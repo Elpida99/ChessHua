@@ -14,8 +14,16 @@ public class Chess_AI {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+       public static void main(String[] args) {
         // TODO code application logic here
+    	
+    	Board board = new Board();
+    	board.printBoard();
+    	System.out.println("Players: w=white and b=black");
+    	System.out.println("Pieces: K= king, Q= queen, N= knight, B= bishop, R= rook, P= pawn");
     }
+    
+}
+
     
 }
