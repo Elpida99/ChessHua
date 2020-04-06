@@ -1,5 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
+* To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -13,57 +12,147 @@ import model_chess_pieces.*;
  */
 public class Board {
 
-    private Field field[][];
+	private Field field[][];
 
-    public Board() {
+	public Board() {
 
-        field = new Field[8][8];    //how many there on the board 
+		field = new Field[8][8]; // how many there on the board
 
-        for (int i = 0; i < 8; ++i) {
-            for (int j = 0; j < 8; ++j) {
-                field[i][j] = new Field(j, i);
-            }
-        }
+		for (int i = 0; i < 8; ++i) {
+			for (int j = 0; j < 8; ++j) {
+				field[i][j] = new Field(j, i);
+			}
+		}
 
-        placeBlackPieces();
-        placeBlackPawns();
-        placeWhitePieces();
-        placeWhitePawns();
-    }
+		// emptyFields();
+		placeBlackPieces();
+		placeBlackPawns();
+		placeWhitePieces();
+		placeWhitePawns();
+	}
 
-    private void placeBlackPieces() {
-        this.field[0][0].setChessPiece(new Rook(ChessPieceCharacteristics.Color.white, ChessPieceCharacteristics.Name.ROOK));
-        this.field[0][1].setChessPiece(new Knight(ChessPieceCharacteristics.Color.white, ChessPieceCharacteristics.Name.KNIGHT));
-        this.field[0][2].setChessPiece(new Bishop(ChessPieceCharacteristics.Color.white, ChessPieceCharacteristics.Name.BISHOP));
-        this.field[0][3].setChessPiece(new Queen(ChessPieceCharacteristics.Color.white, ChessPieceCharacteristics.Name.QUEEN));
-        this.field[0][4].setChessPiece(new King(ChessPieceCharacteristics.Color.white, ChessPieceCharacteristics.Name.KING));
-        this.field[0][5].setChessPiece(new Bishop(ChessPieceCharacteristics.Color.white, ChessPieceCharacteristics.Name.BISHOP));
-        this.field[0][6].setChessPiece(new Knight(ChessPieceCharacteristics.Color.white, ChessPieceCharacteristics.Name.KNIGHT));
-        this.field[0][7].setChessPiece(new Rook(ChessPieceCharacteristics.Color.white, ChessPieceCharacteristics.Name.ROOK));
+	private void placeBlackPieces() {
+		this.field[0][0].setChessPiece(new Rook(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.R));
+		this.field[0][1].setChessPiece(new Knight(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.N));
+		this.field[0][2].setChessPiece(new Bishop(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.B));
+		this.field[0][3].setChessPiece(new Queen(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.Q));
+		this.field[0][4].setChessPiece(new King(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.K));
+		this.field[0][5].setChessPiece(new Bishop(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.B));
+		this.field[0][6].setChessPiece(new Knight(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.N));
+		this.field[0][7].setChessPiece(new Rook(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.R));
 
-    }
+	}
 
-    private void placeBlackPawns() {
-        for (int i = 0; i < 8; ++i) {
-            this.field[1][i].setChessPiece(new Pawn(ChessPieceCharacteristics.Color.white, ChessPieceCharacteristics.Name.PAWN));
-        }
-    }
+	private void placeBlackPawns() {
+		for (int i = 0; i < 8; ++i) {
+			this.field[1][i]
+					.setChessPiece(new Pawn(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.P));
+		}
+	}
 
-    private void placeWhitePieces() {
-        this.field[7][0].setChessPiece(new Rook(ChessPieceCharacteristics.Color.black, ChessPieceCharacteristics.Name.ROOK));
-        this.field[7][1].setChessPiece(new Knight(ChessPieceCharacteristics.Color.black, ChessPieceCharacteristics.Name.KNIGHT));
-        this.field[7][2].setChessPiece(new Bishop(ChessPieceCharacteristics.Color.black, ChessPieceCharacteristics.Name.BISHOP));
-        this.field[7][3].setChessPiece(new Queen(ChessPieceCharacteristics.Color.black, ChessPieceCharacteristics.Name.QUEEN));
-        this.field[7][4].setChessPiece(new King(ChessPieceCharacteristics.Color.black, ChessPieceCharacteristics.Name.KING));
-        this.field[7][5].setChessPiece(new Bishop(ChessPieceCharacteristics.Color.black, ChessPieceCharacteristics.Name.BISHOP));
-        this.field[7][6].setChessPiece(new Knight(ChessPieceCharacteristics.Color.black, ChessPieceCharacteristics.Name.KNIGHT));
-        this.field[7][7].setChessPiece(new Rook(ChessPieceCharacteristics.Color.black, ChessPieceCharacteristics.Name.ROOK));
-    }
+	private void placeWhitePieces() {
+		this.field[7][0].setChessPiece(new Rook(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.R));
+		this.field[7][1].setChessPiece(new Knight(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.N));
+		this.field[7][2].setChessPiece(new Bishop(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.B));
+		this.field[7][3].setChessPiece(new Queen(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.Q));
+		this.field[7][4].setChessPiece(new King(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.K));
+		this.field[7][5].setChessPiece(new Bishop(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.B));
+		this.field[7][6].setChessPiece(new Knight(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.N));
+		this.field[7][7].setChessPiece(new Rook(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.R));
+	}
 
-    private void placeWhitePawns() {
-        for (int i = 0; i < 8; ++i) {
-            this.field[6][i].setChessPiece(new Pawn(ChessPieceCharacteristics.Color.black, ChessPieceCharacteristics.Name.PAWN));
-        }
-    }
+	private void placeWhitePawns() {
+		for (int i = 0; i < 8; ++i) {
+			this.field[6][i]
+					.setChessPiece(new Pawn(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.P));
+		}
+	}
+
+	private void emptyFields() {
+		int i = 0;
+		for (i = 0; i < 8; i++) {
+			for (int j = 3; j < 7; j++) {
+				this.field[j][i].removeChessPiece();
+			}
+		}
+	}
+
+	// Standard even check
+	public boolean isEven(int i) {
+		if ((i % 2) == 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public void printBoard() {
+
+		// Print the board
+
+		printBlack();
+		for (int i = 5; i >= 2; i--) {
+			for (int j = 0; j < 8; j++) {
+				if (this.field[i][j] != null) {
+					if ((isEven(i) && isEven(j)) || (!isEven(i) && !isEven(j))) {
+						System.out.print("## ");
+						if (j == 7) {
+							int k = i + 1;
+							System.out.print(" | " + k + "\n");
+						}
+						continue;
+					} else {
+						System.out.print("   ");
+						if (j == 7) {
+							int k = i + 1;
+							System.out.print(" | " + k + "\n");
+						}
+						continue;
+					}
+				}
+
+				
+			}
+			
+		}
+		printWhite();
+		System.out.println("------------------------");
+		System.out.println(" a  b  c  d  e  f  g  h \n");
+	}
+
+	public void printBlack() {
+		int k = 8;
+		for (int i = 0; i < 2; i++) {
+			if (i == 1) {
+				k--;
+			}
+			for (int j = 0; j < 8; j++) {
+
+				System.out.print(this.field[i][j].getChessPiece().getColor() + ""
+						+ this.field[i][j].getChessPiece().getName() + " ");
+				if (j == 7) {
+					System.out.print(" | " + k+"\n");
+				}
+			}
+
+		}
+	}
+
+	public void printWhite() {
+		int k = 2;
+		for (int z = 6; z < 8; z++) {
+			if (z == 7) {
+				k--;
+			}
+
+			for (int y = 0; y < 8; y++) {
+				System.out.print(this.field[z][y].getChessPiece().getColor() + ""
+						+ this.field[z][y].getChessPiece().getName() + " ");
+				if (y == 7) {
+					System.out.print(" | " + k + "\n");
+				}
+			}
+		}
+	}
+
 
 }
