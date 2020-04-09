@@ -31,6 +31,11 @@ public class Board {
 		placeWhitePawns();
 	}
 
+	//NEW METHOD AND NEW FIELD IN CLASS FIELD !!
+	public boolean isFieldOccupied(int x, int y) {
+		return this.getField()[x][y].isOccupied();
+	}
+	
 	private void placeBlackPieces() {
 		this.field[0][0].setChessPiece(new Rook(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.R));
 		this.field[0][1].setChessPiece(new Knight(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.N));
