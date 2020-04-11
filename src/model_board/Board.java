@@ -102,26 +102,27 @@ public class Board {
 						System.out.print("## ");
 						if (j == 7) {
 							int k = i + 1;
-							System.out.print(" | " + k + "\n");
+							System.out.print(" | " + k + "(" + (k-1) + ")\n");
 						}
 						continue;
 					} else {
 						System.out.print("   ");
 						if (j == 7) {
 							int k = i + 1;
-							System.out.print(" | " + k + "\n");
+							System.out.print(" | " + k + "(" + (k-1) + ")\n");
 						}
 						continue;
 					}
 				}
 
-				
 			}
-			
+
 		}
 		printWhite();
 		System.out.println("------------------------");
-		System.out.println(" a  b  c  d  e  f  g  h \n");
+		System.out.println(" a  b  c  d  e  f  g  h ");
+		System.out.println("(0  1  2  3  4  5  6  7) \n");
+		
 	}
 
 	public void printBlack() {
@@ -135,10 +136,10 @@ public class Board {
 				System.out.print(this.field[i][j].getChessPiece().getColor() + ""
 						+ this.field[i][j].getChessPiece().getName() + " ");
 				if (j == 7) {
-					System.out.print(" | " + k+"\n");
+					System.out.print(" | " + k + "(" + (k-1) + ")\n");
 				}
-			}
 
+			}
 		}
 	}
 
@@ -153,11 +154,10 @@ public class Board {
 				System.out.print(this.field[z][y].getChessPiece().getColor() + ""
 						+ this.field[z][y].getChessPiece().getName() + " ");
 				if (y == 7) {
-					System.out.print(" | " + k + "\n");
+					System.out.print(" | " + k + "(" +(k-1) + ")\n");
 				}
 			}
 		}
 	}
-
 
 }
