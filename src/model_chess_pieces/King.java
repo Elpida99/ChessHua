@@ -50,7 +50,7 @@ public class King extends ChessPiece {
                 System.out.println("move not possible-field occupied");
                 answer = false;
             } else {
-                System.out.println("position available-field not occupied    Let's check if the new move meets the \"criteria\"");
+                System.out.println("position available-field not occupied  --- Let's check if the new move meets the \"criteria\"");
                 //row = new x 
                 if //VERTICAL 
                         (col == getPiecePosition().getY() && (Math.abs((row - getPiecePosition().getX())) == 1 || Math.abs((row - getPiecePosition().getX())) == -1)) { //if column(Yposition) is the same-->the move is forward/ backword : newX - oldX = 1 or -1
@@ -63,15 +63,18 @@ public class King extends ChessPiece {
                     System.out.println(Math.abs((row - getPiecePosition().getX())));
                     answer = true;
                 }//DIAGONAL 
-                else if ((Math.abs((row - getPiecePosition().getX())) == 1 || Math.abs((row - getPiecePosition().getX())) && (Math.abs((col - getPiecePosition().getY())) == 1 || Math.abs((col - getPiecePosition().getY())) {    //newX - oldX = 1 or -1 AND newY - oldY = 1 or -1
+                else if ( (Math.abs((row - getPiecePosition().getX())) == 1 || Math.abs((row - getPiecePosition().getX()) ) && ( Math.abs((col - getPiecePosition().getY())) == 1 || Math.abs((col - getPiecePosition().getY() )) ) )) {    //newX - oldX = 1 or -1 AND newY - oldY = 1 or -1
                     System.out.println("DIAGONAL  move is possible");
                     System.out.println(Math.abs((row - getPiecePosition().getX())));
                     answer = true;
-                } else {
-                    System.out.println("move not possible");
+                }else {
+                    System.out.println("piece exists on this field -- move not possible");
                     answer = false;
                 }
             }
+        }else {
+            System.out.println("piece DOES NOT sexists on this field -- move not possible");
+            answer = false;
         }
         return answer;
     }
