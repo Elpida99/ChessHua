@@ -31,7 +31,7 @@ public class Pawn extends ChessPiece {
 	public boolean isMovePossible(ChessMove move, Board board) {
 		boolean answer = false; // answer: is the move possible or not
 		String color = this.getColor().toString(); //colour of pawn
-		System.out.println(color);
+	        System.out.println("colour="+color);
 		move.setCurrent(this.getPiecePosition()); // piece's current position-->set it to class ChessMove
 		
 		int curRow = this.getPiecePosition().getRow(); //piece's current row
