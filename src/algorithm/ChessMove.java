@@ -5,34 +5,24 @@ import model_chess_pieces.ChessPiece;
 
 public class ChessMove {
 
-	private FieldCoordinates oldXY;
-	private FieldCoordinates newXY;
+	private FieldCoordinates current;
+	private FieldCoordinates newPos;
 	private ChessPiece p; // p is a copy of the piece that is to be moved
 
-	public FieldCoordinates getOldXY() {
-		return oldXY;
+	public FieldCoordinates getCurrent() {
+		return current;
 	}
 
-	public void setOldXY(FieldCoordinates oldXY) {
-		this.oldXY = oldXY;
+	public void setCurrent(FieldCoordinates current) {
+		this.current = current;
 	}
 
-	public FieldCoordinates getNewXY() {
-		return newXY;
+	public FieldCoordinates getNewPos() {
+		return newPos;
 	}
 
-	public void setNewXY(FieldCoordinates newXY) {
-		this.newXY = newXY;
-	}
-	
-	public int getnewX(FieldCoordinates newXY) {
-		int x=newXY.x;
-		return x;
-	}
-	
-	public int getnewY(FieldCoordinates newXY) {
-		int y=newXY.y;
-		return y;
+	public void setNewPos(FieldCoordinates newPos) {
+		this.newPos = newPos;
 	}
 
 	public ChessPiece getP() {
@@ -43,7 +33,7 @@ public class ChessMove {
 		this.p = p;
 	}
 
-	public static boolean isValid(int col, int row) {
+	public static boolean isValid(int row, int col) {
 		return col >= 0 && col < 8 && row >= 0 && row < 8;
 	}
 
