@@ -20,7 +20,7 @@ public class Board {
 
 		for (int i = 0; i < 8; ++i) {
 			for (int j = 0; j < 8; ++j) {
-				field[i][j] = new Field(j, i);
+				field[i][j] = new Field(i,j);
 			}
 		}
 
