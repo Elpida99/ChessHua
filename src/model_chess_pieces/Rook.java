@@ -110,6 +110,7 @@ public class Rook extends ChessPiece{
             System.out.println("piece exists on this field -- move not possible");
             answer = false;
         }
+	    //++++++CHECK IF THERE IS AN OTHER PAWN IN THE COLUMN OR ROW THAT THE ROOK CAN MOVE!!!
     }
     
     
