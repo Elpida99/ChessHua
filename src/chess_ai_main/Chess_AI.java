@@ -17,10 +17,21 @@ public class Chess_AI {
        public static void main(String[] args) {
         // TODO code application logic here
     	
+    	
     	Board board = new Board();
     	board.printBoard();
     	System.out.println("Players: w=white and b=black");
-    	System.out.println("Pieces: K= king, Q= queen, N= knight, B= bishop, R= rook, P= pawn");
+    	System.out.println("Pieces: K=king, Q=queen, N=knight, B=bishop, R=rook, P=pawn");
+    	
+    	ChessMove move = new ChessMove();
+		Pawn piece = new Pawn(ChessPieceCharacteristics.Color.b,ChessPieceCharacteristics.Name.P);
+		piece.setPiecePosition(board.getField()[1][4].getFieldCoordintes());
+    
+    	move.setP(piece);
+    	FieldCoordinates newxy = new FieldCoordinates(3,4);
+    	move.setNewXY(newxy);
+    	System.out.println(piece.isMovePossible(move,board));
+    	
     }
     
 }
