@@ -23,14 +23,17 @@ public class Chess_AI {
     	System.out.println("Players: w=white and b=black");
     	System.out.println("Pieces: K=king, Q=queen, N=knight, B=bishop, R=rook, P=pawn");
     	
+	       //tests for pawn
     	ChessMove move = new ChessMove();
-		Pawn piece = new Pawn(ChessPieceCharacteristics.Color.b,ChessPieceCharacteristics.Name.P);
-		piece.setPiecePosition(board.getField()[1][4].getFieldCoordintes());
-    
-    	move.setP(piece);
-    	FieldCoordinates newxy = new FieldCoordinates(3,4);
-    	move.setNewXY(newxy);
-    	System.out.println(piece.isMovePossible(move,board));
+	Pawn pawn = new Pawn(ChessPieceCharacteristics.Color.w,ChessPieceCharacteristics.Name.P);
+		
+	pawn.setPiecePosition(board.getField()[1][4].getFieldCoordintes());
+	System.out.println(board.getField()[1][4].getFieldCoordintes());
+		
+    	move.setP(pawn);
+    	FieldCoordinates newpos = new FieldCoordinates(3,4);
+    	move.setNewPos(newpos);
+    	System.out.println(pawn.isMovePossible(move,board));
     	
     }
     
