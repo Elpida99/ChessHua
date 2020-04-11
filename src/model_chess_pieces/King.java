@@ -53,17 +53,17 @@ public class King extends ChessPiece {
                 System.out.println("position available-field not occupied  --- Let's check if the new move meets the \"criteria\"");
                 //row = new x 
                 if //VERTICAL 
-                        (col == getPiecePosition().getY() && (Math.abs((row - getPiecePosition().getX())) == 1 || Math.abs((row - getPiecePosition().getX())) == -1)) { //if column(Yposition) is the same-->the move is forward/ backword : newX - oldX = 1 or -1
+                        (col == getPiecePosition().getY() && (  (row - getPiecePosition().getX() ) == 1 ||  ( row - getPiecePosition().getX() == -1)   )   ) { //if column(Yposition) is the same-->the move is forward/ backword : newX - oldX = 1 or -1
                     System.out.println("VERTICAL move is possible");
                     System.out.println(Math.abs((row - getPiecePosition().getX())));
                     answer = true;
                 }//HORIZONTAL 
-                else if (row == getPiecePosition().getX() && (Math.abs((col - getPiecePosition().getY())) == 1 || Math.abs((col - getPiecePosition().getY())) == -1)) {   //if row(Xposition)is the same and newY - oldY = 1 or -1
+                else if (row == getPiecePosition().getX() && (  ( col - getPiecePosition().getY() ) == 1  || (col - getPiecePosition().getY() ) == -1 )  ) {   //if row(Xposition)is the same and newY - oldY = 1 or -1
                     System.out.println("HORIZONTAL move is possible");
                     System.out.println(Math.abs((row - getPiecePosition().getX())));
                     answer = true;
                 }//DIAGONAL 
-                else if ( (Math.abs((row - getPiecePosition().getX())) == 1 || Math.abs((row - getPiecePosition().getX()) ) && ( Math.abs((col - getPiecePosition().getY())) == 1 || Math.abs((col - getPiecePosition().getY() )) ) )) {    //newX - oldX = 1 or -1 AND newY - oldY = 1 or -1
+                else if ( ( ( (row - getPiecePosition().getX()) == 1 || (row - getPiecePosition().getX()) == -1 ) && ( (col - getPiecePosition().getY()) == 1 || (col - getPiecePosition().getY() ) == -1 ) )) {    //newX - oldX = 1 or -1 AND newY - oldY = 1 or -1
                     System.out.println("DIAGONAL  move is possible");
                     System.out.println(Math.abs((row - getPiecePosition().getX())));
                     answer = true;
