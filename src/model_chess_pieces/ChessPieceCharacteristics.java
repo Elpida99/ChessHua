@@ -11,11 +11,13 @@ package model_chess_pieces;
  */
 public class ChessPieceCharacteristics {
 
+  
     public enum Color{
-	white,black
+	w,b //white,black
     }
 	
     public enum Name{
-	ROOK,KNIGHT,BISHOP,QUEEN,KING,PAWN
+	//ROOK,KNIGHT,BISHOP,QUEEN,KING,PAWN
+        R,N,B,Q,K,P
     }
 }
