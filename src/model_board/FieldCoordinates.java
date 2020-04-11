@@ -4,28 +4,28 @@ package model_board;
  * @author it21735 , it21754, it21762
  */
 public class FieldCoordinates {
-	public int x;
-	public int y;
+	public int row;
+	public int col;
 	
-	public FieldCoordinates(int x, int y){
-		this.x = x;
-		this.y = y;
+	public FieldCoordinates(int row, int col){
+		this.row = row;
+		this.col = col;
 	}
 	
-	public int getX(){
-		return this.x;
+	public int getRow(){
+		return this.row;
 	}
 	
-	public int getY(){
-		return this.y;
+	public int getCol(){
+		return this.col;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + x;
-		result = prime * result + y;
+		result = prime * result + row;
+		result = prime * result + col;
 		return result;
 	}
 
@@ -38,16 +38,16 @@ public class FieldCoordinates {
 		if (getClass() != obj.getClass())
 			return false;
 		FieldCoordinates other = (FieldCoordinates) obj;
-		if (x != other.x)
+		if (row != other.row)
 			return false;
-		if (y != other.y)
+		if (col != other.col)
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "FieldCoordinates [x=" + x + ", y=" + y + "]";
+		return "FieldCoordinates [row=" + row + ", column=" + col + "]";
 	}	
 	
 	
