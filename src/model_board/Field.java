@@ -15,17 +15,17 @@ public class Field {
 	private FieldCoordinates fieldCoordinates;
 	private final FieldCoordinates permanentCoordinates;
 
-	public Field(int x, int y) {
+	public Field(int row, int col) {
 		this.chessPiece = null;
-		this.fieldCoordinates = new FieldCoordinates(x, y);
-		this.permanentCoordinates = new FieldCoordinates(x, y);
+		this.fieldCoordinates = new FieldCoordinates(row, col);
+		this.permanentCoordinates = new FieldCoordinates(row, col);
 		this.isOccupied=false;
 	}
 
-	public Field(int x, int y, ChessPiece chessman) {
+	public Field(int row, int col, ChessPiece chessman) {
 		this.chessPiece = chessman;
-		this.fieldCoordinates = new FieldCoordinates(x, y);
-		this.permanentCoordinates = new FieldCoordinates(x, y);
+		this.fieldCoordinates = new FieldCoordinates(row, col);
+		this.permanentCoordinates = new FieldCoordinates(row, col);
 		this.isOccupied=true;
 	}
 
@@ -50,9 +50,9 @@ public class Field {
 		return this.fieldCoordinates;
 	}
 
-	public void setFieldCoordinates(int x, int y) {
-		this.fieldCoordinates.x = x;
-		this.fieldCoordinates.y = y;
+	public void setFieldCoordinates(int row, int col) {
+		this.fieldCoordinates.row = row;
+		this.fieldCoordinates.col = col;
 	}
 
 	public FieldCoordinates getPermanentCoordinates() {
