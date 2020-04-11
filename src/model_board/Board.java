@@ -13,6 +13,15 @@ import model_chess_pieces.*;
 public class Board {
 
 	private Field field[][];
+	
+	public Field[][] getField() {
+        	return field;
+    	}
+
+        public void setField(Field[][] field) {
+		this.field = field;
+	}
+
 
 	public Board() {
 
