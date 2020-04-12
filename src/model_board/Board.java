@@ -1,4 +1,5 @@
-* To change this license header, choose License Headers in Project Properties.
+/*
+ * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -13,15 +14,14 @@ import model_chess_pieces.*;
 public class Board {
 
 	private Field field[][];
-	
-	public Field[][] getField() {
-        	return field;
-    	}
 
-        public void setField(Field[][] field) {
-		this.field = field;
+	public Field[][] getField() {
+		return field;
 	}
 
+	public void setField(Field[][] field) {
+		this.field = field;
+	}
 
 	public Board() {
 
@@ -29,7 +29,8 @@ public class Board {
 
 		for (int i = 0; i < 8; ++i) {
 			for (int j = 0; j < 8; ++j) {
-				field[i][j] = new Field(i,j);
+				field[i][j] = new Field(i, j);
+
 			}
 		}
 
@@ -40,11 +41,10 @@ public class Board {
 		placeWhitePawns();
 	}
 
-	//NEW METHOD AND NEW FIELD IN CLASS FIELD !!
-	public boolean isFieldOccupied(int x, int y) {
-		return this.getField()[x][y].isOccupied();
+	public boolean isFieldOccupied(int row, int col) {
+		return this.getField()[row][col].isOccupied();
 	}
-	
+
 	private void placeBlackPieces() {
 		this.field[0][0].setChessPiece(new Rook(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.R));
 		this.field[0][1].setChessPiece(new Knight(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.N));
@@ -86,7 +86,7 @@ public class Board {
 		int i = 0;
 		for (i = 0; i < 8; i++) {
 			for (int j = 3; j < 7; j++) {
-				this.field[j][i].removeChessPiece();
+				this.field[i][j].removeChessPiece();
 			}
 		}
 	}
@@ -99,74 +99,42 @@ public class Board {
 		return false;
 	}
 
+
 	public void printBoard() {
-
-		// Print the board
-
-		printBlack();
-		for (int i = 2; i <6; i++) {
+		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				if (this.field[i][j] != null) {
+				if (this.isFieldOccupied(i, j)) {
+					System.out.print(this.field[i][j].getChessPiece().getColor() + ""
+							+ this.field[i][j].getChessPiece().getName() + " ");
+					if (j == 7) {
+						int k = i + 1;
+						System.out.print(" | " + k + "(" + (k - 1) + ")\n");
+					}
+					continue;
+				} else {
 					if ((isEven(i) && isEven(j)) || (!isEven(i) && !isEven(j))) {
 						System.out.print("## ");
 						if (j == 7) {
 							int k = i + 1;
-							System.out.print(" | " + k + "(" + (k-1) + ")\n");
+							System.out.print(" | " + k + "(" + (k - 1) + ")\n");
 						}
 						continue;
 					} else {
 						System.out.print("   ");
 						if (j == 7) {
 							int k = i + 1;
-							System.out.print(" | " + k + "(" + (k-1) + ")\n");
+							System.out.print(" | " + k + "(" + (k - 1) + ")\n");
 						}
 						continue;
 					}
 				}
-
 			}
 
 		}
-		printWhite();
 		System.out.println("------------------------");
 		System.out.println(" a  b  c  d  e  f  g  h ");
 		System.out.println("(0  1  2  3  4  5  6  7) \n");
-		
-	}
-
-	public void printBlack() {
-		int k = 1;
-		for (int i = 0; i < 2; i++) {
-			if (i == 1) {
-				k++;
-			}
-			for (int j = 0; j < 8; j++) {
-
-				System.out.print(this.field[i][j].getChessPiece().getColor() + ""
-						+ this.field[i][j].getChessPiece().getName() + " ");
-				if (j == 7) {
-					System.out.print(" | " + k + "(" + (k-1) + ")\n");
-				}
-
-			}
-		}
-	}
-
-	public void printWhite() {
-		int k = 7;
-		for (int z = 6; z < 8; z++) {
-			if (z == 7) {
-				k++;
-			}
-
-			for (int y = 0; y < 8; y++) {
-				System.out.print(this.field[z][y].getChessPiece().getColor() + ""
-						+ this.field[z][y].getChessPiece().getName() + " ");
-				if (y == 7) {
-					System.out.print(" | " + k + "(" +(k-1) + ")\n");
-				}
-			}
-		}
 	}
 
 }
+
