@@ -29,24 +29,9 @@ public class Pawn extends ChessPiece {
 		this.isFirstMove = isFirstMove;
 	}
 
-	public int allPossibleMoves(Board board) {
+	public void allPossibleMoves(Board board) {
 
-		int counter = 0;
-		int row = this.getPiecePosition().getRow();
-		int col = this.getPiecePosition().getCol();
-
-		ChessMove move = new ChessMove();
-		move.setCurrent(this.getPiecePosition());
-
-		for (int i = row + 1; i < row + 3; i++) {
-			FieldCoordinates newPos = new FieldCoordinates(i, col);
-			move.setNewPos(newPos);
-			if (this.isMovePossible(move, board)) {
-				counter++;
-			}
-		}
-
-		return counter;
+		
 	}
 
 	public boolean isMovePossible(ChessMove move, Board board) {
