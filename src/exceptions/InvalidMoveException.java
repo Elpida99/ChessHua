@@ -3,21 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model_chess_pieces;
+package exceptions;
 
 /**
  *
  * @author it21735 , it21754, it21762
  */
-public class ChessPieceCharacteristics {
 
-  
-    public enum Color{
-	w,b //white,black
-    }
-	
-    public enum Name{
-	//ROOK,KNIGHT,BISHOP,QUEEN,KING,PAWN
-        R,N,B,Q,K,P
-    }
+@SuppressWarnings("serial")
+public class InvalidMoveException extends Exception {
+	public InvalidMoveException(){
+		super("This move is forbidden");
+	}
+
 }

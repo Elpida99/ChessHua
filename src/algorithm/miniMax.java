@@ -13,3 +13,5 @@ public class miniMax {
 	private static final int DEPTH = 1;
 
 }
+
+ 

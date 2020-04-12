@@ -1,5 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
+/* To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -15,14 +14,33 @@ public class Board {
 
 	private Field field[][];
 
-	public Field[][] getField() {
-		return field;
-	}
+    public Field[][] getField() {
+        return field;
+    }
 
-	public void setField(Field[][] field) {
-		this.field = field;
-	}
+    public void setField(Field[][] field) {
+        this.field = field;
+    }
 
+    public Field getField(int x, int y)   //NEW METHOD
+	{
+		if(x<0||x>7||y<0||y>7)
+			return null;
+		Field possible = field[y][x];
+		FieldCoordinates possibleCoords = possible.getFieldCoordintes();
+		if(possibleCoords.row == x && possibleCoords.col == y){
+			return possible;
+		}
+		int invertedX = Math.abs(x-7);
+		int invertedY = Math.abs(y-7);
+		possible = field[invertedY][invertedX];
+		possibleCoords = possible.getFieldCoordintes();
+		if(possibleCoords.row == x && possibleCoords.col == y){
+			return possible;
+		}
+		return null;
+	}
+    
 	public Board() {
 
 		field = new Field[8][8]; // how many there on the board
@@ -30,7 +48,6 @@ public class Board {
 		for (int i = 0; i < 8; ++i) {
 			for (int j = 0; j < 8; ++j) {
 				field[i][j] = new Field(i, j);
-
 			}
 		}
 
@@ -41,10 +58,11 @@ public class Board {
 		placeWhitePawns();
 	}
 
-	public boolean isFieldOccupied(int row, int col) {
-		return this.getField()[row][col].isOccupied();
+	//NEW METHOD AND NEW FIELD IN CLASS FIELD !!
+	public boolean isFieldOccupied(int x, int y) {
+		return this.getField()[x][y].isOccupied();
 	}
-
+	
 	private void placeBlackPieces() {
 		this.field[0][0].setChessPiece(new Rook(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.R));
 		this.field[0][1].setChessPiece(new Knight(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.N));
@@ -82,11 +100,12 @@ public class Board {
 		}
 	}
 
+
 	private void emptyFields() {
 		int i = 0;
 		for (i = 0; i < 8; i++) {
 			for (int j = 3; j < 7; j++) {
-				this.field[i][j].removeChessPiece();
+				this.field[j][i].removeChessPiece();
 			}
 		}
 	}
@@ -98,7 +117,6 @@ public class Board {
 		}
 		return false;
 	}
-
 
 	public void printBoard() {
 		for (int i = 0; i < 8; i++) {
@@ -136,5 +154,5 @@ public class Board {
 		System.out.println("(0  1  2  3  4  5  6  7) \n");
 	}
 
-}
 
+}

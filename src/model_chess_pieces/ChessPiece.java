@@ -6,8 +6,7 @@
 package model_chess_pieces;
 
 import java.util.List;
-import model_board.FieldCoordinates;
-import model_chess_pieces.ChessPieceCharacteristics;
+import model_board.*;
 
 /**
  *
