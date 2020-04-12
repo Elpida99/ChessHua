@@ -104,7 +104,7 @@ public class Board {
 		// Print the board
 
 		printBlack();
-		for (int i = 5; i >= 2; i--) {
+		for (int i = 2; i <6; i++) {
 			for (int j = 0; j < 8; j++) {
 				if (this.field[i][j] != null) {
 					if ((isEven(i) && isEven(j)) || (!isEven(i) && !isEven(j))) {
@@ -135,10 +135,10 @@ public class Board {
 	}
 
 	public void printBlack() {
-		int k = 8;
+		int k = 1;
 		for (int i = 0; i < 2; i++) {
 			if (i == 1) {
-				k--;
+				k++;
 			}
 			for (int j = 0; j < 8; j++) {
 
@@ -153,10 +153,10 @@ public class Board {
 	}
 
 	public void printWhite() {
-		int k = 2;
+		int k = 7;
 		for (int z = 6; z < 8; z++) {
 			if (z == 7) {
-				k--;
+				k++;
 			}
 
 			for (int y = 0; y < 8; y++) {
