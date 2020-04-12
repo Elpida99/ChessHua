@@ -2,6 +2,7 @@ package model_chess_pieces;
 
 import algorithm.ChessMove;
 import model_board.Board;
+import model_board.FieldCoordinates;
 
 /**
  * it21735 , it21754, it21762
@@ -28,28 +29,43 @@ public class Pawn extends ChessPiece {
 		this.isFirstMove = isFirstMove;
 	}
 
+	public int allPossibleMoves(Board board) {
+
+		int counter = 0;
+		int row = this.getPiecePosition().getRow();
+		int col = this.getPiecePosition().getCol();
+
+		ChessMove move = new ChessMove();
+		move.setCurrent(this.getPiecePosition());
+
+		for (int i = row + 1; i < row + 3; i++) {
+			FieldCoordinates newPos = new FieldCoordinates(i, col);
+			move.setNewPos(newPos);
+			if (this.isMovePossible(move, board)) {
+				counter++;
+			}
+		}
+
+		return counter;
+	}
+
 	public boolean isMovePossible(ChessMove move, Board board) {
 		boolean answer = false; // answer: is the move possible or not
 		String color = this.getColor().toString(); // colour of pawn
 		System.out.println("colour=" + color);
-		move.setCurrent(this.getPiecePosition()); // piece's current position-->set it to class ChessMove
 
 		int curRow = this.getPiecePosition().getRow(); // piece's current row
 		int curCol = this.getPiecePosition().getCol(); // piece's current column
 
-		System.out.println("old coordinates: " + move.getCurrent().getRow() + "," + move.getCurrent().getCol());
+		System.out.println("old coordinates: " + curRow + "," + curCol);
 
 		int row = move.getNewPos().getRow(); // coordinates of desired move are the directions of the user
 		int col = move.getNewPos().getCol();
 
 		System.out.println("new position: " + row + "," + col); // check that they are right
-
-		if (board.isFieldOccupied(curRow, curCol)) { // if piece exists on the field
-			System.out.print("piece exists on this field and it can be moved\n");
-
-			if (ChessMove.isValid(row, col)) { //if the new position is valid (row&col <8)
+		if (!this.isBlocked(board)) {
+			if (ChessMove.isValid(row, col)) { // if the new position is valid (row&col <8)
 				System.out.print("New position is valid, coordinates exist on board : ");
-
 				if (col == curCol) {
 					// forward
 					if (this.isFirstMove()) { // the pawn can move 2 fields forward if it is its first move
@@ -85,11 +101,27 @@ public class Pawn extends ChessPiece {
 				// not valid
 				System.out.println("new field must exist on board!");
 			}
-		} else {
-			// pawn does not exist on this field
-			System.out.println("This field " + curRow + " " + curCol + " does not contain a piece");
 		}
 		return answer;
+	}
+	
+	public void enPassant() {
+		
+	}
+	
+	public void PawnUpgrade() {
+		int row = this.getPiecePosition().getRow();
+		int col = this.getPiecePosition().getRow();
+		
+		if(this.getColor().equals(ChessPieceCharacteristics.Color.w)) {
+			if(row==7) {
+				//white pawn can be upgraded
+			}
+		}else {
+			if(row==0) {
+				//black pawn can be upgraded
+			}
+		}
 	}
 
 }
