@@ -39,6 +39,7 @@ public class Field {
 	public void setChessPiece(ChessPiece chessman) // set one of the figures is in a specific field
 	{
 		this.chessPiece = chessman;
+		chessman.setPiecePosition(this.getFieldCoordintes());
 		this.isOccupied=true;
 	}
 
