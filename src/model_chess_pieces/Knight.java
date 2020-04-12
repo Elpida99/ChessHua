@@ -23,17 +23,26 @@ public class Knight extends ChessPiece {
 		return value;
 	}
 
-	public int allPossibleMoves(Board board) {
-		FieldCoordinates curpos = this.getPiecePosition();
+	public List<Field> allPossibleMoves(Board board) {
+		List<Field> moves = new LinkedList<>();
+		int currow = this.getPiecePosition().getRow();
+		int curcol = this.getPiecePosition().getCol();
+		ChessMove move = new ChessMove(null, this);
 
-		int row = curpos.getRow();
-		int col = curpos.getCol();
+		moves.add(board.getField()[currow][curcol]);
 
-		// two types of moves
-		// first: 2 fields horizontally, one vertically
-		// second: 2 fields vertically, one horizontal
+		for (int i = 0; i < this.directions.length; i++) {
+			int[] direction = directions[i];
+			int col = curcol + direction[0];
+			int row = currow + direction[1];
+			move.setNewCoor(row, col);
+			if (this.isMovePossible(move, board)) {
+				moves.add(new Field(row, col));
+			}
 
-		return 0;
+		}
+		return moves;
+
 	}
 
 	public boolean isMovePossible(Board board, ChessMove move) {
