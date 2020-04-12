@@ -6,8 +6,10 @@
 package model_chess_pieces;
 
 import algorithm.ChessMove;
+import java.util.ArrayList;
 import java.util.List;
 import model_board.Board;
+import model_board.Position;
 
 /**
  *
@@ -18,7 +20,10 @@ public class King extends ChessPiece {
     private final int value = 10;
     private boolean answer = false; //answer: is the move possiple or not
 
-    private int[][] directions = {
+    Board board;
+    ChessMove move;
+       
+    private final int[][] directions = {
         {-1, -1},
         {1, 1},
         {1, -1},
@@ -36,16 +41,17 @@ public class King extends ChessPiece {
     public int getValue() {
         return value;
     }
-
-    public boolean isMovePossible(ChessMove move, Board board) {
-        
+    
+    public List<Position> getPossibleMovesForKing(ChessMove move, Board board) {
+         
         int curRow = 0;
         int curCol = 0;
         int row = 0;
         int col = 0;
+        String color = null;
     
         answer = false; //answer: is the move possiple or not
-        String color = this.getColor().toString(); // colour of pawn
+        color = this.getColor().toString(); // colour of pawn
         System.out.println("colour=" + color);
         move.setCurrent(this.getPiecePosition()); // piece's current position-->set it to class ChessMove
 
@@ -57,6 +63,31 @@ public class King extends ChessPiece {
         col = move.getNewPos().getCol();
         System.out.println("new position: " + row + "," + col); // check that they are right
 
+        List<Position> possibleMoves = new ArrayList<>();
+        
+        addPossibleMove(possibleMoves, curRow,curCol,-1,-1, color);
+        addPossibleMove(possibleMoves, curRow,curCol,1, 1, color);
+        addPossibleMove(possibleMoves, curRow,curCol,1,-1, color);
+        
+        addPossibleMove(possibleMoves, curRow,curCol,-1,1, color);
+        addPossibleMove(possibleMoves, curRow,curCol,-1,0, color);
+        addPossibleMove(possibleMoves, curRow,curCol,1,0, color);
+        addPossibleMove(possibleMoves, curRow,curCol,0,-1,  color);
+        addPossibleMove(possibleMoves, curRow,curCol,0,-1, color);
+        return possibleMoves;
+    }
+
+    private void addPossibleMove(List<Position>  possibleMoves, int curRow,int curCol,int row, int col,String color) {
+
+        if (isMovePossible(move,board, curRow,curCol, row, col,color))
+            possibleMoves.add(new Position(curRow + row, curCol+col ));
+
+    }
+
+
+    
+    public boolean isMovePossible(ChessMove move, Board board, int curRow,int curCol,int row, int col, String color) {
+        
         if (board.isFieldOccupied(curRow, curCol)) { //if piece exists on the field
             System.out.println("piece exists on this field and it can be moved\n");
 
