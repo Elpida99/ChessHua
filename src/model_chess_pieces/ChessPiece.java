@@ -54,5 +54,29 @@ public abstract class ChessPiece {
     public void setIsAlive(boolean isAlive) {
         this.isAlive = isAlive;
     }
+	
+
+	public boolean isBlocked(Board board) {
+		boolean blocked = false;
+		boolean white = false;
+		
+		int curRow = this.getPiecePosition().getRow();
+		int curCol = this.getPiecePosition().getCol();
+		
+		if (this.getColor().equals(ChessPieceCharacteristics.Color.w)) { // white
+			white = true;
+		}
+		if(white) { //white
+			if(board.getField()[curRow-1][curCol].isOccupied()) {
+				blocked=true;
+			}
+		}else { //black 
+			if(board.getField()[curRow+1][curCol].isOccupied()) {
+				blocked=true;
+			}
+		}
+		
+		return blocked;
+	}
 
 }
