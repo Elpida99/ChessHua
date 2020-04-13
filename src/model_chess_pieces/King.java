@@ -9,6 +9,7 @@ import algorithm.ChessMove;
 import java.util.ArrayList;
 import java.util.List;
 import model_board.Board;
+import model_board.Field;
 import model_board.Position;
 
 /**
@@ -42,7 +43,7 @@ public class King extends ChessPiece {
         return value;
     }
     
-    public List<Position> getPossibleMovesForKing(ChessMove move, Board board) {
+    public List<Field> getPossibleMovesForKing(ChessMove move, Board board) {
          
         int curRow = 0;
         int curCol = 0;
@@ -63,24 +64,26 @@ public class King extends ChessPiece {
         col = move.getNewPos().getCol();
         System.out.println("new position: " + row + "," + col); // check that they are right
 
-        List<Position> possibleMoves = new ArrayList<>();
-        
-        addPossibleMove(possibleMoves, curRow,curCol,-1,-1, color);
-        addPossibleMove(possibleMoves, curRow,curCol,1, 1, color);
-        addPossibleMove(possibleMoves, curRow,curCol,1,-1, color);
-        
-        addPossibleMove(possibleMoves, curRow,curCol,-1,1, color);
-        addPossibleMove(possibleMoves, curRow,curCol,-1,0, color);
-        addPossibleMove(possibleMoves, curRow,curCol,1,0, color);
-        addPossibleMove(possibleMoves, curRow,curCol,0,-1,  color);
-        addPossibleMove(possibleMoves, curRow,curCol,0,-1, color);
-        return possibleMoves;
+        List<Field> possibleFields = new ArrayList<>();
+
+        addPossibleMove(possibleFields, curRow, curCol, directions[0][0], directions[0][1], color);
+        addPossibleMove(possibleFields, curRow, curCol, directions[1][0], directions[1][1], color);
+        addPossibleMove(possibleFields, curRow, curCol, directions[2][0], directions[2][1], color);
+        addPossibleMove(possibleFields, curRow, curCol, directions[3][0], directions[3][1], color);
+
+        addPossibleMove(possibleFields, curRow, curCol, directions[4][0], directions[4][1], color);
+        addPossibleMove(possibleFields, curRow, curCol, directions[5][0], directions[5][1], color);
+        addPossibleMove(possibleFields, curRow, curCol, directions[6][0], directions[6][1], color);
+        addPossibleMove(possibleFields, curRow, curCol, directions[7][0], directions[7][1], color);
+
+        return possibleFields;
     }
 
-    private void addPossibleMove(List<Position>  possibleMoves, int curRow,int curCol,int row, int col,String color) {
+    private void addPossibleMove(List<Field>  possibleMoves, int curRow,int curCol,int row, int col,String color) {
 
         if (isMovePossible(move,board, curRow,curCol, row, col,color))
-            possibleMoves.add(new Position(curRow + row, curCol+col ));
+            possibleMoves.add(board.getField(curRow + row, curCol+col ));        
+
 
     }
 
