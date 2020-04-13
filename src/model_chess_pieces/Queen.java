@@ -37,7 +37,7 @@ public class Queen extends ChessPiece {
         return value;
     }
 
-    public boolean isDiagonalMovePossible(ChessMove move, Board board) { //In case Queen is moving diagonally, queen moves the same as bishop
+    public boolean isMoveLikeBishop(ChessMove move, Board board) { //In case Queen is moving diagonally, queen moves the same as bishop
 
         String color = this.getColor().toString(); // colour of pawn
         System.out.println("colour=" + color);
@@ -65,7 +65,7 @@ public class Queen extends ChessPiece {
         //check that field is actually occupied
         if (board.isFieldOccupied(move.getCurrent().getRow(), move.getCurrent().getCol())) {
 
-            System.out.println("bishop exists on the field and can be moved");
+            System.out.println("queen exists on the field and can be moved");
 
             if (board.isFieldOccupied(newRow, newCol)) {
 
@@ -80,7 +80,9 @@ public class Queen extends ChessPiece {
                 for (int i = 1; i <= Math.abs(deltaX); i++) {
 
                     nextField = board.getField(curRow + i * dx, curCol + i * dy);
-
+                    if (nextField == null) {
+                        System.out.println("null");
+                    }
                     if (nextField.getChessPiece() != null && (i != Math.abs(deltaX) || nextField.getChessPiece().getColor() == this.getColor())) {
                         return false;
                     }
@@ -115,18 +117,17 @@ public class Queen extends ChessPiece {
 
         /*IF EXPLANATION: deltaX !=0 && deltaY !=0 is true IF the move is not horizontal OR vertical
                           newRow == curRow && newCol==curRow is true IF the queen stays on the same position*/
-        if( deltaX !=0 && deltaY !=0 || (newRow==curRow && newCol==curCol)){
+        if (deltaX != 0 && deltaY != 0 || (newRow == curRow && newCol == curCol)) {
             System.out.println("Invalid Move");
             return false;
         }
-        
+
         int dx = setDerivativeChange(deltaX);
         int dy = setDerivativeChange(deltaY);
-        
-        int delta = Math.abs(Math.max(Math.abs(deltaX),Math.abs(deltaY)));
+
+        int delta = Math.abs(Math.max(Math.abs(deltaX), Math.abs(deltaY)));
 
         System.out.println(newRow + " " + newCol); //check that they are right
-        
 
         //check that field is actually occupied
         if (board.isFieldOccupied(move.getCurrent().getRow(), move.getCurrent().getCol())) {
@@ -146,7 +147,7 @@ public class Queen extends ChessPiece {
                 for (int i = 1; i <= delta; i++) {
 
                     nextField = board.getField(curRow + i * dx, curCol + i * dy);
-                    
+
                     if (nextField.getChessPiece() != null && (i != delta || nextField.getChessPiece().getColor() == this.getColor())) {
                         return false;
                     }
@@ -167,24 +168,6 @@ public class Queen extends ChessPiece {
         }
     }
 
-    private void check_col_row(int col, int curCol, int row, int curRow) {
-        //row = new x, col = new y 
-        //curRow = old x, curCol = old y
-        if //VERTICAL 
-                (col == curCol) { //if column(Yposition) is the same-->the move is forward/ backword : newX - oldX = 1 or -1
-            System.out.println("VERTICAL move is possible");
-            System.out.println(Math.abs((row - curRow)));
-            answer = true;
-        }//HORIZONTAL 
-        else if (row == curRow) {   //if row(Xposition)is the same and newY - oldY = 1 or -1
-            System.out.println("HORIZONTAL move is possible");
-            System.out.println((row - curRow));
-            answer = true;
-        } else {
-            System.out.println("piece exists on this field -- move not possible");
-            answer = false;
-        }
-        //++++++CHECK IF THERE IS AN OTHER PAWN IN THE COLUMN OR ROW THAT THE ROOK CAN MOVE!!!
-    }
+    
 
 }
