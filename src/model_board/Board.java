@@ -26,7 +26,7 @@ public class Board {
 	{
 		if(x<0||x>7||y<0||y>7)
 			return null;
-		Field possible = field[y][x];
+		Field possible = field[x][y];
 		FieldCoordinates possibleCoords = possible.getFieldCoordintes();
 		if(possibleCoords.row == x && possibleCoords.col == y){
 			return possible;
