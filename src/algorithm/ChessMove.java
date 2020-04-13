@@ -9,6 +9,17 @@ public class ChessMove {
 	private FieldCoordinates newPos;
 	private ChessPiece p; // p is a copy of the piece that is to be moved
 
+	public ChessMove() {
+		
+	}
+	
+	public ChessMove(FieldCoordinates newPos, ChessPiece p) {
+		super();
+		this.current = p.getPiecePosition();
+		this.newPos = newPos;
+		this.p = p;
+	}
+
 	public FieldCoordinates getCurrent() {
 		return current;
 	}
@@ -23,6 +34,11 @@ public class ChessMove {
 
 	public void setNewPos(FieldCoordinates newPos) {
 		this.newPos = newPos;
+	}
+	
+	public void setNewCoor(int row,int col) {
+		FieldCoordinates newpos = new FieldCoordinates(row,col);
+		this.newPos = newpos;
 	}
 
 	public ChessPiece getP() {
