@@ -112,18 +112,11 @@ public class Pawn extends ChessPiece {
 								&& !(board.getField()[col][row].getChessPiece().getColor().toString().equals(color))) {
 							answer = true;
 						} else { // check enpassant
-//							Player Wplayer = new Player();
-//							Player Bplayer = new Player();
-//							Bplayer.setTurn(true);
-//							ChessMove move2 = new ChessMove(null,board.getField()[6][7].getChessPiece());
-//							move2.setNewCoor(4,7);
-//							Wplayer.setLastMove(move2);
-//							ChessMove enpassant = this.CheckEnPassant(board, Wplayer, Bplayer);
-//							if (enpassant.getNewPos().equals(move.getNewPos())) {
-//								answer = true;
-//							} else {
+						//	if(the move is en passant){
+						//		answer = true;
+						//	} else {
 							answer = false;
-							// }
+						// 	}
 						}
 					}
 				}
