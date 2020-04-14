@@ -1,7 +1,13 @@
 package model_chess_pieces;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
+
 import algorithm.ChessMove;
+import algorithm.Player;
 import model_board.Board;
+import model_board.Field;
 import model_board.FieldCoordinates;
 
 /**
@@ -29,9 +35,42 @@ public class Pawn extends ChessPiece {
 		this.isFirstMove = isFirstMove;
 	}
 
-	public void allPossibleMoves(Board board) {
+	public List<Field> allPossibleMoves(Board board) { //missing en passant
 
+		List<Field> moves = new LinkedList<>();
+		int currow = this.getPiecePosition().getRow();
+		int curcol = this.getPiecePosition().getCol();
+		ChessMove move = new ChessMove(null, this);
+
+		moves.add(board.getField()[currow][curcol]);
+
+		int forward = this.getColor().equals(ChessPieceCharacteristics.Color.b) ? 1 : -1;
+
+		// forward
+		for (int i = 0; i <= 2; i++) {
+			int col = curcol;
+			int row = currow + forward * i;
+			move.setNewCoor(row, col);
+			if (this.isMovePossible(move, board)) {
+				moves.add(new Field(row, col));
+			}
+		}
+
+		// diagonal
+		int col = curcol + 1;
+		int row = currow + forward;
+		move.setNewCoor(row, col);
+		if (this.isMovePossible(move, board)) {
+			moves.add(new Field(row, col));
+		}
 		
+		col=curcol - 1;
+		move.setNewCoor(row, col);
+		if (this.isMovePossible(move, board)) {
+			moves.add(new Field(row, col));
+		}
+
+		return moves;
 	}
 
 	public boolean isMovePossible(ChessMove move, Board board) {
@@ -54,7 +93,7 @@ public class Pawn extends ChessPiece {
 				if (col == curCol) {
 					// forward
 					if (this.isFirstMove()) { // the pawn can move 2 fields forward if it is its first move
-						if (Math.abs((row - curRow)) <= 2) {
+						if (Math.abs((row - curRow)) == 1 || Math.abs((row - curRow)) == 2) {
 							System.out.println("move is possible-->move piece " + Math.abs((row - curRow))
 									+ " position(s) forward");
 							answer = true;
@@ -89,24 +128,148 @@ public class Pawn extends ChessPiece {
 		}
 		return answer;
 	}
-	
-	public void enPassant() {
-		
-	}
-	
-	public void PawnUpgrade() {
-		int row = this.getPiecePosition().getRow();
-		int col = this.getPiecePosition().getRow();
-		
-		if(this.getColor().equals(ChessPieceCharacteristics.Color.w)) {
-			if(row==7) {
-				//white pawn can be upgraded
+
+	public int CheckEnPassantWhitePlayer(Board board, Player player) {
+
+		boolean occupied = false;
+		int counter = 0;
+		int curRow = this.getPiecePosition().getRow();
+		int curCol = this.getPiecePosition().getRow();
+
+		int enemyRow = curRow;
+		int enemyCol = 0;
+		int enemyCol1 = curCol + 1;
+		int enemyCol2 = curCol - 1;
+
+		String enemyColour = ChessPieceCharacteristics.Color.b.toString();
+
+		if (curRow == 4) {
+			if (board.isFieldOccupied(enemyRow, enemyCol1)) { // right
+				enemyCol = enemyCol1;
+				occupied = true;
+				counter++;
 			}
-		}else {
-			if(row==0) {
-				//black pawn can be upgraded
+			if (board.isFieldOccupied(enemyRow, enemyCol2)) { // left
+				enemyCol = enemyCol2;
+				occupied = true;
+				counter++;
+			}
+			if (occupied && counter == 1) {
+				ChessPiece piece = board.getField()[enemyRow][enemyCol].getChessPiece();
+				if (piece.getColor().toString().equals(enemyColour)
+						&& piece.getName().equals(ChessPieceCharacteristics.Name.P)) {
+					if (player.getLastMove().getP().equals(piece)) {
+
+					}
+
+				}
+			} else if (occupied && counter == 2) {
+				ChessPiece piece1 = board.getField()[enemyRow][enemyCol1].getChessPiece();
+				if (piece1.getColor().toString().equals(enemyColour)
+						&& piece1.getName().equals(ChessPieceCharacteristics.Name.P)) {
+
+				}
+				ChessPiece piece2 = board.getField()[enemyRow][enemyCol2].getChessPiece();
+				if (piece2.getColor().toString().equals(enemyColour)
+						&& piece2.getName().equals(ChessPieceCharacteristics.Name.P)) {
+
+				}
+			}
+
+		}
+		return counter;
+	}
+
+	public int CheckEnPassantBlackPlayer(Board board) {
+
+		int counter = 0;
+//			enemyColour = ChessPieceCharacteristics.Color.b.toString();
+//			if (curRow == 3) {
+//
+//			}
+		return counter;
+
+	}
+
+	public void enPassant() {
+		// if the last move of the enemy is
+		// a pawn 2 fields forward and it would be eaten if it moved 1 field,then
+		// pawn can catch the enPassant move and eat it as if it would have moved 1
+		// field
+
+	}
+
+	public boolean CheckPawnPromotion(int row) {
+		boolean promotion = false;
+		if (this.getColor().equals(ChessPieceCharacteristics.Color.w)) {
+			if (row == 0) {
+				// white pawn can be promoted
+				promotion = true;
+			}
+		} else {
+			if (row == 7) {
+				// black pawn can be promoted
+				promotion = true;
 			}
 		}
+		return promotion;
+	}
+
+	public void PawnPromotion(int row,Board board) {
+		if (this.CheckPawnPromotion(row)) {
+			boolean temp = true;
+			while (temp) {
+				System.out.println("This pawn can be promoted to:");
+				System.out.println("\t1.Queen | 2.Bishop | 3.Knight | 4.Rook");
+				Scanner input = new Scanner(System.in);
+				int answer = input.nextInt();
+
+				switch (answer) {
+				case 1:
+					System.out.println("Pawn at position " + row + "," + this.getPiecePosition().getCol()
+							+ " is promoted to Queen");
+					Queen queen = new Queen(this.getColor(), ChessPieceCharacteristics.Name.Q);
+					this.promotePawn(queen,board);
+					temp = false;
+					break;
+				case 2:
+					System.out.println("Pawn at position " + row + "," + this.getPiecePosition().getCol()
+							+ " is promoted to Bishop");
+					Bishop bishop = new Bishop(this.getColor(), ChessPieceCharacteristics.Name.B);
+					this.promotePawn(bishop,board);
+					temp = false;
+					break;
+				case 3:
+					System.out.println("Pawn at position " + row + "," + this.getPiecePosition().getCol()
+							+ " is promoted to Knight");
+					Knight knight = new Knight(this.getColor(), ChessPieceCharacteristics.Name.N);
+					this.promotePawn(knight,board);
+					temp = false;
+					break;
+				case 4:
+					System.out.println("Pawn at position " + row + "," + this.getPiecePosition().getCol()
+							+ " is promoted to Rook");
+					Rook rook = new Rook(this.getColor(), ChessPieceCharacteristics.Name.R);
+					this.promotePawn(rook,board);
+					temp = false;
+					break;
+				default:
+					System.out.println("Not a valid answer");
+					break;
+
+				}
+			}
+		}
+
+	}
+	
+	public void promotePawn(ChessPiece piece,Board board) {
+		int row = this.getPiecePosition().getRow();
+		int col = this.getPiecePosition().getCol();
+		
+		board.getField()[row][col].removeChessPiece(); 
+		this.setIsAlive(false);
+		board.getField()[row][col].setChessPiece(piece);
 	}
 
 }
