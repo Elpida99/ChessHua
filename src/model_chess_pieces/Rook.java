@@ -7,6 +7,7 @@ package model_chess_pieces;
 
 import algorithm.ChessMove;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import model_board.Board;
 import model_board.Field;
@@ -21,9 +22,6 @@ public class Rook extends ChessPiece {
     private final int value = 5;
     private boolean answer = false; //answer: is the move possiple or not
 
-    Board board;
-    ChessMove move;
-       
     private Field field[][];
 
     public Field[][] getField() {
@@ -33,8 +31,7 @@ public class Rook extends ChessPiece {
     public void setField(Field[][] field) {
         this.field = field;
     }
-    
-    
+
     private int[][] possibleMoves;
 
     private final int[][] directions = {
@@ -61,8 +58,29 @@ public class Rook extends ChessPiece {
         super(color, name);
     }
 
-    public List<Field> getPossibleMovesForKing(ChessMove move, Board board) {
-        
+    public List<Field> allPossibleMoves(Board board) {
+        List<Field> moves = new LinkedList<>();
+        int currow = this.getPiecePosition().getRow();
+        int curcol = this.getPiecePosition().getCol();
+        ChessMove move = new ChessMove(null, this);
+
+        moves.add(board.getField()[currow][curcol]);
+
+        for (int i = 0; i < this.directions.length; i++) {
+            int[] direction = directions[i];
+            int col = curcol + direction[0];
+            int row = currow + direction[1];
+            move.setNewCoor(row, col);
+            if (this.isMovePossible(move, board)) {
+                moves.add(new Field(row, col));
+            }
+
+        }
+        return moves;
+
+    }
+
+    public boolean isMovePossible(ChessMove move, Board board) { // int curRow, int curCol, int row, int col, String color) {
         int curRow = 0;
         int curCol = 0;
         int row = 0;
@@ -77,34 +95,9 @@ public class Rook extends ChessPiece {
         curCol = this.getPiecePosition().getCol(); // piece's current column, y !!
         System.out.println("old coordinates: " + move.getCurrent().getRow() + "," + move.getCurrent().getCol());
 
-        //DO NOT KNOW IF WE NEED THEM /*
         row = move.getNewPos().getRow(); // coordinates of desired move are the directions of the user
         col = move.getNewPos().getCol();
         System.out.println("new position: " + row + "," + col); // check that they are right
-        //      */
-        
-        List<Field> possibleFields = new ArrayList<>();
-        
-        addPossibleMove(possibleFields,  curRow,  curCol, row, col,color); 
-        addPossibleMove(possibleFields,  curRow,  curCol, directions[0][0] , directions[0][1],color);
-        addPossibleMove(possibleFields,  curRow,  curCol, directions[1][0] , directions[1][1],color);
-        addPossibleMove(possibleFields,  curRow,  curCol, directions[2][0] , directions[2][1],color);
-        addPossibleMove(possibleFields,  curRow,  curCol, directions[3][0] , directions[3][1],color);  
-        
-        
-        return possibleFields;   
-    }
-
-    private void addPossibleMove(List<Field> possibleFields, int curRow, int curCol, int row, int col, String color) {
-
-        if (isMovePossible(move, board, curRow, curCol, row, col, color))
-            possibleFields.add(board.getField(curRow + row, curCol+col ));        
-
-    }
-
-
-    
-    public boolean isMovePossible(ChessMove move, Board board, int curRow, int curCol, int row, int col, String color) {
 
         if (board.isFieldOccupied(curRow, curCol)) { //if piece exists on the field
             System.out.println("piece exists on this field and it can be moved\n");
@@ -112,13 +105,13 @@ public class Rook extends ChessPiece {
             if (ChessMove.isValid(row, col)) { //if the new position is valid (row&col <8)
                 System.out.print("New position is valid, coordinates exist on board (row&col <8) ");
 
-                if (board.isFieldOccupied(row, col) && !(board.getField()[col][row].getChessPiece().getColor().toString().equals(color))) {
+                if (board.isFieldOccupied(row, col) && !(board.getField()[row][col].getChessPiece().getColor().toString().equals(color))) {
                     //if NEW POSITION IS OCCUPIED/ NOT EMPTY , we need to check the colour of the pioni + and the colour is DIFFERENT from the one that the king has 
                     System.out.println("field occupied-the colour of the pawn (pioni) needs to be checked ");
 
                     check_col_row(col, curCol, row, curRow);
 
-                } else if (board.isFieldOccupied(row, col) && (board.getField()[col][row].getChessPiece().getColor().toString().equals(color))) {
+                } else if (board.isFieldOccupied(row, col) && (board.getField()[row][col].getChessPiece().getColor().toString().equals(color))) {
                     //if NEW POSITION IS OCCUPIED/ NOT EMPTY , we need to check the colour of the pioni + and the colour is the SAME from the one that the king has 
                     System.out.println("field occupied-the colour of the pawn (pioni) is the SAME with the colour of the king ");
                     answer = false;
@@ -159,8 +152,6 @@ public class Rook extends ChessPiece {
             System.out.println("piece exists on this field -- move not possible");
             answer = false;
         }
-
-        //CHECK IF THERE IS AN OTHER PAWN IN THE COLUMN OR ROW THAT THE ROOK CAN MOVE!!!
     }
 
 }
