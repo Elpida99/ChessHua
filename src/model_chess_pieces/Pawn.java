@@ -71,7 +71,7 @@ public class Pawn extends ChessPiece {
 
 		// enPassant
 		ChessMove enpassant = this.CheckEnPassant(board, Wplayer, Bplayer);
-		if (!enpassant.getNewPos().equals(null)) {
+		if (enpassant.getNewPos()!=null) {
 			moves.add(new Field(enpassant.getNewPos().getRow(), enpassant.getNewPos().getCol()));
 		}
 
