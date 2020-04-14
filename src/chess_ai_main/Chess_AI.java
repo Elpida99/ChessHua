@@ -50,5 +50,25 @@ public class Chess_AI {
         FieldCoordinates newBPos = new FieldCoordinates(3,5);
         bMove.setNewPos(newBPos);
         System.out.println(bishop.isMovePossible(bMove, board)); */
+        
+        //test for rook 
+        ChessPiece piece1 = board.getField()[7][0].getChessPiece();
+        Rook rook = (Rook) piece1;
+        rook.setPiecePosition(piece1.getPiecePosition());
+        List<Field> moves_rook = new LinkedList<>();
+        moves_rook = rook.allPossibleMoves(board);
+        for (int i = 0; i < moves_rook.size(); i++) {
+            System.out.println("possible fields: " + moves_rook.get(i).getFieldCoordintes() + "\n");
+        }
+        
+        //test for king 
+        //        ChessPiece piece = board.getField()[7][4].getChessPiece();
+//        King king = (King) piece;
+//        king.setPiecePosition(piece.getPiecePosition());
+//        List<Field> moves = new LinkedList<>();
+//        moves = king.allPossibleMoves(board);
+//        for (int i = 0; i < moves.size(); i++) {
+//            System.out.println("possible fields: " + moves.get(i).getFieldCoordintes() + "\n");
+//        }
     }
 }
