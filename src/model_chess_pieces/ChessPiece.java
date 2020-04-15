@@ -27,7 +27,7 @@ public abstract class ChessPiece {
     
     //public abstract boolean isMovePossible();
 
-    public abstract List<Field> allPossibleMoves(Board board);
+    public abstract List<Field> allPossibleMoves(Board board,Player player); //player needed for pawn
 
     public abstract int getValue();
 
