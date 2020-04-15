@@ -13,14 +13,23 @@ import model_chess_pieces.*;
 public class Board {
 
 	private Field field[][];
+	private ChessMove lastMove;
 
-    public Field[][] getField() {
+	public ChessMove getLastMove() {
+		return lastMove;
+	}
+
+	public void setLastMove(ChessMove lastMove) {
+		this.lastMove = lastMove;
+	}
+
+     	public Field[][] getField() {
         return field;
-    }
+   	 }
 
-    public void setField(Field[][] field) {
-        this.field = field;
-    }
+  	public void setField(Field[][] field) {
+  	    this.field = field;
+  	  }
 
     public Field getField(int x, int y)   //NEW METHOD
 	{
