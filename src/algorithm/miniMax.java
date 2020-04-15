@@ -87,8 +87,8 @@ public int evaluateBoard(Board board) {
 		List<ChessMove> allMoves = new LinkedList<>();
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				if (board.isFieldOccupied(i, j)) {
-					if (board.getField()[i][j].getChessPiece().getName().equals(ChessPieceCharacteristics.Name.P)) {
+				if (board.isFieldOccupied(i, j)) { //currently finds only for pawns and knights
+					if (board.getField()[i][j].getChessPiece().getName().equals(ChessPieceCharacteristics.Name.P) || board.getField()[i][j].getChessPiece().getName().equals(ChessPieceCharacteristics.Name.N)) {
 						possibleMoves = board.getField()[i][j].getChessPiece().allPossibleMoves(board, player);
 						for (Field Field : possibleMoves) {
 							allMoves.add(
