@@ -23,7 +23,7 @@ public class Knight extends ChessPiece {
 		return value;
 	}
 
-	public List<Field> allPossibleMoves(Board board) {
+	public List<Field> allPossibleMoves(Board board,Player player) {
 		List<Field> moves = new LinkedList<>();
 		int currow = this.getPiecePosition().getRow();
 		int curcol = this.getPiecePosition().getCol();
