@@ -20,6 +20,7 @@ import model_board.Position;
  */
 public class King extends ChessPiece {
 
+    private boolean firstMove;
     private final int value = 10;
     private boolean answer = false; //answer: is the move possiple or not
 
@@ -139,5 +140,112 @@ public class King extends ChessPiece {
             System.out.println("piece exists on this field -- move not possible");
             answer = false;
         }
+    }
+    
+    public void doCastling(Board board){
+        //castling, change positions between rook and king !
+        int king_curRow = 0;
+        int king_curCol = 0;
+        String king_color = null;
+           
+        int rook_curRow = 0;
+        int rook_curCol = 0;
+        String rook_color = null;
+        
+        int new_king_Row = 0;
+        int new_king_Col = 0;           
+        int new_rook_Row = 0;
+        int new_rook_Col = 0;
+
+        //BLACK  colour
+        if (king_curRow == 0 && king_curCol == 4 && rook_curRow == 0 && rook_curCol == 7 && (!board.isFieldOccupied(0, 5)) && (!board.isFieldOccupied(0, 6))) {
+            new_king_Row = 0;
+            new_king_Col = 6;           
+            new_rook_Row = 0;
+            new_rook_Col = 5;
+        } else if (king_curRow == 0 && king_curCol == 4 && (rook_curRow == 0 && rook_curCol == 0) && (!board.isFieldOccupied(0, 1)) && (!board.isFieldOccupied(0, 2)) && (!board.isFieldOccupied(0, 3))) {
+            new_king_Row = 0;
+            new_king_Col = 3;           
+            new_rook_Row = 0;
+            new_rook_Col = 2;
+        }  
+        //WHITE colour
+        else if (king_curRow == 7 && king_curCol == 4 && rook_curRow == 7 && rook_curCol == 7 && (!board.isFieldOccupied(7, 5)) && (!board.isFieldOccupied(7, 6))) {
+            new_king_Row = 7;
+            new_king_Col = 6;           
+            new_rook_Row = 7;
+            new_rook_Col = 5;
+        } else if (king_curRow == 7 && king_curCol == 4 && rook_curRow == 7 && rook_curCol == 0 && (!board.isFieldOccupied(7, 1)) && (!board.isFieldOccupied(7, 2)) && (!board.isFieldOccupied(7, 3))) {
+            new_king_Row = 7;
+            new_king_Col = 3;           
+            new_rook_Row = 7;
+            new_rook_Col = 2;
+        } else {
+            System.out.println("ERROR!!");
+        }
+
+    }
+
+    //lists must be in the class where the method will be called 
+    List<Field> king_moves = new LinkedList<>();
+    List<Field> rook_moves = new LinkedList<>();
+    
+    public boolean isCastlingPossible(Board board, int king_curRow, int king_curCol, String king_color, int rook_curRow, int rook_curCol, String rook_color){
+        boolean possible = false;
+        
+        //*both lists empty=>rook, queen have not been moved once   
+        //*the in-between fields empty  
+        //*in their initial position based on their colour  
+        if( king_moves.isEmpty() && rook_moves.isEmpty() ){ 
+            if ("b".equals(rook_color) && "b".equals(king_color)) { //black  colour
+                //*if they are in their initial position ++ the in-between fields empty
+                if (king_curRow == 0 && king_curCol == 4 && rook_curRow == 0 && rook_curCol == 7 && (!board.isFieldOccupied(0, 5)) && (!board.isFieldOccupied(0, 6))) {                    //*if they are in their initial position  ++ the in-between fields empty : [0][5]  [0][6]
+                    System.out.println("same color=b, king_curRow == 0 && king_curCol == 4 && rook_curRow == 0 && rook_curCol == 7 ");
+                    possible = true;
+                } else if (king_curRow == 0 && king_curCol == 4 && (rook_curRow == 0 && rook_curCol == 0) && (!board.isFieldOccupied(0, 1)) && (!board.isFieldOccupied(0, 2)) && (!board.isFieldOccupied(0, 3))) {
+                    //empty:  [0][1] [0][2]    [0][3]
+                    System.out.println("same color=b, king( Row == 0 , Col == 4 ) && rook ( Row == 0 && Col == 0)");
+                    possible = true;
+                } else {
+                    System.out.println("same color=b, criteria do not match");
+                    possible = false;
+                }
+            } else if ("w".equals(rook_color) && "w".equals(king_color)) { //white colour
+                //*if they are in their initial position ++ the in-between fields empty
+                if(king_curRow == 7 && king_curCol == 4 &&  rook_curRow == 7 && rook_curCol == 7 && ( !board.isFieldOccupied(7,5) ) &&  ( !board.isFieldOccupied(7,6) ) ){  
+                    //empty: [7][5]  [7][6]
+                    System.out.println("same color=w, king_curRow == 7 && king_curCol == 4 &&  rook_curRow == 7 && rook_curCol == 7 && empty: [7][5]  [7][6]");
+                    possible = true;
+                }else if (king_curRow == 7 && king_curCol == 4 && rook_curRow == 7 && rook_curCol == 0 && ( !board.isFieldOccupied(7,1) ) && (! board.isFieldOccupied(7,2) ) && ( !board.isFieldOccupied(7,3) ) ){
+                    //empty: [7][1],  [7][2], [7][3]
+                    System.out.println("same color=w, king_curRow == 7 && king_curCol == 4 && rook_curRow == 7 && rook_curCol == 0 + empty: [7][1],  [7][2], [7][3]");
+                    possible = true;
+                }else{
+                    System.out.println("same color=w, criteria do not match");
+                    possible = false;
+                }                
+            }else{
+                System.out.println("the king and rook do not have the same color");
+                possible = false;
+            }
+        }else{
+            System.out.println("lists not empty, one or both of the pawns have been moved before");
+            possible = false;
+        } 
+        return possible;
+    }
+        
+     
+     //logic used for castling
+    public boolean firstMove() {
+        return firstMove;
+    }
+
+    public void madeFirstMove() {
+        firstMove = false;
+    }
+
+    public void setFirstMove(boolean move) {
+        firstMove = move;
     }
 }
