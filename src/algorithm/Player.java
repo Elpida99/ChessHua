@@ -5,6 +5,16 @@ public class Player {
 	private ChessMove lastMove;
 	private boolean turn;
 	private String playerColour;
+	
+	public Player() {
+		this.lastMove=null;
+	}
+	
+	public Player(String playerColour,ChessMove lastMove) {
+		this.playerColour=playerColour;
+		this.lastMove = lastMove;
+	}
+	
 	public ChessMove getLastMove() {
 		return lastMove;
 	}
