@@ -42,15 +42,23 @@ public class Board {
 	}
     
 	public Board() {
-
+		field = new Field[8][8];
+	}
+	
+	public void createEmptyBoard() {
 		field = new Field[8][8]; // how many there on the board
 
 		for (int i = 0; i < 8; ++i) {
 			for (int j = 0; j < 8; ++j) {
 				field[i][j] = new Field(i, j);
+
 			}
 		}
+	}
 
+	public void CreateBoard() {
+
+		createEmptyBoard();
 		// emptyFields();
 		placeBlackPieces();
 		placeBlackPawns();
