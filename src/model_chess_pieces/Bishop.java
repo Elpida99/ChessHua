@@ -115,6 +115,7 @@ public class Bishop extends ChessPiece {
         return true;
     }
 
+    @Override
     public List<Field> allPossibleMoves(Board board, Player curplayer) {
 
         List<Field> moves = new LinkedList<>();
