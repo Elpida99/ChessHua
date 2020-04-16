@@ -3,6 +3,7 @@ package model_chess_pieces;
 import algorithm.ChessMove;
 import model_board.Board;
 import model_board.FieldCoordinates;
+import algorithm.Player;
 
 /**
  * it21735 , it21754, it21762
