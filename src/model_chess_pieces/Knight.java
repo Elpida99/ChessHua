@@ -1,9 +1,13 @@
 package model_chess_pieces;
 
+
 import algorithm.ChessMove;
 import model_board.Board;
 import model_board.FieldCoordinates;
 import algorithm.Player;
+import java.util.LinkedList;
+import java.util.List;
+import model_board.Field;
 
 /**
  * it21735 , it21754, it21762
