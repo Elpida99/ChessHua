@@ -1,8 +1,10 @@
 package model_chess_pieces;
 
 import algorithm.ChessMove;
+import algorithm.Player;
 import exceptions.InvalidMoveException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import model_board.Board;
 import model_board.Field;
@@ -39,14 +41,14 @@ public class Queen extends ChessPiece {
 
     public boolean isMoveLikeBishop(ChessMove move, Board board) { //In case Queen is moving diagonally, queen moves the same as bishop
 
-        String color = this.getColor().toString(); // colour of pawn
+        String color = this.getColor().toString(); // colour of queen
         System.out.println("colour=" + color);
         move.setCurrent(this.getPiecePosition()); // piece's current position-->set it to class ChessMove
 
-        int curRow = move.getCurrent().getRow(); //get bishop's current coordinates 
+        int curRow = move.getCurrent().getRow(); //get Queen's current coordinates 
         int curCol = move.getCurrent().getCol();
 
-        int newRow = move.getNewPos().getRow(); //get bishop's new coordinates 
+        int newRow = move.getNewPos().getRow(); //get Queen's new coordinates 
         int newCol = move.getNewPos().getCol();
 
         if (move.getCurrent() == null || move.getNewPos() == null) { //check
@@ -97,14 +99,14 @@ public class Queen extends ChessPiece {
 
     public boolean isMoveLikeRook(ChessMove move, Board board) { //If queen moves vertically/horizontically, she moves like Rook
 
-        String color = this.getColor().toString(); // colour of pawn
+        String color = this.getColor().toString(); // colour of Queen
         System.out.println("colour=" + color);
         move.setCurrent(this.getPiecePosition()); // piece's current position-->set it to class ChessMove
 
-        int curRow = move.getCurrent().getRow(); //get bishop's current coordinates 
+        int curRow = move.getCurrent().getRow(); //get Queen's current coordinates 
         int curCol = move.getCurrent().getCol();
 
-        int newRow = move.getNewPos().getRow(); //get bishop's new coordinates 
+        int newRow = move.getNewPos().getRow(); //get Queen's new coordinates 
         int newCol = move.getNewPos().getCol();
 
         if (move.getCurrent() == null || move.getNewPos() == null) { //check
@@ -168,6 +170,57 @@ public class Queen extends ChessPiece {
         }
     }
 
-    
+    public boolean isMovePossible(ChessMove move, Board board) {
 
+        if (this.getPiecePosition() == null || move.getNewPos() == null) {
+            return false;
+        }
+
+        int curRow = move.getCurrent().getRow(); //get Queen's current coordinates 
+        int curCol = move.getCurrent().getCol();
+
+        int newRow = move.getNewPos().getRow(); //get Queen's new coordinates 
+        int newCol = move.getNewPos().getCol();
+
+        int deltaX = newRow - curRow;
+        int deltaY = newCol - curCol;
+        if ((deltaX == 0 && deltaY != 0) || (deltaX != 0 && deltaY == 0)) {
+            return isMoveLikeRook(move, board);
+        }
+        if (Math.abs(deltaX) == Math.abs(deltaY)) {
+            return isMoveLikeBishop(move, board);
+        }
+        
+        return false;
+    }
+
+    public List<Field> allPossibleMoves(Board board, Player curplayer) {
+
+        List<Field> moves = new LinkedList<>();
+        int curRow = this.getPiecePosition().getRow();
+        int curCol = this.getPiecePosition().getCol();
+        ChessMove move = new ChessMove(null, this);
+
+        moves.add(board.getField()[curRow][curCol]);
+
+        //checks if there are any pieces in the path for the rook based on directions
+        for (int[] direction : directions) {
+            for (int j = 1; j < 8; j++) {
+                int col = curCol + direction[0] * j;
+                int row = curRow + direction[1] * j;
+                
+                move.setNewCoor(row, col);
+                //if the possible position is valid check the next positions
+                if (this.isMovePossible(move, board)) {
+                    
+                    moves.add(new Field(row,col));
+                    
+                }
+            }
+        }
+        
+            return moves;
+
+    }
+    
 }
