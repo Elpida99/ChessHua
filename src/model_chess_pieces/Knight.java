@@ -1,6 +1,5 @@
 package model_chess_pieces;
 
-
 import algorithm.ChessMove;
 import model_board.Board;
 import model_board.FieldCoordinates;
@@ -41,7 +40,7 @@ public class Knight extends ChessPiece {
 			int col = curcol + direction[0];
 			int row = currow + direction[1];
 			move.setNewCoor(row, col);
-			if (this.isMovePossible(move, board)) {
+			if (this.isMovePossible(board, move)) {
 				moves.add(new Field(row, col));
 			}
 
