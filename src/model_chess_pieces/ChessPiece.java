@@ -73,15 +73,11 @@ public abstract class ChessPiece {
 	
 	public boolean isBlocked(Board board) {
 		boolean blocked = false;
-		boolean white = false;
-		
+				
 		int curRow = this.getPiecePosition().getRow();
 		int curCol = this.getPiecePosition().getCol();
 		
-		if (this.getColor().equals(ChessPieceCharacteristics.Color.w)) { // white
-			white = true;
-		}
-		if(white) { //white
+		if(this.getColor().equals(ChessPieceCharacteristics.Color.w)) { //white
 			if(board.getField()[curRow-1][curCol].isOccupied()) {
 				blocked=true;
 			}
@@ -92,6 +88,7 @@ public abstract class ChessPiece {
 		}
 		
 		return blocked;
+		
 	}
 
 }
