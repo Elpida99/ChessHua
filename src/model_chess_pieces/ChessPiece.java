@@ -90,5 +90,11 @@ public abstract class ChessPiece {
 		return blocked;
 		
 	}
+	
+	 public boolean firstMove(){
+
+        	return false;
+
+         }
 
 }
