@@ -65,7 +65,7 @@ public class Board {
 		}
 	}
 
-	public void CreateBoard() {
+	public void createBoard() {
 
 		createEmptyBoard();
 		// emptyFields();
