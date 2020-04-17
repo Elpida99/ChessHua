@@ -175,4 +175,67 @@ public class miniMax {
         return beta;
     }
 */
+	
+	
+	
+	/* private int Max(Board board, int alpha, int beta, int boardDepth) {
+
+        ChessPiece piece;
+        boolean madeFirstMove;
+        int minVal;
+
+        //if it's at the depth get the board evulation
+        if (boardDepth == 0) {
+            return evaluateBoard(board);
+        }
+
+        //get the list of moves for the color of the current player
+        List<ChessMove> moves;
+
+        if (AIColor == ChessPieceCharacteristics.Color.w) {
+            moves = getAllMoves(board, ChessPieceCharacteristics.Color.w);
+        } else {
+            moves = getAllMoves(board, ChessPieceCharacteristics.Color.b);
+        }
+
+        //if there are moves that can be made for the player
+        if (moves != null) {
+
+            //while there are still moves that the player can make
+            while (moves.size() > 0) {
+
+                // get the first move from the move list
+                ChessMove firstMove = moves.remove(0);
+
+                if (firstMove.getCurrent().equals(firstMove.getNewPos())) {
+                    continue;
+                }
+                //check if the first move is being made
+                madeFirstMove =  board.checkFirstMove(firstMove.getCurrent());
+
+                // make move
+                piece = board.moveSpecialPiece(firstMove);
+
+                //get the min value by calling the min function at a depth one lower than the current depth
+                minVal = Min(board, alpha, beta, boardDepth - 1);
+
+                // if the min is greater than the beta undo the move and return the beta value
+                if (minVal >= beta) {
+                    board.undoSpecialMove(firstMove, piece, madeFirstMove);
+                    return beta;
+                }
+
+                //the alpha value set if the min is greater than the alpha
+                if (minVal > alpha) {
+                    if (boardDepth == depth) {
+                        nextMove = firstMove;
+                    }
+                    alpha = minVal;
+                }
+                //undo the move made
+                board.undoSpecialMove(firstMove, piece, madeFirstMove);
+            }
+        }
+        return alpha;
+    }*/
 }
