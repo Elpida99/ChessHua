@@ -170,6 +170,21 @@ public class Board {
 		System.out.println(" a  b  c  d  e  f  g  h ");
 		System.out.println("(0  1  2  3  4  5  6  7) \n");
 	}
+	
+	public boolean containsPiece(int row, int col){
+		return isFieldOccupied(row, col);
+	}
 
+
+	public boolean checkFirstMove(FieldCoordinates fieldcoordinates){
+		if(containsPiece(fieldcoordinates)){
+		    return field[fieldcoordinates.getRow()][fieldcoordinates.getCol()].getChessPiece().firstMove();
+		}
+		return false;
+	}
+
+	public boolean containsPiece(FieldCoordinates fieldcoordinates){
+		return field[fieldcoordinates.getRow()][fieldcoordinates.getCol()].isOccupied();
+	}
 
 }
