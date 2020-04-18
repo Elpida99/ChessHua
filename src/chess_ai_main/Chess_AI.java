@@ -20,23 +20,19 @@ public class Chess_AI {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-
         Board board = new Board();
-        board.printBoard();
-        System.out.println("Players: w=white and b=black");
-        System.out.println("Pieces: K=king, Q=queen, N=knight, B=bishop, R=rook, P=pawn");
-
+		board.createBoard();
+		board.printBoard();
+		System.out.println("Players: w=white and b=black");
+		System.out.println("Pieces: K=king, Q=queen, N=knight, B=bishop, R=rook, P=pawn\n");
+        
         //tests for pawn
-        ChessMove move = new ChessMove();
-        Pawn pawn = new Pawn(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.P);
-
-        pawn.setPiecePosition(board.getField()[1][4].getFieldCoordintes());
-        System.out.println(board.getField()[1][4].getFieldCoordintes());
-
-        move.setP(pawn);
+        
+        ChessPiece piece = board.getField()[6][7].getChessPiece();
+		Pawn pawn = new Pawn(null, null);
+		pawn = (Pawn) piece;
         FieldCoordinates newpos = new FieldCoordinates(3, 4);
-        move.setNewPos(newpos);
-        System.out.println(pawn.isMovePossible(move, board));
+        ChessMove move = new ChessMove(newpos,pawn);
         
         //test for bishop
        /* ChessMove bMove = new ChessMove();
@@ -70,5 +66,11 @@ public class Chess_AI {
 //        for (int i = 0; i < moves.size(); i++) {
 //            System.out.println("possible fields: " + moves.get(i).getFieldCoordintes() + "\n");
 //        }
+        
+        //test for miniMax
+        miniMax alg = new miniMax();
+		alg.AIColor=ChessPieceCharacteristics.Color.w;
+
+		System.out.println("Evaluation of board: "+alg.evaluateBoard(board));
     }
 }
