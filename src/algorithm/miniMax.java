@@ -52,60 +52,74 @@ public class miniMax {
         return copy;
     }
 
-    public int evaluateBoard(Board board) {
-        int value = 0;
-        double mobility = 0.0; // total number of legal moves of current player
-        int totalPieces = 0;
+   public int evaluateBoard(Board board) {
+		int value = 0;
+		double mobility = 0.0; // total number of legal moves of current player
+		int totalPieces = 0;
 
-        // goes thorough the entire board to evaluate the summed value of the pieces
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (board.isFieldOccupied(i, j)) {
-                    Field tempField = board.getField()[i][j];
-                    totalPieces++;
-                    // if the piece is the colour of current player--> increase value
-                    if (tempField.getChessPiece().getColor().toString().equals(player.getPlayerColour())) {
-                        value += tempField.getChessPiece().getValue();
-                        mobility += getAllPieceMoves(board, tempField).toArray().length;
+		// goes thorough the entire board to evaluate the summed value of the pieces
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (board.isFieldOccupied(i, j)) {
+					// if
+					// (board.getField()[i][j].getChessPiece().getName().equals(ChessPieceCharacteristics.Name.B))
+					// {
+					System.out.println("Move of: " + board.getField()[i][j].getChessPiece().getColor() + ""
+							+ board.getField()[i][j].getChessPiece().getName() + " is ");
+					Field tempField = board.getField()[i][j];
+					totalPieces++;
+					// if the piece is the colour of current player--> increase value
+					if (tempField.getChessPiece().getColor() == AIColor) {
+						value += tempField.getChessPiece().getValue();
+						mobility += getAllPieceMoves(board, tempField).toArray().length;
 
-                        List<ChessMove> moves = new LinkedList<>();
-                        moves = getAllPieceMoves(board, tempField);
-//						
-                    } else { // if enemy piece-->decrease value
-                        value -= tempField.getChessPiece().getValue();
-                        mobility -= getAllPieceMoves(board, tempField).toArray().length;
-                    }
-                }
-            }
-        }
-        /*
+						List<ChessMove> moves = new LinkedList<>();
+						moves = getAllPieceMoves(board, tempField);
+						for (int y = 0; y < moves.size(); y++) {
+							System.out.print(" " + moves.get(y).getCurrent().getRow() + ","
+									+ moves.get(y).getCurrent().getCol() + "-->" + moves.get(y).getNewPos().getRow()
+									+ "," + moves.get(y).getNewPos().getCol() + "\n");
+						}
+					} else { // if enemy piece-->decrease value
+						value -= tempField.getChessPiece().getValue();
+						mobility -= getAllPieceMoves(board, tempField).toArray().length;
+						List<ChessMove> moves = new LinkedList<>();
+						moves = getAllPieceMoves(board, tempField);
+						for (int y = 0; y < moves.size(); y++) {
+							System.out.print(" " + moves.get(y).getCurrent().getRow() + ","
+									+ moves.get(y).getCurrent().getCol() + "-->" + moves.get(y).getNewPos().getRow()
+									+ "," + moves.get(y).getNewPos().getCol() + "\n");
+						}
+					}
+				}
+
+			}
+		}
+		/*
 		 * The evaluation of the board is the value plus the mobility times the sum of
 		 * the remaining pieces divided by the original number of pieces, making the
 		 * mobility more important as the game progresses
-         */
-        System.out.println(mobility);
-        return value + (int) Math.round(mobility * ((totalPieces / 32) + 0.1));
+		 */
+		System.out.println("mobility is: " + mobility);
+		return value + (int) Math.round(mobility * ((totalPieces / 32) + 0.1));
 
-    }
+	}
 
-    public List<ChessMove> getAllPieceMoves(Board board, Field field) {
-        List<ChessMove> allMoves = new LinkedList<>();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (board.isFieldOccupied(i, j)) { //currently finds only for pawns and knights
-                    if (board.getField()[i][j].getChessPiece().getName().equals(ChessPieceCharacteristics.Name.P) || board.getField()[i][j].getChessPiece().getName().equals(ChessPieceCharacteristics.Name.N)) {
-                        possibleMoves = board.getField()[i][j].getChessPiece().allPossibleMoves(board, player);
-                        for (Field Field : possibleMoves) {
-                            allMoves.add(
-                                    new ChessMove(Field.getFieldCoordintes(), board.getField()[i][j].getChessPiece()));
-                        }
-                    }
-                }
-            }
-        }
+	public List<ChessMove> getAllPieceMoves(Board board, Field field) {
+		List<ChessMove> allMoves = new LinkedList<>();
+		int row = field.getFieldCoordintes().getRow();
+		int col = field.getFieldCoordintes().getCol();
 
-        return allMoves;
-    }
+		try {
+			possibleMoves = board.getField()[row][col].getChessPiece().allPossibleMoves(board, player);
+			for (Field Field : possibleMoves) {
+				allMoves.add(new ChessMove(Field.getFieldCoordintes(), board.getField()[row][col].getChessPiece()));
+			}
+		} catch (Exception e) {
+
+		}
+		return allMoves;
+	}
     
     //gets all the moves of the color passed to it
     private List<ChessMove> getAllMoves(Board board, ChessPieceCharacteristics.Color colorType){
