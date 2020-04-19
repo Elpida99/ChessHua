@@ -96,5 +96,9 @@ public abstract class ChessPiece {
         	return false;
 
          }
+	
+	   
+    public void setFirstMove(boolean firstMove){
+    }
 
 }
