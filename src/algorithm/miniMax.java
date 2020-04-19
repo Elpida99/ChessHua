@@ -190,9 +190,8 @@ public class miniMax {
     }
 */
 	
-	
-	
-	/* private int Max(Board board, int alpha, int beta, int boardDepth) {
+
+    private int Max(Board board, int alpha, int beta, int boardDepth) {
 
         ChessPiece piece;
         boolean madeFirstMove;
@@ -218,7 +217,7 @@ public class miniMax {
             //while there are still moves that the player can make
             while (moves.size() > 0) {
 
-                // get the first move from the move list
+                // get the first move from the move list  => iterate the whole list with the moves
                 ChessMove firstMove = moves.remove(0);
 
                 if (firstMove.getCurrent().equals(firstMove.getNewPos())) {
@@ -228,14 +227,14 @@ public class miniMax {
                 madeFirstMove =  board.checkFirstMove(firstMove.getCurrent());
 
                 // make move
-                piece = board.moveSpecialPiece(firstMove);
+                piece = board.moveSpecialPiece(firstMove);    //?????
 
                 //get the min value by calling the min function at a depth one lower than the current depth
                 minVal = Min(board, alpha, beta, boardDepth - 1);
 
                 // if the min is greater than the beta undo the move and return the beta value
                 if (minVal >= beta) {
-                    board.undoSpecialMove(firstMove, piece, madeFirstMove);
+                    board.undoSpecialMove(firstMove, piece, madeFirstMove);    //here , needsd to be completed 
                     return beta;
                 }
 
@@ -251,5 +250,6 @@ public class miniMax {
             }
         }
         return alpha;
-    }*/
+    }
+
 }
