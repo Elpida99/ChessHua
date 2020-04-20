@@ -67,5 +67,15 @@ public class Field {
 	public void setOccupied(boolean isOccupied) {
 		this.isOccupied = isOccupied;
 	}
+	
+	
+	  public ChessPiece takeChessPiece(){    //makes the current piece null and returns the tiles piece  //????????
+            if(isOccupied()){
+                ChessPiece holder = chessPiece;
+                chessPiece = null;
+                return holder;
+            }
+            return null;
+        }
 
 }
