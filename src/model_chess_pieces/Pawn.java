@@ -116,7 +116,15 @@ public class Pawn extends ChessPiece {
 								&& !(board.getField()[col][row].getChessPiece().getColor().toString().equals(color))) {
 							answer = true;
 						} else { // check enpassant
-//						answer = true;
+//							Player Wplayer = new Player();
+//							Player Bplayer = new Player();
+//							Bplayer.setTurn(true);
+//							ChessMove move2 = new ChessMove(null,board.getField()[6][7].getChessPiece());
+//							move2.setNewCoor(4,7);
+//							Wplayer.setLastMove(move2);
+//							ChessMove enpassant = this.CheckEnPassant(board, Wplayer, Bplayer);
+//							if (enpassant.getNewPos().equals(move.getNewPos())) {
+//								answer = true;
 //							} else {
 							answer = false;
 							// }
@@ -142,21 +150,21 @@ public class Pawn extends ChessPiece {
 		int Pawnrank = 0;
 		int back = 0;
 		int forward = 0;
-		String enemycolour = "";
+		ChessPieceCharacteristics.Color enemycolour = null;
 		Player enemy = new Player();
 
 		if (curplayer.getPlayerColour().equals("w")) {// white player's turn
 			Pawnrank = 3; // white pawn must be at field 3 to catch en passant
 			back = -2; // black pawn must have moved 2 fields forward (it was 2 fields back)
 			forward = -1; // white pawn moves 1 field forward horizontally
-			enemycolour = "b"; // enemyColour
+			enemycolour = ChessPieceCharacteristics.Color.b; // enemyColour
 			enemy.setPlayerColour(enemycolour);
 
 		} else {
 			Pawnrank = 4;
 			back = 2;
 			forward = 1;
-			enemycolour = "w";
+			enemycolour = ChessPieceCharacteristics.Color.w; // enemyColour
 			enemy.setPlayerColour(enemycolour);
 
 		}
@@ -170,7 +178,7 @@ public class Pawn extends ChessPiece {
 					Field field = board.getField()[row][col];
 
 					if (field.isOccupied() && field.getChessPiece().getName().equals(ChessPieceCharacteristics.Name.P)
-							&& field.getChessPiece().getColor().toString().equals(enemycolour)) {
+							&& field.getChessPiece().getColor().equals(enemycolour)) {
 						System.out.println("piece found at " + row + "," + col);
 						FieldCoordinates currenttmp = board.getField()[row][col].getFieldCoordintes();
 						FieldCoordinates previoustmp = board.getField()[row + back][col].getFieldCoordintes();
