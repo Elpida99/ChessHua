@@ -8,6 +8,10 @@ import java.util.List;
 import model_board.*;
 import model_chess_pieces.*;
 
+/**
+ *
+ * @author it21735 , it21754, it21762
+ */
 public class miniMax {
 
     private ChessPieceCharacteristics.Color AIColor;
@@ -15,7 +19,8 @@ public class miniMax {
     private ChessMove nextMove;
     private Player player;
     private static final int DEPTH = 1;
-
+    int depth;
+    
     public Board copyBoard(Board board) {
         Board copy = new Board();
         copy.createEmptyBoard();
@@ -52,89 +57,74 @@ public class miniMax {
         return copy;
     }
 
-   public int evaluateBoard(Board board) {
-		int value = 0;
-		double mobility = 0.0; // total number of legal moves of current player
-		int totalPieces = 0;
+    public int evaluateBoard(Board board) {
+        int value = 0;
+        double mobility = 0.0; // total number of legal moves of current player
+        int totalPieces = 0;
 
-		// goes thorough the entire board to evaluate the summed value of the pieces
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				if (board.isFieldOccupied(i, j)) {
-					// if
-					// (board.getField()[i][j].getChessPiece().getName().equals(ChessPieceCharacteristics.Name.B))
-					// {
-					System.out.println("Move of: " + board.getField()[i][j].getChessPiece().getColor() + ""
-							+ board.getField()[i][j].getChessPiece().getName() + " is ");
-					Field tempField = board.getField()[i][j];
-					totalPieces++;
-					// if the piece is the colour of current player--> increase value
-					if (tempField.getChessPiece().getColor() == AIColor) {
-						value += tempField.getChessPiece().getValue();
-						mobility += getAllPieceMoves(board, tempField).toArray().length;
+        // goes thorough the entire board to evaluate the summed value of the pieces
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board.isFieldOccupied(i, j)) {
+                    Field tempField = board.getField()[i][j];
+                    totalPieces++;
+                    // if the piece is the colour of current player--> increase value
+                    if (tempField.getChessPiece().getColor().toString().equals(player.getPlayerColour())) {
+                        value += tempField.getChessPiece().getValue();
+                        mobility += getAllPieceMoves(board, tempField).toArray().length;
 
-						List<ChessMove> moves = new LinkedList<>();
-						moves = getAllPieceMoves(board, tempField);
-						for (int y = 0; y < moves.size(); y++) {
-							System.out.print(" " + moves.get(y).getCurrent().getRow() + ","
-									+ moves.get(y).getCurrent().getCol() + "-->" + moves.get(y).getNewPos().getRow()
-									+ "," + moves.get(y).getNewPos().getCol() + "\n");
-						}
-					} else { // if enemy piece-->decrease value
-						value -= tempField.getChessPiece().getValue();
-						mobility -= getAllPieceMoves(board, tempField).toArray().length;
-						List<ChessMove> moves = new LinkedList<>();
-						moves = getAllPieceMoves(board, tempField);
-						for (int y = 0; y < moves.size(); y++) {
-							System.out.print(" " + moves.get(y).getCurrent().getRow() + ","
-									+ moves.get(y).getCurrent().getCol() + "-->" + moves.get(y).getNewPos().getRow()
-									+ "," + moves.get(y).getNewPos().getCol() + "\n");
-						}
-					}
-				}
-
-			}
-		}
-		/*
+                        List<ChessMove> moves = new LinkedList<>();
+                        moves = getAllPieceMoves(board, tempField);
+                    } else { // if enemy piece-->decrease value
+                        value -= tempField.getChessPiece().getValue();
+                        mobility -= getAllPieceMoves(board, tempField).toArray().length;
+                    }
+                }
+            }
+        }
+        /*
 		 * The evaluation of the board is the value plus the mobility times the sum of
 		 * the remaining pieces divided by the original number of pieces, making the
 		 * mobility more important as the game progresses
-		 */
-		System.out.println("mobility is: " + mobility);
-		return value + (int) Math.round(mobility * ((totalPieces / 32) + 0.1));
+         */
+        System.out.println(mobility);
+        return value + (int) Math.round(mobility * ((totalPieces / 32) + 0.1));
 
-	}
+    }
 
-	public List<ChessMove> getAllPieceMoves(Board board, Field field) {
-		List<ChessMove> allMoves = new LinkedList<>();
-		int row = field.getFieldCoordintes().getRow();
-		int col = field.getFieldCoordintes().getCol();
+    public List<ChessMove> getAllPieceMoves(Board board, Field field) {
+        List<ChessMove> allMoves = new LinkedList<>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board.isFieldOccupied(i, j)) { //currently finds only for pawns and knights
+                    if (board.getField()[i][j].getChessPiece().getName().equals(ChessPieceCharacteristics.Name.P) || board.getField()[i][j].getChessPiece().getName().equals(ChessPieceCharacteristics.Name.N)) {
+                        possibleMoves = board.getField()[i][j].getChessPiece().allPossibleMoves(board, player);
+                        for (Field Field : possibleMoves) {
+                            allMoves.add(
+                                    new ChessMove(Field.getFieldCoordintes(), board.getField()[i][j].getChessPiece()));
+                        }
+                    }
+                }
+            }
+        }
 
-		try {
-			possibleMoves = board.getField()[row][col].getChessPiece().allPossibleMoves(board, player);
-			for (Field Field : possibleMoves) {
-				allMoves.add(new ChessMove(Field.getFieldCoordintes(), board.getField()[row][col].getChessPiece()));
-			}
-		} catch (Exception e) {
+        return allMoves;
+    }
 
-		}
-		return allMoves;
-	}
-    
     //gets all the moves of the color passed to it
-    private List<ChessMove> getAllMoves(Board board, ChessPieceCharacteristics.Color colorType){
+    private List<ChessMove> getAllMoves(Board board, ChessPieceCharacteristics.Color colorType) {
         //empty list that holds all the moves
         List<ChessMove> playerMoves = new LinkedList<>();
-        for (int i = 0 ; i < 8 ; i++) {
-            for (int j = 0 ; j < 8 ; j++) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
                 //if that particular position has a piece that is the same color as the AI
-                if (board.isFieldOccupied(j, j)&& board.getField()[i][j].getChessPiece().getColor() == colorType){
-                    
+                if (board.isFieldOccupied(j, j) && board.getField()[i][j].getChessPiece().getColor() == colorType) {
+
                     possibleMoves = board.getField(i, j).getChessPiece().allPossibleMoves(board, player);
-                    
+
                     for (Field field : possibleMoves) {
-                            playerMoves.add(new ChessMove(field.getFieldCoordintes(), board.getField()[i][j].getChessPiece()));
-                        }
+                        playerMoves.add(new ChessMove(field.getFieldCoordintes(), board.getField()[i][j].getChessPiece()));
+                    }
                 }
             }
         }
@@ -143,10 +133,8 @@ public class miniMax {
 
     /*
     private int Min(Board board, int alpha, int beta, int boardDepth) {
-
         ChessPiece piece;
         boolean madeFirstMove;
-
         int maxVal;
         //if its the bottom of the depth tree get the board value
         if (boardDepth == 0) {
@@ -187,10 +175,8 @@ public class miniMax {
             }
         }
         return beta;
-    }
-*/
-	
-
+    } */
+   
     private int Max(Board board, int alpha, int beta, int boardDepth) {
 
         ChessPiece piece;
@@ -224,7 +210,7 @@ public class miniMax {
                     continue;
                 }
                 //check if the first move is being made
-                madeFirstMove =  board.checkFirstMove(firstMove.getCurrent());
+                madeFirstMove =  board.checkFirstMove(firstMove.getCurrent());  //?????
 
                 // make move
                 piece = board.moveSpecialPiece(firstMove);    //?????
