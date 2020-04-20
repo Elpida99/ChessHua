@@ -20,12 +20,8 @@ public class Chess_AI {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Board board = new Board();
-		board.createBoard();
-		board.printBoard();
-		System.out.println("Players: w=white and b=black");
-		System.out.println("Pieces: K=king, Q=queen, N=knight, B=bishop, R=rook, P=pawn\n");
-        
+       Game game = new Game();
+		game.Game();
         //tests for pawn
         
         ChessPiece piece = board.getField()[6][7].getChessPiece();
