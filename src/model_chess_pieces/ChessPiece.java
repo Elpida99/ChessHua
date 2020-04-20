@@ -24,7 +24,7 @@ public abstract class ChessPiece {
         this.name = name;
     } 
 
-    public abstract boolean isMovePossible(Board board, ChessMove move);
+    public abstract boolean isMovePossible(ChessMove move, Board board);
     
     public abstract List<Field> allPossibleMoves(Board board, Player player); //player needed for pawn    
     
@@ -53,11 +53,6 @@ public abstract class ChessPiece {
     public void setIsAlive(boolean isAlive) {
         this.isAlive = isAlive;
     }
-    
-    public boolean firstMove(){
-        return false;
-    }
-
     public void makeMove(ChessMove move, Board board) {
 
         int curRow = this.getPiecePosition().getRow(); // piece's current row
@@ -98,7 +93,14 @@ public abstract class ChessPiece {
     }
     
    
-    public void setFirstMove(boolean firstMove){
+    public void madeFirstMove(){
     }
 
+    //used for the king and rook for castling and the pawn for first double jump move
+    public boolean firstMove(){    ///   ???
+        return false;
+    }
+
+    public void setFirstMove(boolean firstMove){
+    }
 }
