@@ -6,13 +6,11 @@
 package model_chess_pieces;
 
 import algorithm.ChessMove;
-import java.util.ArrayList;
+import algorithm.Player;
 import java.util.LinkedList;
 import java.util.List;
 import model_board.Board;
 import model_board.Field;
-import model_board.FieldCoordinates;
-import model_board.Position;
 
 /**
  *
@@ -43,7 +41,25 @@ public class King extends ChessPiece {
     public int getValue() {
         return value;
     }
-    public List<Field> allPossibleMoves(Board board) {
+         
+     //logic used for castling
+    @Override
+    public boolean firstMove() {
+        return firstMove;
+    }
+
+    @Override
+    public void madeFirstMove() {
+        firstMove = false;
+    }
+
+    @Override
+    public void setFirstMove(boolean move) {
+        firstMove = move;
+    }
+    
+    @Override
+    public List<Field> allPossibleMoves(Board board,Player player ) {  
 		List<Field> moves = new LinkedList<>();
 		int currow = this.getPiecePosition().getRow();
 		int curcol = this.getPiecePosition().getCol();
@@ -56,15 +72,16 @@ public class King extends ChessPiece {
 			int col = curcol + direction[0];
 			int row = currow + direction[1];
 			move.setNewCoor(row, col);
-			if (this.isMovePossible(move, board)) {
+			if (this.isMovePossible(move,  board)) {
 				moves.add(new Field(row, col));
 			}
 		}
 		return moves;
-	}
+    }
 
 
-      public boolean isMovePossible( ChessMove move, Board board ){
+    @Override
+    public boolean isMovePossible(ChessMove move, Board board ){
         int curRow = 0;
         int curCol = 0;
         int row = 0;
@@ -235,17 +252,4 @@ public class King extends ChessPiece {
         return possible;
     }
         
-     
-     //logic used for castling
-    public boolean firstMove() {
-        return firstMove;
-    }
-
-    public void madeFirstMove() {
-        firstMove = false;
-    }
-
-    public void setFirstMove(boolean move) {
-        firstMove = move;
-    }
 }
