@@ -6,12 +6,11 @@
 package model_chess_pieces;
 
 import algorithm.ChessMove;
-import java.util.ArrayList;
+import algorithm.Player;
 import java.util.LinkedList;
 import java.util.List;
 import model_board.Board;
 import model_board.Field;
-import model_board.Position;
 
 /**
  *
@@ -19,20 +18,9 @@ import model_board.Position;
  */
 public class Rook extends ChessPiece {
 
+    private boolean firstMove;
     private final int value = 5;
     private boolean answer = false; //answer: is the move possiple or not
-
-    private Field field[][];
-
-    public Field[][] getField() {
-        return field;
-    }
-
-    public void setField(Field[][] field) {
-        this.field = field;
-    }
-
-    private int[][] possibleMoves;
 
     private final int[][] directions = {
         {-1, 0},
@@ -40,15 +28,23 @@ public class Rook extends ChessPiece {
         {0, -1},
         {0, 1}
     };
-
-    public int[][] getPossibleMoves() {
-        return possibleMoves;
+    
+    //logic used for castling
+    @Override
+    public boolean firstMove() {
+        return firstMove;
     }
 
-    public void setPossibleMoves(int[][] possibleMoves) {
-        this.possibleMoves = possibleMoves;
+    @Override
+    public void madeFirstMove() {
+        firstMove = false;
     }
 
+    @Override
+    public void setFirstMove(boolean move) {
+        firstMove = move;
+    }
+    
     @Override
     public int getValue() {
         return value;
@@ -58,7 +54,8 @@ public class Rook extends ChessPiece {
         super(color, name);
     }
 
-    public List<Field> allPossibleMoves(Board board) {
+    @Override
+    public List<Field> allPossibleMoves(Board board, Player player) {
         List<Field> moves = new LinkedList<>();
         int currow = this.getPiecePosition().getRow();
         int curcol = this.getPiecePosition().getCol();
@@ -77,10 +74,10 @@ public class Rook extends ChessPiece {
 
         }
         return moves;
-
     }
 
-    public boolean isMovePossible(ChessMove move, Board board) { // int curRow, int curCol, int row, int col, String color) {
+    @Override
+    public boolean isMovePossible( ChessMove move, Board board ) { // int curRow, int curCol, int row, int col, String color) {
         int curRow = 0;
         int curCol = 0;
         int row = 0;
@@ -153,5 +150,6 @@ public class Rook extends ChessPiece {
             answer = false;
         }
     }
+
 
 }
