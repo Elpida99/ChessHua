@@ -1,12 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model_chess_pieces;
 
+import algorithm.ChessMove;
+import algorithm.Player;
 import java.util.List;
-import model_board.*;
+import model_board.Board;
+import model_board.Field;
+import model_board.FieldCoordinates;
+import model_chess_pieces.ChessPieceCharacteristics;
 
 /**
  *
@@ -18,17 +18,16 @@ public abstract class ChessPiece {
     private final ChessPieceCharacteristics.Color color;              //is the piece black or white
     private final ChessPieceCharacteristics.Name name;                //the type of piece
     private FieldCoordinates piecePosition;
-    
+
     public ChessPiece(ChessPieceCharacteristics.Color color, ChessPieceCharacteristics.Name name) {
         this.color = color;
         this.name = name;
-    }
+    } 
 
+    public abstract boolean isMovePossible(Board board, ChessMove move);
     
-    //public abstract boolean isMovePossible();
-
-    public abstract List<Field> allPossibleMoves(Board board,Player player); //player needed for pawn
-
+    public abstract List<Field> allPossibleMoves(Board board, Player player); //player needed for pawn    
+    
     public abstract int getValue();
 
     public ChessPieceCharacteristics.Name getName() {
@@ -40,13 +39,13 @@ public abstract class ChessPiece {
     }
 
     public FieldCoordinates getPiecePosition() {
-		return piecePosition;
-	}
+        return piecePosition;
+    }
 
+    public void setPiecePosition(FieldCoordinates piecePosition) {
+        this.piecePosition = piecePosition;
+    }
 
-	public void setPiecePosition(FieldCoordinates piecePosition) {
-		this.piecePosition = piecePosition;
-	}
     public boolean isIsAlive() {
         return isAlive;
     }
@@ -54,50 +53,51 @@ public abstract class ChessPiece {
     public void setIsAlive(boolean isAlive) {
         this.isAlive = isAlive;
     }
-	
-	public void makeMove(ChessMove move, Board board) {
+    
+    public boolean firstMove(){
+        return false;
+    }
 
-		int curRow = this.getPiecePosition().getRow(); // piece's current row
-		int curCol = this.getPiecePosition().getCol(); // piece's current column
+    public void makeMove(ChessMove move, Board board) {
 
-		int row = move.getNewPos().getRow(); // coordinates of desired move are the directions of the user
-		int col = move.getNewPos().getCol();
+        int curRow = this.getPiecePosition().getRow(); // piece's current row
+        int curCol = this.getPiecePosition().getCol(); // piece's current column
 
-		System.out.println("Current position: " + curRow + "," + curCol);
-		System.out.println("New position: " + row + "," + col);
+        int row = move.getNewPos().getRow(); // coordinates of desired move are the directions of the user
+        int col = move.getNewPos().getCol();
 
-		board.getField()[curRow][curCol].removeChessPiece(); // remove piece from current position
-		board.getField()[row][col].setChessPiece(this); // set it to the new field
+        System.out.println("Current position: " + curRow + "," + curCol);
+        System.out.println("New position: " + row + "," + col);
 
-	}
-	
-	public boolean isBlocked(Board board) {
-		boolean blocked = false;
-				
-		int curRow = this.getPiecePosition().getRow();
-		int curCol = this.getPiecePosition().getCol();
-		
-		if(this.getColor().equals(ChessPieceCharacteristics.Color.w)) { //white
-			if(board.getField()[curRow-1][curCol].isOccupied()) {
-				blocked=true;
-			}
-		}else { //black 
-			if(board.getField()[curRow+1][curCol].isOccupied()) {
-				blocked=true;
-			}
-		}
-		
-		return blocked;
-		
-	}
-	
-	 public boolean firstMove(){
+        board.getField()[curRow][curCol].removeChessPiece(); // remove piece from current position
+        board.getField()[row][col].setChessPiece(this); // set it to the new field
 
-        	return false;
+    }
 
-         }
-	
-	   
+    public boolean isBlocked(Board board) {
+        boolean blocked = false;
+        boolean white = false;
+
+        int curRow = this.getPiecePosition().getRow();
+        int curCol = this.getPiecePosition().getCol();
+
+        if (this.getColor().equals(ChessPieceCharacteristics.Color.w)) { // white
+            white = true;
+        }
+        if (white) { //white
+            if (board.getField()[curRow - 1][curCol].isOccupied()) {
+                blocked = true;
+            }
+        } else { //black 
+            if (board.getField()[curRow + 1][curCol].isOccupied()) {
+                blocked = true;
+            }
+        }
+
+        return blocked;
+    }
+    
+   
     public void setFirstMove(boolean firstMove){
     }
 
