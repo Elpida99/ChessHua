@@ -8,19 +8,14 @@ import java.util.List;
 import model_board.*;
 import model_chess_pieces.*;
 
-/**
- *
- * @author it21735 , it21754, it21762
- */
 public class miniMax {
 
     private ChessPieceCharacteristics.Color AIColor;
     private List<Field> possibleMoves;
     private ChessMove nextMove;
     private Player player;
-    private static final int DEPTH = 1;
-    int depth;
-    
+    private static final int depth = 1;
+
     public Board copyBoard(Board board) {
         Board copy = new Board();
         copy.createEmptyBoard();
@@ -131,10 +126,11 @@ public class miniMax {
         return playerMoves;
     }
 
-    /*
     private int Min(Board board, int alpha, int beta, int boardDepth) {
+
         ChessPiece piece;
         boolean madeFirstMove;
+
         int maxVal;
         //if its the bottom of the depth tree get the board value
         if (boardDepth == 0) {
@@ -156,13 +152,13 @@ public class miniMax {
                     continue;
                 }
                 //check to see if its the first move
-                madeFirstMove = chessBoard.checkFirstMove(firstMove.getStart());
+                madeFirstMove = board.checkFirstMove(firstMove.getCurrent());
                 //make the first move in the move list
-                piece = chessBoard.moveSpecialPiece(firstMove);
+                piece = board.moveSpecialPiece(firstMove);
                 //get the max value by going down one more level in the depth
-                maxVal = Max(chessBoard, alpha, beta, boardDepth - 1);
+                maxVal = Max(board, alpha, beta, boardDepth - 1);
                 if (maxVal <= alpha) {
-                    chessBoard.undoSpecialMove(firstMove, piece, madeFirstMove); // undo
+                    board.undoSpecialMove(firstMove, piece, madeFirstMove); // undo
                     return alpha;
                 }
                 if (maxVal < beta) {
@@ -171,12 +167,12 @@ public class miniMax {
                     }
                     beta = maxVal;
                 }
-                chessBoard.undoSpecialMove(firstMove, piece, madeFirstMove); // undo
+                board.undoSpecialMove(firstMove, piece, madeFirstMove); // undo
             }
         }
         return beta;
-    } */
-   
+    }
+
     private int Max(Board board, int alpha, int beta, int boardDepth) {
 
         ChessPiece piece;
@@ -210,7 +206,7 @@ public class miniMax {
                     continue;
                 }
                 //check if the first move is being made
-                madeFirstMove =  board.checkFirstMove(firstMove.getCurrent());  //?????
+                madeFirstMove = board.checkFirstMove(firstMove.getCurrent());  //?????
 
                 // make move
                 piece = board.moveSpecialPiece(firstMove);    //?????
