@@ -1,16 +1,19 @@
 package algorithm;
 
+import model_chess_pieces.ChessPieceCharacteristics;
+import model_chess_pieces.ChessPieceCharacteristics.Color;
+
 public class Player {
 
 	private ChessMove lastMove;
 	private boolean turn;
-	private String playerColour;
+	private ChessPieceCharacteristics.Color playerColour;
 	
 	public Player() {
 		this.lastMove=null;
 	}
 	
-	public Player(String playerColour,ChessMove lastMove) {
+	public Player(Color playerColour,ChessMove lastMove) {
 		this.playerColour=playerColour;
 		this.lastMove = lastMove;
 	}
@@ -27,10 +30,10 @@ public class Player {
 	public void setTurn(boolean turn) {
 		this.turn = turn;
 	}
-	public String getPlayerColour() {
+	public Color getPlayerColour() {
 		return playerColour;
 	}
-	public void setPlayerColour(String playerColour) {
+	public void setPlayerColour(Color playerColour) {
 		this.playerColour = playerColour;
 	}
 	
