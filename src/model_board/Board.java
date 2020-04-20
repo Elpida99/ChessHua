@@ -173,9 +173,9 @@ public class Board {
         return isFieldOccupied(row, col);
     }
 
-    public boolean checkFirstMove(FieldCoordinates fieldcoordinates){
+    public boolean checkFirstMove(FieldCoordinates fieldcoordinates){    ///??????
         if(containsPiece(fieldcoordinates)){
-            return field[fieldcoordinates.getRow()][fieldcoordinates.getCol()].getChessPiece().firstMove();
+            return field[fieldcoordinates.getRow()][fieldcoordinates.getCol()].getChessPiece().firstMove();   // method firstMove() :   returns false
         }
         return false;
     }
@@ -254,7 +254,6 @@ public class Board {
         }
 
         //if the end piece is occupied get the piece
-
         if (endTile.isOccupied()) {
             endPiece = endTile.takeChessPiece();
         }
@@ -298,9 +297,7 @@ public class Board {
         // undo castling if castling has happened
         if (getPieceType(move.getCurrent()) == ChessPieceCharacteristics.Name.K   //king
                 &&
-                field[move.getCurrent().getRow()][move.getCurrent().getCol()].getChessPiece().firstMove() &&
-
-                move.getCurrent().getCol() == 4) {
+                field[move.getCurrent().getRow()][move.getCurrent().getCol()].getChessPiece().firstMove() &&  move.getCurrent().getCol() == 4) {
 
             if (move.getCurrent().getCol() - move.getNewPos().getCol() == -2 &&
 
@@ -324,7 +321,7 @@ public class Board {
 
                 setPiece(new FieldCoordinates(move.getNewPos().getRow(), move.getNewPos().getCol() - 2),
 
-                        removePiece(new FieldCoordinates(move.getNewPos().getCol() + 1, move.getNewPos().getRow())));
+                        removePiece(new FieldCoordinates(move.getNewPos().getRow(), move.getNewPos().getCol() + 1)));
 
             }
 
