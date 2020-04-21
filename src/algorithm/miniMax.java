@@ -11,10 +11,35 @@ import model_chess_pieces.*;
 public class miniMax {
 
     private ChessPieceCharacteristics.Color AIColor;
-   private static List<Field> possibleMoves;
+    private static List<Field> possibleMoves;
     private ChessMove nextMove;
     private static Player player;
-    private static final int depth = 1;
+    private int depth = 1;
+
+    public static Player getPlayer() {
+        return player;
+    }
+
+    public static void setPlayer(Player player) {
+        miniMax.player = player;
+    }
+    
+    
+    public miniMax(ChessPieceCharacteristics.Color AIColorType, int depth) {
+        this.AIColor = AIColorType;
+        this.depth = depth;
+    }
+    
+    //gets the color type for the AI
+    public ChessPieceCharacteristics.Color getAIColor() {
+        return AIColor;
+    }
+    //makes the next move by calling the max function
+    public ChessMove getNextMove ( Board board) {
+        Board cloneBoard = copyBoard(board);
+        Max(cloneBoard, Integer.MIN_VALUE, Integer.MAX_VALUE, depth);
+        return nextMove;
+    }
 
     public Board copyBoard(Board board) {
         Board copy = new Board();
@@ -106,32 +131,32 @@ public class miniMax {
         return allMoves;
     }
 
-  // gets all the moves of the color passed to it
-		public static List<ChessMove> getAllMoves(Board board, ChessPieceCharacteristics.Color colorType) {
-			// empty list that holds all the moves
-			List<ChessMove> playerMoves = new LinkedList<>();
-			for (int i = 0; i < 8; i++) {
-				for (int j = 0; j < 8; j++) {
-					// if that particular position has a piece that is the same color as the AI
-					if (board.isFieldOccupied(i, j) && board.getField()[i][j].getChessPiece().getColor() == colorType) {
-						try {
-							possibleMoves = board.getField()[i][j].getChessPiece().allPossibleMoves(board, player);
+    // gets all the moves of the color passed to it
+    public static List<ChessMove> getAllMoves(Board board, ChessPieceCharacteristics.Color colorType) {
+        // empty list that holds all the moves
+        List<ChessMove> playerMoves = new LinkedList<>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                // if that particular position has a piece that is the same color as the AI
+                if (board.isFieldOccupied(i, j) && board.getField()[i][j].getChessPiece().getColor() == colorType) {
+                    try {
+                        possibleMoves = board.getField()[i][j].getChessPiece().allPossibleMoves(board, player);
 
-							for (Field field : possibleMoves) {
-								playerMoves.add(
-										new ChessMove(field.getFieldCoordintes(), board.getField()[i][j].getChessPiece()));
-							}
+                        for (Field field : possibleMoves) {
+                            playerMoves.add(
+                                    new ChessMove(field.getFieldCoordintes(), board.getField()[i][j].getChessPiece()));
+                        }
 
-						} catch (Exception e) {
+                    } catch (Exception e) {
 
-						}
-					}
-				}
+                    }
+                }
+            }
 
-			}
+        }
 
-			return playerMoves;
-		}
+        return playerMoves;
+    }
 
     private int Min(Board board, int alpha, int beta, int boardDepth) {
 

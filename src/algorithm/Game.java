@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import model_board.Board;
 import model_board.FieldCoordinates;
+import model_chess_pieces.ChessPiece;
 import model_chess_pieces.ChessPieceCharacteristics;
 
 public class Game {
@@ -14,6 +15,10 @@ public class Game {
     private static Player blackP = new Player(ChessPieceCharacteristics.Color.b, null);
 
     private static Board board = new Board();
+
+    boolean playerTurn = true;
+    miniMax bot; // AI engine
+    int depth;
 
     public void setBoard() {
         board.createBoard();
@@ -134,6 +139,8 @@ public class Game {
                 int curRow = returnRowFromUser(Integer.parseInt(curTokens[1]));
                 int curCol = returnColFromUser(curTokens[0]);
                 userMove.setCurCoor(curRow, curCol);
+                
+                userMove.setP(board.getField()[curRow][curCol].getChessPiece());
 
                 System.out.println(
                         "currow is: (" + curTokens[1] + ")" + curRow + " curcol is: (" + curTokens[0] + ")" + curCol);
@@ -154,6 +161,7 @@ public class Game {
     }
 
     public void recommendMove(ChessPieceCharacteristics.Color colour) {
+
         List<ChessMove> recommendedMoves = miniMax.getAllMoves(board, colour);
         System.out.println(" \nRecommended moves for white player:");
         int counter = 0;
@@ -171,30 +179,91 @@ public class Game {
             //at the moment it returns all possible moves
         }
     }
-    
-    public void proccessMove(ChessMove move){ //to douleuw twra auto
+
+    public void processMove(ChessMove move) { //to douleuw twra auto -> This could be a solution (?)
+
         int curRow = move.getCurrent().getRow();
-        int curCol= move.getCurrent().getCol() ;
-        if(ChessMove.isValid(curRow,curCol)){
-            if(board.isFieldOccupied(curRow, curCol)){ //does a piece exist in this field and is it the player's colour?
-        }else{
-            System.out.println("Coordinates do not exist");
+        int curCol = move.getCurrent().getCol();
+
+        int newRow = move.getNewPos().getRow();
+        int newCol = move.getNewPos().getCol();
+
+        ChessPieceCharacteristics.Color color = move.getP().getColor();
+
+        if (ChessMove.isValid(curRow, curCol)) { //row and col number is valid
+
+            //if current field is actually occupied and by the correct color
+            if (board.isFieldOccupied(curRow, curCol) && (board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(color))) { 
+                
+                //if target field is occupied by an enemy piece, remove it and take its place
+                if (board.isFieldOccupied(newRow, newCol) && !(board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(color))) {
+
+                    board.getField()[newRow][newCol].getChessPiece().setIsAlive(false);
+                    board.removePiece(move.getNewPos());
+                    move.getP().makeMove(move, board);
+
+                //if target field is occupied by a same-color piece, move is not possible
+                } else if (board.isFieldOccupied(curRow, curCol) && (board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(color))) {
+
+                    System.out.println("Sorry, field is occupied by the same color piece. ");
+
+                } else { //target field is not occupied
+                    
+                    move.getP().makeMove(move, board);
+                    
+                }
+
+            }
+        } else {
+
+            System.out.println("Coordinates do not exist.");
+
         }
+
     }
 
+   
     public void ChessGame() {
+        
         setBoard();
         whiteP.setTurn(true);
         blackP.setTurn(false);
+        miniMax.setPlayer(blackP);
+        bot = new miniMax(ChessPieceCharacteristics.Color.b, depth);
+        
 
         while (true) {
-            if (whiteP.isTurn()) {
-                readFromUser(whiteP);
-            } else {
 
+            List<ChessMove> reccomendedMoves = new LinkedList();
+
+            if (whiteP.isTurn()) {
+                
+                System.out.println("White's turn, please enter move: ");
+                // = reccomendMove(ChessPieceCharacteristics.Color.w);
+                //show List
+                ChessMove wMove = new ChessMove();
+                wMove = readFromUser(whiteP);
+                if(wMove == null) {
+                    System.out.println("NULL");
+                }
+                wMove.getP().makeMove(wMove, board);
+                blackP.setTurn(true);
+                whiteP.setTurn(false);
+                board.printBoard(); //reprints chess board
+                
+            } else {
+                
+                System.out.println("Black's turn, AI makes a move: ");
+                ChessMove move = bot.getNextMove(board);
+                processMove(move);
+                blackP.setTurn(false);
+                whiteP.setTurn(true);
+                
             }
 
-            //readFromUser();
         }
+
+        //readFromUser();
     }
+
 }
