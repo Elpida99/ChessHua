@@ -6,6 +6,8 @@
 package chess_ai_main;
 
 import algorithm.*;
+import java.util.LinkedList;
+import java.util.List;
 import model_board.*;
 import model_chess_pieces.*;
 
@@ -19,9 +21,12 @@ public class Chess_AI {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
         // TODO code application logic here
-       Game game = new Game();
-		game.Game();
+        Game game = new Game();
+        game.ChessGame();
+        
+        /*
         //tests for pawn
         
         ChessPiece piece = board.getField()[6][7].getChessPiece();
@@ -31,7 +36,7 @@ public class Chess_AI {
         ChessMove move = new ChessMove(newpos,pawn);
         
         //test for bishop
-       /* ChessMove bMove = new ChessMove();
+       ChessMove bMove = new ChessMove();
         Bishop bishop = new Bishop(ChessPieceCharacteristics.Color.b,ChessPieceCharacteristics.Name.B);
         
         
@@ -41,7 +46,7 @@ public class Chess_AI {
         bMove.setP(bishop);
         FieldCoordinates newBPos = new FieldCoordinates(3,5);
         bMove.setNewPos(newBPos);
-        System.out.println(bishop.isMovePossible(bMove, board)); */
+        System.out.println(bishop.isMovePossible(bMove, board)); 
         
         //test for rook 
         ChessPiece piece1 = board.getField()[7][0].getChessPiece();
@@ -54,19 +59,20 @@ public class Chess_AI {
         }
         
         //test for king 
-        //        ChessPiece piece = board.getField()[7][4].getChessPiece();
-//        King king = (King) piece;
-//        king.setPiecePosition(piece.getPiecePosition());
-//        List<Field> moves = new LinkedList<>();
-//        moves = king.allPossibleMoves(board);
-//        for (int i = 0; i < moves.size(); i++) {
-//            System.out.println("possible fields: " + moves.get(i).getFieldCoordintes() + "\n");
-//        }
+        ChessPiece piece = board.getField()[7][4].getChessPiece();
+        King king = (King) piece;
+        king.setPiecePosition(piece.getPiecePosition());
+        List<Field> moves = new LinkedList<>();
+        moves = king.allPossibleMoves(board);
+        for (int i = 0; i < moves.size(); i++) {
+            System.out.println("possible fields: " + moves.get(i).getFieldCoordintes() + "\n");
+        }
         
         //test for miniMax
         miniMax alg = new miniMax();
 		alg.AIColor=ChessPieceCharacteristics.Color.w;
 
 		System.out.println("Evaluation of board: "+alg.evaluateBoard(board));
+*/
     }
 }
