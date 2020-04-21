@@ -45,6 +45,7 @@ public class Field {
 
 	public void removeChessPiece() {
 		this.chessPiece = null;
+		this.setOccupied(false);
 	}
 
 	public FieldCoordinates getFieldCoordintes() {
