@@ -106,25 +106,32 @@ public class miniMax {
         return allMoves;
     }
 
-    //gets all the moves of the color passed to it
-    private List<ChessMove> getAllMoves(Board board, ChessPieceCharacteristics.Color colorType) {
-        //empty list that holds all the moves
-        List<ChessMove> playerMoves = new LinkedList<>();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                //if that particular position has a piece that is the same color as the AI
-                if (board.isFieldOccupied(j, j) && board.getField()[i][j].getChessPiece().getColor() == colorType) {
+   // gets all the moves of the color passed to it
+	public static List<ChessMove> getAllMoves(Board board, ChessPieceCharacteristics.Color colorType) {
+		// empty list that holds all the moves
+		List<ChessMove> playerMoves = new LinkedList<>();
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				// if that particular position has a piece that is the same color as the AI
+				if (board.isFieldOccupied(i, j) && board.getField()[i][j].getChessPiece().getColor() == colorType) {
+					try {
+						possibleMoves = board.getField()[i][j].getChessPiece().allPossibleMoves(board, player);
 
-                    possibleMoves = board.getField(i, j).getChessPiece().allPossibleMoves(board, player);
+						for (Field field : possibleMoves) {
+							playerMoves.add(
+									new ChessMove(field.getFieldCoordintes(), board.getField()[i][j].getChessPiece()));
+						}
 
-                    for (Field field : possibleMoves) {
-                        playerMoves.add(new ChessMove(field.getFieldCoordintes(), board.getField()[i][j].getChessPiece()));
-                    }
-                }
-            }
-        }
-        return playerMoves;
-    }
+					} catch (Exception e) {
+
+					}
+				}
+			}
+
+		}
+
+		return playerMoves;
+	}
 
     private int Min(Board board, int alpha, int beta, int boardDepth) {
 
