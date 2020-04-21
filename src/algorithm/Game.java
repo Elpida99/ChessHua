@@ -139,7 +139,7 @@ public class Game {
                 int curRow = returnRowFromUser(Integer.parseInt(curTokens[1]));
                 int curCol = returnColFromUser(curTokens[0]);
                 userMove.setCurCoor(curRow, curCol);
-                
+
                 userMove.setP(board.getField()[curRow][curCol].getChessPiece());
 
                 System.out.println(
@@ -193,24 +193,38 @@ public class Game {
         if (ChessMove.isValid(curRow, curCol)) { //row and col number is valid
 
             //if current field is actually occupied and by the correct color
-            if (board.isFieldOccupied(curRow, curCol) && (board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(color))) { 
-                
+            if (board.isFieldOccupied(curRow, curCol) && (board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(color))) {
+
                 //if target field is occupied by an enemy piece, remove it and take its place
                 if (board.isFieldOccupied(newRow, newCol) && !(board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(color))) {
 
                     board.getField()[newRow][newCol].getChessPiece().setIsAlive(false);
                     board.removePiece(move.getNewPos());
-                    move.getP().makeMove(move, board);
+                    if (move.getP().isMovePossible(move, board)) {
 
-                //if target field is occupied by a same-color piece, move is not possible
+                        move.getP().makeMove(move, board);
+
+                    } else {
+
+                        System.out.println("Move not possible.");
+                    }
+
+                    //if target field is occupied by a same-color piece, move is not possible
                 } else if (board.isFieldOccupied(curRow, curCol) && (board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(color))) {
 
                     System.out.println("Sorry, field is occupied by the same color piece. ");
 
                 } else { //target field is not occupied
-                    
-                    move.getP().makeMove(move, board);
-                    
+
+                    if (move.getP().isMovePossible(move, board)) {
+
+                        move.getP().makeMove(move, board);
+
+                    } else {
+
+                        System.out.println("Move not possible.");
+                    }
+
                 }
 
             }
@@ -222,43 +236,40 @@ public class Game {
 
     }
 
-   
     public void ChessGame() {
-        
+
         setBoard();
         whiteP.setTurn(true);
         blackP.setTurn(false);
         miniMax.setPlayer(blackP);
         bot = new miniMax(ChessPieceCharacteristics.Color.b, depth);
-        
 
         while (true) {
 
             List<ChessMove> reccomendedMoves = new LinkedList();
 
             if (whiteP.isTurn()) {
-                
+
                 System.out.println("White's turn, please enter move: ");
                 // = reccomendMove(ChessPieceCharacteristics.Color.w);
                 //show List
                 ChessMove wMove = new ChessMove();
                 wMove = readFromUser(whiteP);
-                if(wMove == null) {
-                    System.out.println("NULL");
-                }
+                
                 wMove.getP().makeMove(wMove, board);
                 blackP.setTurn(true);
                 whiteP.setTurn(false);
+
                 board.printBoard(); //reprints chess board
-                
+
             } else {
-                
+
                 System.out.println("Black's turn, AI makes a move: ");
                 ChessMove move = bot.getNextMove(board);
                 processMove(move);
                 blackP.setTurn(false);
                 whiteP.setTurn(true);
-                
+
             }
 
         }
