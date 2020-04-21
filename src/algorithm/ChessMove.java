@@ -28,6 +28,11 @@ public class ChessMove {
 		this.current = current;
 	}
 
+	  public void setCurCoor(int row, int col){
+            FieldCoordinates curpos = new FieldCoordinates(row,col);
+            this.current=curpos;
+        }
+	
 	public FieldCoordinates getNewPos() {
 		return newPos;
 	}
