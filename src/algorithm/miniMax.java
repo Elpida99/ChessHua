@@ -11,9 +11,9 @@ import model_chess_pieces.*;
 public class miniMax {
 
     private ChessPieceCharacteristics.Color AIColor;
-    private List<Field> possibleMoves;
+   private static List<Field> possibleMoves;
     private ChessMove nextMove;
-    private Player player;
+    private static Player player;
     private static final int depth = 1;
 
     public Board copyBoard(Board board) {
