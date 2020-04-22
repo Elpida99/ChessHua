@@ -108,8 +108,8 @@ public class Rook extends ChessPiece {
                     check_col_row(col, curCol, row, curRow);
                 }
         } else {
-           // System.out.println("piece DOES NOT exists on this field -- move not possible");
-            //System.out.println("This field " + curRow + " " + curCol + " does not contain a piece");
+            System.out.println("ROOK'S piece DOES NOT exists on this field -- move not possible");
+            System.out.println("ROOK'S This field " + curRow + " " + curCol + " does not contain a piece");
             answer = false;
         }
         return answer;
@@ -120,16 +120,14 @@ public class Rook extends ChessPiece {
         //curRow = old x, curCol = old y
         if //VERTICAL 
                 (col == curCol) { //if column(Yposition) is the same-->the move is forward/ backword : newX - oldX = 1 or -1
-            //System.out.println("VERTICAL move is possible");
-            System.out.println(Math.abs((row - curRow)));
+            System.out.println("ROOK'S VERTICAL move is possible " + Math.abs((row - curRow)));
             answer = true;
         }//HORIZONTAL 
         else if (row == curRow) {   //if row(Xposition)is the same and newY - oldY = 1 or -1
-            //System.out.println("HORIZONTAL move is possible");
-            System.out.println((row - curRow));
+            System.out.println("ROOK'S HORIZONTAL move is possible "+ (row - curRow));
             answer = true;
         } else {
-            //System.out.println("piece exists on this field -- move not possible");
+            System.out.println("ROOK'S piece exists on this field -- move not possible");
             answer = false;
         }
     }
