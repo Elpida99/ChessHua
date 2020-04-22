@@ -24,6 +24,13 @@ public abstract class ChessPiece {
         this.name = name;
     } 
 
+    
+    public ChessPiece(boolean isAlive, ChessPieceCharacteristics.Color color, ChessPieceCharacteristics.Name name, FieldCoordinates piecePosition) {
+        this.isAlive = isAlive;
+        this.color = color;
+        this.name = name;
+        this.piecePosition = piecePosition;
+    }
     public abstract boolean isMovePossible(ChessMove move, Board board);
     
     public abstract List<Field> allPossibleMoves(Board board, Player player); //player needed for pawn    
