@@ -257,7 +257,7 @@ public class Game {
 
     }
 
-    public MoveResult ChessGame() {
+  public MoveResult ChessGame() {
 
         setBoard();
         whiteP.setTurn(true);
@@ -272,30 +272,47 @@ public class Game {
             if (whiteP.isTurn()) {
                 //check for check-mate, if yes game is over 
                 king = new King(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.K);
+                blackPieceList = new LinkedList<>();
+                whitePieceList = new LinkedList<>();
 
-//                if( king.isCheckmate(ChessPiece king, boolean isWhite, Board board, Player player, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList) ){
-//                    System.out.println("White LOST, Black WON");
-//                    return MoveResult.CHECK_MATE;
-//                }
+                m = new miniMax();
+
+                if (king.isCheckmate(king.get_Kings_position(board,m), true, m.copyBoard(board), whiteP, blackPieceList, whitePieceList)) {
+                    //if( king.isCheckmate(ChessPiece king, boolean isWhite, Board board, Player player, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList) ){
+                    System.out.println(MoveResult.CHECK_MATE+ " : White LOST, Black WON");
+                    return MoveResult.CHECK_MATE;
+                }else{
+                   System.out.println("NOT A:  "+MoveResult.CHECK_MATE);
+                }
 
                 System.out.println("White's turn, please enter move: ");
-               
+                // = reccomendMove(ChessPieceCharacteristics.Color.w);
+                //show List
                 ChessMove wMove = new ChessMove();
                 wMove = readFromUser(whiteP);
-                
-                 processMove(wMove);
+
+                wMove.getP().makeMove(wMove, board);
                 blackP.setTurn(true);
                 whiteP.setTurn(false);
                 //check for check 
+                board.printBoard(); //reprints chess board
 
             } else {
                 //check for check-mate, if yes game is over  
                 king = new King(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.K);
+                blackPieceList = new LinkedList<>();
+                whitePieceList = new LinkedList<>();
 
-//                if( king.isCheckmate(ChessPiece king, boolean isWhite, Board board, Player player, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList) ){
-//                    System.out.println("Black LOST, White WON");
-//                    return MoveResult.CHECK_MATE;
-//                }
+                board = new Board();
+                miniMax m = new miniMax();
+
+                if (king.isCheckmate(king.get_Kings_position(board,m), false, m.copyBoard(board), blackP,blackPieceList, whitePieceList ) ){
+                    System.out.println(MoveResult.CHECK_MATE+ " : Black LOST, White WON");
+                    return MoveResult.CHECK_MATE;
+                }else{
+                    System.out.println("NOT A:  "+MoveResult.CHECK_MATE);
+                }
+
                 System.out.println("Black's turn, AI makes a move: ");
                 ChessMove move = bot.getNextMove(board);
                 processMove(move);
@@ -308,5 +325,4 @@ public class Game {
 
         //readFromUser();
     }
-
 }
