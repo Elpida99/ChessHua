@@ -8,6 +8,8 @@ public class ChessMove {
 	private FieldCoordinates current;
 	private FieldCoordinates newPos;
 	private ChessPiece p; // p is a copy of the piece that is to be moved
+        private boolean attack=false;
+	
 
 	public ChessMove() {
 		
@@ -27,12 +29,11 @@ public class ChessMove {
 	public void setCurrent(FieldCoordinates current) {
 		this.current = current;
 	}
-
-	  public void setCurCoor(int row, int col){
+        public void setCurCoor(int row, int col){
             FieldCoordinates curpos = new FieldCoordinates(row,col);
             this.current=curpos;
         }
-	
+
 	public FieldCoordinates getNewPos() {
 		return newPos;
 	}
@@ -54,9 +55,17 @@ public class ChessMove {
 		this.p = p;
 	}
 
+        public void setAttack(boolean attack){
+            this.attack=attack;
+        }
+        
+        public boolean getAttack(){
+            return attack;
+        }
+        
 	public static boolean isValid(int row, int col) {
 		return col >= 0 && col < 8 && row >= 0 && row < 8;
 	}
+	
 
 }
-
