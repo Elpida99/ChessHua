@@ -92,7 +92,7 @@ public class miniMax {
                     Field tempField = board.getField()[i][j];
                     totalPieces++;
                     // if the piece is the colour of current player--> increase value
-                    if (tempField.getChessPiece().getColor().toString().equals(player.getPlayerColour())) {
+                    if (tempField.getChessPiece().getColor().equals(player.getPlayerColour())) {
                         value += tempField.getChessPiece().getValue();
                         mobility += getAllPieceMoves(board, tempField).toArray().length;
 
