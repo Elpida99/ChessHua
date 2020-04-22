@@ -22,6 +22,7 @@ public abstract class ChessPiece {
     public ChessPiece(ChessPieceCharacteristics.Color color, ChessPieceCharacteristics.Name name) {
         this.color = color;
         this.name = name;
+        this.isAlive = true;
     } 
 
     
