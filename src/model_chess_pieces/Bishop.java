@@ -83,34 +83,40 @@ public class Bishop extends ChessPiece {
         System.out.println(newRow + " " + newCol); //check that they are right
 
         //check that field is actually occupied
-        if (board.isFieldOccupied(move.getCurrent().getRow(), move.getCurrent().getCol())) {
+        if (ChessMove.isValid(newRow, newCol)) {
+            if (board.isFieldOccupied(move.getCurrent().getRow(), move.getCurrent().getCol())) {
 
-            System.out.println("bishop exists on the field and can be moved");
+                System.out.println("bishop exists on the field and can be moved");
 
-            if (board.isFieldOccupied(newRow, newCol)) {
+                if (board.isFieldOccupied(newRow, newCol)) {
 
-                System.out.println("New move is not possible - Field occupied.");
-                return false;
+                    System.out.println("New move is not possible - Field occupied.");
+                    return false;
 
-            } else {
+                } else {
 
-                System.out.println("Position available");
-                Field nextField;
+                    System.out.println("Position available");
+                    Field nextField;
 
-                for (int i = 1; i <= Math.abs(deltaX); i++) {
+                    for (int i = 1; i <= Math.abs(deltaX); i++) {
 
-                    nextField = board.getField(curRow + i * dx, curCol + i * dy);
-                    if (nextField == null) {
-                        System.out.println("null");
-                    }
-                    if (nextField.getChessPiece() != null && (i != Math.abs(deltaX) || nextField.getChessPiece().getColor() == this.getColor())) {
-                        return false;
+                        nextField = board.getField(curRow + i * dx, curCol + i * dy);
+                        if (nextField == null) {
+                            System.out.println("null");
+                        }
+                        if (nextField.getChessPiece() != null && (i != Math.abs(deltaX) || nextField.getChessPiece().getColor() == this.getColor())) {
+                            return false;
+                        }
+
                     }
 
                 }
 
             }
 
+        } else {
+            System.out.println("Out of bounds");
+            return false;
         }
         return true;
     }
@@ -130,18 +136,18 @@ public class Bishop extends ChessPiece {
             for (int j = 1; j < 8; j++) {
                 int col = curCol + direction[0] * j;
                 int row = curRow + direction[1] * j;
-                
+
                 move.setNewCoor(row, col);
                 //if the possible position is valid check the next positions
                 if (this.isMovePossible(move, board)) {
-                    
-                    moves.add(new Field(row,col));
-                    
+
+                    moves.add(new Field(row, col));
+
                 }
             }
         }
-        
-            return moves;
+
+        return moves;
 
     }
 }
