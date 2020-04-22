@@ -2,7 +2,10 @@ package algorithm;
 
 import model_board.FieldCoordinates;
 import model_chess_pieces.ChessPiece;
-
+/**
+ *
+ * @author it21735 , it21754, it21762
+ */
 public class ChessMove {
 
 	private FieldCoordinates current;
