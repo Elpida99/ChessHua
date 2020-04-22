@@ -12,7 +12,7 @@ public class miniMax {
 
     private ChessPieceCharacteristics.Color AIColor;
     private static List<Field> possibleMoves;
-    private ChessMove nextMove;
+    private ChessMove nextMove = new ChessMove();
     private static Player player;
     private int depth = 1;
 
