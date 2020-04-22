@@ -121,13 +121,12 @@ public class King extends ChessPiece {
                 }
             } else {
                 // not valid, out of bounds
-               // System.out.println("new field must exist on board!");
+                System.out.println("KING: new field must exist on board!");
                 answer = false;
-                //+while loop for checking a new entry ?????
             }
         } else {
-           // System.out.println("piece DOES NOT exists on this field -- move not possible");
-            //System.out.println("This field " + curRow + " " + curCol + " does not contain a piece");
+           System.out.println("KING'S piece DOES NOT exists on this field -- move not possible");
+            System.out.println("KING: This field " + curRow + " " + curCol + " does not contain a piece");
             answer = false;
         }
         return answer;
