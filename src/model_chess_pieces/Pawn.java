@@ -11,7 +11,7 @@ import model_board.Field;
 import model_board.FieldCoordinates;
 
 /**
- * it21735 , it21754, it21762
+ * @author it21735 , it21754, it21762
  */
 public class Pawn extends ChessPiece {
 
