@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model_chess_pieces;
 
 import algorithm.ChessMove;
@@ -93,46 +88,46 @@ public class King extends ChessPiece {
 
         answer = false; //answer: is the move possiple or not
         color = this.getColor().toString(); // colour of pawn
-        System.out.println("colour=" + color);
+        //System.out.println("colour=" + color);
         move.setCurrent(this.getPiecePosition()); // piece's current position-->set it to class ChessMove
 
         curRow = this.getPiecePosition().getRow(); // piece's current row , x !!
         curCol = this.getPiecePosition().getCol(); // piece's current column, y !!
-        System.out.println("old coordinates: " + move.getCurrent().getRow() + "," + move.getCurrent().getCol());
+        //System.out.println("old coordinates: " + move.getCurrent().getRow() + "," + move.getCurrent().getCol());
 
         row = move.getNewPos().getRow(); // coordinates of desired move are the directions of the user
         col = move.getNewPos().getCol();
-        System.out.println("new position: " + row + "," + col); // check that they are right
+        //System.out.println("new position: " + row + "," + col); // check that they are right
         
         if (board.isFieldOccupied(curRow, curCol)) { //if piece exists on the field
-            System.out.println("piece exists on this field and it can be moved\n");
+            //System.out.println("piece exists on this field and it can be moved\n");
 
             if (ChessMove.isValid(row, col)) { //if the new position is valid (row&col <8)
-                System.out.print("New position is valid, coordinates exist on board, (row&col <8) ");
+                //System.out.print("New position is valid, coordinates exist on board, (row&col <8) ");
 
                 if (board.isFieldOccupied(row, col) && !(board.getField()[row][col].getChessPiece().getColor().toString().equals(color))) {
                     //if NEW POSITION IS OCCUPIED/ NOT EMPTY , we need to check the colour of the pioni + and the colour is DIFFERENT from the one that the king has 
-                    System.out.println("field occupied-the colour of the pawn (pioni) needs to be checked ");
+                    //System.out.println("field occupied-the colour of the pawn (pioni) needs to be checked ");
                     check_col_row(col, curCol, row, curRow);
 
                 } else if (board.isFieldOccupied(row, col) && (board.getField()[row][col].getChessPiece().getColor().toString().equals(color))) {
                     //if NEW POSITION IS OCCUPIED/ NOT EMPTY , we need to check the colour of the pioni + and the colour is the SAME from the one that the king has 
-                    System.out.println("field occupied-the colour of the pawn (pioni) is the SAME with the colour of the king--king cannot be moved to this field ");
+                   // System.out.println("field occupied-the colour of the pawn (pioni) is the SAME with the colour of the king--king cannot be moved to this field ");
                     answer = false;
                 } else if (!(board.isFieldOccupied(row, col))) { //FIELD EMPTY
-                    System.out.println("position available-FIELD NOT OCCUPIED/EMPTY  --- Let's check if the new move meets the \"criteria\"");
+                   // System.out.println("position available-FIELD NOT OCCUPIED/EMPTY  --- Let's check if the new move meets the \"criteria\"");
 
                     check_col_row(col, curCol, row, curRow);
                 }
             } else {
                 // not valid, out of bounds
-                System.out.println("new field must exist on board!");
+               // System.out.println("new field must exist on board!");
                 answer = false;
                 //+while loop for checking a new entry ?????
             }
         } else {
-            System.out.println("piece DOES NOT exists on this field -- move not possible");
-            System.out.println("This field " + curRow + " " + curCol + " does not contain a piece");
+           // System.out.println("piece DOES NOT exists on this field -- move not possible");
+            //System.out.println("This field " + curRow + " " + curCol + " does not contain a piece");
             answer = false;
         }
         return answer;
@@ -143,21 +138,18 @@ public class King extends ChessPiece {
         //curRow = old x, curCol = old y
         if //VERTICAL 
                 (col == curCol && ((row - curRow) == 1 || (row - curRow == -1))) { //if column(Yposition) is the same-->the move is forward/ backword : newX - oldX = 1 or -1
-            System.out.println("VERTICAL move is possible");
-            System.out.println(Math.abs((row - curRow)));
+            System.out.println("KING'S VERTICAL move is possible: "+ Math.abs(row - curRow) +"\n");
             answer = true;
         }//HORIZONTAL 
         else if (row == curRow && ((col - curCol) == 1 || (col - curCol) == -1)) {   //if row(Xposition)is the same and newY - oldY = 1 or -1
-            System.out.println("HORIZONTAL move is possible");
-            System.out.println((row - curRow));
+            System.out.println("KING'S HORIZONTAL move is possible: "+ (row - curRow) + "\n");
             answer = true;
         }//DIAGONAL 
         else if ((((row - curRow) == 1 || (row - curRow) == -1) && ((col - curCol) == 1 || (col - curCol) == -1))) {    //newX - oldX = 1 or -1 AND newY - oldY = 1 or -1
-            System.out.println("DIAGONAL  move is possible");
-            System.out.println((row - curRow));
+            System.out.println("KING'S DIAGONAL  move is possible: "+ (row - curRow));
             answer = true;
         } else {
-            System.out.println("piece exists on this field -- move not possible");
+            System.out.println("KING'S piece exists on this field -- move not possible");
             answer = false;
         }
     }
@@ -316,7 +308,7 @@ public class King extends ChessPiece {
     }
     
     
-    public ChessPiece get_Kings_position(Board board, miniMax m ) {//retruns the position of the king, based on the board 
+    public ChessPiece get_Kings_position(Board board, miniMax m, boolean is_color_white  ) {//returns the position of the king, based on the board 
         Board result_board = new Board();
         ChessPiece piece = null;
         m = new miniMax();
@@ -325,7 +317,10 @@ public class King extends ChessPiece {
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (result_board.isFieldOccupied(i, j) && result_board.getField()[i][j].getChessPiece().getName() == ChessPieceCharacteristics.Name.K ) {
+                if (result_board.isFieldOccupied(i, j) && result_board.getField()[i][j].getChessPiece().getName() == ChessPieceCharacteristics.Name.K  && is_color_white == true && result_board.getField()[i][j].getChessPiece().getColor() == ChessPieceCharacteristics.Color.w) {
+                        piece = result_board.getField()[i][j].getChessPiece();
+                        return piece;
+                }else if (result_board.isFieldOccupied(i, j) && result_board.getField()[i][j].getChessPiece().getName() == ChessPieceCharacteristics.Name.K  && is_color_white == false && result_board.getField()[i][j].getChessPiece().getColor() == ChessPieceCharacteristics.Color.b) {
                         piece = result_board.getField()[i][j].getChessPiece();
                         return piece;
                 }
