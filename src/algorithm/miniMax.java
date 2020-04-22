@@ -95,9 +95,6 @@ public class miniMax {
                     if (tempField.getChessPiece().getColor().equals(player.getPlayerColour())) {
                         value += tempField.getChessPiece().getValue();
                         mobility += getAllPieceMoves(board, tempField).toArray().length;
-
-                        List<ChessMove> moves = new LinkedList<>();
-                        moves = getAllPieceMoves(board, tempField);
                     } else { // if enemy piece-->decrease value
                         value -= tempField.getChessPiece().getValue();
                         mobility -= getAllPieceMoves(board, tempField).toArray().length;
@@ -110,7 +107,7 @@ public class miniMax {
 		 * the remaining pieces divided by the original number of pieces, making the
 		 * mobility more important as the game progresses
          */
-        System.out.println(mobility);
+        //System.out.println(mobility);
         return value + (int) Math.round(mobility * ((totalPieces / 32) + 0.1));
 
     }
