@@ -21,7 +21,7 @@ public class Game {
     private Board board = new Board();
 
     boolean playerTurn = true;
-    int depth;
+    int depth = 1;
     miniMax bot; // AI engine
 
     King king;
@@ -164,14 +164,13 @@ public class Game {
 
                     userMove.setP(board.getField()[curRow][curCol].getChessPiece());
 
-                    System.out.println(
-                            "currow is: (" + curTokens[1] + ")" + curRow + " curcol is: (" + curTokens[0] + ")" + curCol);
-
+//                    System.out.println(
+//                            "currow is: (" + curTokens[1] + ")" + curRow + " curcol is: (" + curTokens[0] + ")" + curCol);
                     int newRow = returnRowFromUser(Integer.parseInt(newTokens[1]));
                     int newCol = returnColFromUser(newTokens[0]);
                     userMove.setNewCoor(newRow, newCol);
-                    System.out.println(
-                            "newrow is: (" + newTokens[1] + ")" + newRow + " newcol is: (" + newTokens[0] + ")" + newCol);
+//                    System.out.println(
+//                            "newrow is: (" + newTokens[1] + ")" + newRow + " newcol is: (" + newTokens[0] + ")" + newCol);
 
                 } else {
                     System.out.println("Not valid input");
@@ -206,7 +205,7 @@ public class Game {
         }
     }
 
-     public boolean processMove(ChessMove move, Player player) { //to douleuw twra auto -> This could be a solution (?)
+    public boolean processMove(ChessMove move, Player player) { //to douleuw twra auto -> This could be a solution (?)
 
         boolean validMove = false;
         int curRow = move.getCurrent().getRow();
@@ -250,7 +249,7 @@ public class Game {
 
                 miniMax m = new miniMax();
 
-                if (king.isCheckmate(king.get_Kings_position(board, m, true ), true, m.copyBoard(board), whiteP, blackPieceList, whitePieceList)) {
+                if (king.isCheckmate(king.get_Kings_position(board, m, true), true, m.copyBoard(board), whiteP, blackPieceList, whitePieceList)) {
                     //if( king.isCheckmate(ChessPiece king, boolean isWhite, Board board, Player player, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList) ){
                     System.out.println(MoveResult.CHECK_MATE + " : White LOST, Black WON");
                     return MoveResult.CHECK_MATE;
@@ -258,9 +257,8 @@ public class Game {
                     System.out.println("NOT A:  " + MoveResult.CHECK_MATE);
                 }
                 System.out.println("White's turn, please enter move: ");
-                // = reccomendMove(ChessPieceCharacteristics.Color.w);
-                //show List
-              ChessMove wMove = readFromUser(whiteP);
+
+                ChessMove wMove = readFromUser(whiteP);
 
                 if (wMove != null) {
                     if (processMove(wMove, whiteP)) {
@@ -287,19 +285,21 @@ public class Game {
 
                 System.out.println("Black's turn, AI makes a move: ");
                 ChessMove move = bot.getNextMove(board);
+
+                System.out.println(move);
+//                ChessMove wMove = readFromUser(blackP);
+//
+//                if (wMove != null) {
+//                    if (processMove(wMove, blackP)) {
+//                        blackP.setTurn(false);
+//                        whiteP.setTurn(true);
+//                    }
+//                }
                 if (move != null) {
-                    processMove(move);
+                    processMove(move, blackP);
                 }
                 blackP.setTurn(false);
                 whiteP.setTurn(true);
-                
-                
-          /*       if (wMove != null) {
-                    if (processMove(wMove, blackP)) { //AN THELETE NA PAIKSETE ME TON EAYTO SAS GIA ELEGXOYS
-                        blackP.setTurn(false);
-                        whiteP.setTurn(true);
-                    }
-                } */
 
             }
 
