@@ -333,7 +333,7 @@ public class Game {
                 blackPieceList = new LinkedList<>();
                 whitePieceList = new LinkedList<>();
 
-                board = new Board();
+                
                 miniMax m = new miniMax();
 
                 if (king.isCheckmate(king.get_Kings_position(board,m), false, m.copyBoard(board), blackP,blackPieceList, whitePieceList ) ){
