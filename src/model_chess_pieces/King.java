@@ -308,12 +308,9 @@ public class King extends ChessPiece {
     }
     
     
-    public ChessPiece get_Kings_position(Board board, miniMax m, boolean is_color_white  ) {//returns the position of the king, based on the board 
-        Board result_board = new Board();
+    public ChessPiece get_Kings_position(Board result_board, miniMax m, boolean is_color_white  ) {//returns the position of the king, based on the board 
         ChessPiece piece = null;
         m = new miniMax();
-
-        result_board = m.copyBoard(board);
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
