@@ -23,7 +23,10 @@ public class miniMax {
     public static void setPlayer(Player player) {
         miniMax.player = player;
     }
-    
+	
+    public miniMax() {   //default 
+    }
+     
     
     public miniMax(ChessPieceCharacteristics.Color AIColorType, int depth) {
         this.AIColor = AIColorType;
