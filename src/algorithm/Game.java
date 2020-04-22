@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import model_board.Board;
+import model_board.Field;
 import model_board.FieldCoordinates;
 import model_chess_pieces.ChessPiece;
 import model_chess_pieces.ChessPieceCharacteristics;
