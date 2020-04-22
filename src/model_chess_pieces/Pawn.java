@@ -266,6 +266,9 @@ public class Pawn extends ChessPiece {
 
     @Override
     public void makeMove(ChessMove move, Board board) {
+        if(this.isFirstMove){
+            this.setFirstMove(false);
+        }
          int curRow = this.getPiecePosition().getRow(); // piece's current row
         int curCol = this.getPiecePosition().getCol(); // piece's current column
 
