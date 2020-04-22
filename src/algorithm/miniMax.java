@@ -113,22 +113,20 @@ public class miniMax {
     }
 
     public List<ChessMove> getAllPieceMoves(Board board, Field field) {
-        List<ChessMove> allMoves = new LinkedList<>();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (board.isFieldOccupied(i, j)) { //currently finds only for pawns and knights
-                        possibleMoves = board.getField()[i][j].getChessPiece().allPossibleMoves(board, player);
-                        for (Field Field : possibleMoves) {
-                            allMoves.add(
-                                    new ChessMove(Field.getFieldCoordintes(), board.getField()[i][j].getChessPiece()));
-                        }
-                    }
-                
-            }
-        }
+		List<ChessMove> allMoves = new LinkedList<>();
+		int row = field.getFieldCoordintes().getRow();
+		int col = field.getFieldCoordintes().getCol();
 
-        return allMoves;
-    }
+		try {
+			possibleMoves = board.getField()[row][col].getChessPiece().allPossibleMoves(board, player);
+			for (Field Field : possibleMoves) {
+				allMoves.add(new ChessMove(Field.getFieldCoordintes(), board.getField()[row][col].getChessPiece()));
+			}
+		} catch (Exception e) {
+
+		}
+		return allMoves;
+	}
 
     // gets all the moves of the color passed to it
     public static List<ChessMove> getAllMoves(Board board, ChessPieceCharacteristics.Color colorType) {
