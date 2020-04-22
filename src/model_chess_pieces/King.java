@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package model_chess_pieces;
 
 import algorithm.ChessMove;
@@ -308,5 +313,24 @@ public class King extends ChessPiece {
             }
         }
         return true;
+    }
+    
+    
+    public ChessPiece get_Kings_position(Board board, miniMax m ) {//retruns the position of the king, based on the board 
+        Board result_board = new Board();
+        ChessPiece piece = null;
+        m = new miniMax();
+
+        result_board = m.copyBoard(board);
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (result_board.isFieldOccupied(i, j) && result_board.getField()[i][j].getChessPiece().getName() == ChessPieceCharacteristics.Name.K ) {
+                        piece = result_board.getField()[i][j].getChessPiece();
+                        return piece;
+                }
+            }
+        }
+        return piece;
     }
 }
