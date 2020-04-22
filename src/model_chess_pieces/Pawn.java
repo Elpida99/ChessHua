@@ -116,7 +116,7 @@ public class Pawn extends ChessPiece {
                     // diagonal
                     if (Math.abs((col - curCol)) == 1 &&(row - curRow) == forward*1) {
                         if (board.isFieldOccupied(row, col)
-                                && !(board.getField()[col][row].getChessPiece().getColor().equals(color))) {
+                                && !(board.getField()[row][col].getChessPiece().getColor().equals(color))) {
                             answer = true;
                         } else { // check enpassant
 
