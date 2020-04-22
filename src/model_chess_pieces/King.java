@@ -1,16 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model_chess_pieces;
 
 import algorithm.ChessMove;
 import algorithm.Player;
+import algorithm.miniMax;
 import java.util.LinkedList;
 import java.util.List;
 import model_board.Board;
 import model_board.Field;
+import model_board.FieldCoordinates;
 
 /**
  *
@@ -38,6 +35,7 @@ public class King extends ChessPiece {
         super(color, name);
     }
 
+    @Override
     public int getValue() {
         return value;
     }
@@ -251,5 +249,64 @@ public class King extends ChessPiece {
         } 
         return possible;
     }
+       
+    
+    //See if a certain position is attackable by enemy piece. Used to find if a king's position of potential move is in check
+    public boolean isKingInCheck(FieldCoordinates fieldcoordinates, boolean is_color_white, Board board, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList ) {
+        //column and row : the location of the king 
+        int row= 0;
+        int column = 0;
         
+        row = fieldcoordinates.getRow();
+        column = fieldcoordinates.getCol();
+        
+        miniMax minimax = new miniMax();
+
+        blackPieceList  = new LinkedList<>();
+        whitePieceList =  new LinkedList<>();
+        
+        blackPieceList = miniMax.getAllMoves(board,ChessPieceCharacteristics.Color.b ); //Hold a list of black pieces. Could be handy.
+        whitePieceList = miniMax.getAllMoves(board, ChessPieceCharacteristics.Color.w); //Hold a list of white pieces. Could be handy again.
+        
+        boolean isCheck;
+        
+        if(is_color_white) {   //if king has white color 
+            for(ChessMove chessmove:blackPieceList){
+                if(chessmove.getNewPos().getRow() == row && chessmove.getCurrent().getCol() == column ){
+                    //if a chesspiece can attack and "eat" the king, then is checkmate
+                        isCheck = true;
+                         return isCheck;
+                }
+            }
+            isCheck = false;
+            return isCheck;
+        }else{       //if king has black color 
+            for(ChessMove chessmove:whitePieceList){
+                if(chessmove.getNewPos().getRow() == row && chessmove.getCurrent().getCol() == column ){
+                    //if a chesspiece can attack and "eat" the king, then is checkmate
+                        isCheck = true;
+                         return isCheck;
+                }
+            }
+            isCheck = false;
+            return isCheck;
+        }
+    }
+
+    //Method to find checkmate condition
+    //returns false if the king is not in check or if he is not being threatened by another chesspiece, otherwise it returns true 
+    public boolean isCheckmate(ChessPiece king, boolean isWhite, Board board, Player player, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList) {
+
+        if (!isKingInCheck(king.getPiecePosition(), isWhite, board, blackPieceList, whitePieceList)) {  
+       // isKingInCheck(FieldCoordinates fieldcoordinates, boolean is_color_white, Board board, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList ) {
+            return false;
+        }
+
+        for (Field f: king.allPossibleMoves(board, player)) {
+            if (!this.isKingInCheck(f.getFieldCoordintes(), isWhite, board, blackPieceList, whitePieceList)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
