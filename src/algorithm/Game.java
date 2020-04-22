@@ -250,13 +250,13 @@ public class Game {
 
                 miniMax m = new miniMax();
 
-//                if (king.isCheckmate(king.get_Kings_position(board, m), true, m.copyBoard(board), whiteP, blackPieceList, whitePieceList)) {
-//                    //if( king.isCheckmate(ChessPiece king, boolean isWhite, Board board, Player player, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList) ){
-//                    System.out.println(MoveResult.CHECK_MATE + " : White LOST, Black WON");
-//                    return MoveResult.CHECK_MATE;
-//                } else {
-//                    System.out.println("NOT A:  " + MoveResult.CHECK_MATE);
-//                }
+                if (king.isCheckmate(king.get_Kings_position(board, m, true ), true, m.copyBoard(board), whiteP, blackPieceList, whitePieceList)) {
+                    //if( king.isCheckmate(ChessPiece king, boolean isWhite, Board board, Player player, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList) ){
+                    System.out.println(MoveResult.CHECK_MATE + " : White LOST, Black WON");
+                    return MoveResult.CHECK_MATE;
+                } else {
+                    System.out.println("NOT A:  " + MoveResult.CHECK_MATE);
+                }
                 System.out.println("White's turn, please enter move: ");
                 // = reccomendMove(ChessPieceCharacteristics.Color.w);
                 //show List
@@ -278,7 +278,7 @@ public class Game {
                 //  board = new Board();
                 m = new miniMax();
 
-                if (king.isCheckmate(king.get_Kings_position(board, m), false, m.copyBoard(board), blackP, blackPieceList, whitePieceList)) {
+                if (king.isCheckmate(king.get_Kings_position(board, m, false), false, m.copyBoard(board), blackP, blackPieceList, whitePieceList)) {
                     System.out.println(MoveResult.CHECK_MATE + " : Black LOST, White WON");
                     return MoveResult.CHECK_MATE;
                 } else {
