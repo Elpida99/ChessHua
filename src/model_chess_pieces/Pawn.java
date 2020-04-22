@@ -11,7 +11,7 @@ import model_board.Field;
 import model_board.FieldCoordinates;
 
 /**
- * @author it21735 , it21754, it21762
+ * it21735 , it21754, it21762
  */
 public class Pawn extends ChessPiece {
 
@@ -44,8 +44,7 @@ public class Pawn extends ChessPiece {
         int curcol = this.getPiecePosition().getCol();
         ChessMove move = new ChessMove(null, this);
 
-       // moves.add(board.getField()[currow][curcol]);
-
+        // moves.add(board.getField()[currow][curcol]);
         int forward = this.getColor().equals(ChessPieceCharacteristics.Color.b) ? 1 : -1;
         // forward
         for (int i = 0; i <= 2; i++) {
@@ -87,10 +86,10 @@ public class Pawn extends ChessPiece {
     public boolean isMovePossible(ChessMove move, Board board) {
         boolean answer = false; // answer: is the move possible or not
         ChessPieceCharacteristics.Color color = this.getColor(); // colour of pawn
-        int forward ;
-        if(color.equals(ChessPieceCharacteristics.Color.w)){
+        int forward;
+        if (color.equals(ChessPieceCharacteristics.Color.w)) {
             forward = -1;
-        }else{
+        } else {
             forward = 1;
         }
         int curRow = this.getPiecePosition().getRow(); // piece's current row
@@ -104,19 +103,20 @@ public class Pawn extends ChessPiece {
                 if (col == curCol) {
                     // forward
                     if (this.isFirstMove()) { // the pawn can move 2 fields forward if it is its first move
-                        if ((row - curRow) == forward*1 || (row - curRow) == forward*2) {
+                        if ((row - curRow) == forward * 1 || (row - curRow) == forward * 2) {
                             if (!board.isFieldOccupied(row, col)) {
                                 answer = true;
                             }
                         }
                     } else { // not its first move-only one field forward is valid
-                        answer = Math.abs((row - curRow)) == forward*1;
+                        answer = (row - curRow) == forward * 1;
                     }
                 } else {
                     // diagonal
-                    if (Math.abs((col - curCol)) == 1 &&(row - curRow) == forward*1) {
+                    if (Math.abs((col - curCol)) == 1 && (row - curRow) == forward * 1) {
                         if (board.isFieldOccupied(row, col)
-                                && !(board.getField()[row][col].getChessPiece().getColor().equals(color))) {
+                                && (board.getField()[row][col].getChessPiece().getColor() != color)) {
+                            move.setAttack(true);
                             answer = true;
                         } else { // check enpassant
 
@@ -142,8 +142,8 @@ public class Pawn extends ChessPiece {
         int currow = this.getPiecePosition().getRow();
         int curcol = this.getPiecePosition().getCol();
         int Pawnrank;
-        int back ;
-        int forward ;
+        int back;
+        int forward;
         ChessPieceCharacteristics.Color enemycolour;
         Player enemy = new Player();
 
@@ -266,24 +266,23 @@ public class Pawn extends ChessPiece {
 
     @Override
     public void makeMove(ChessMove move, Board board) {
-        if(this.isFirstMove){
+        if (this.isFirstMove) {
             this.setFirstMove(false);
         }
-         int curRow = this.getPiecePosition().getRow(); // piece's current row
+        int curRow = this.getPiecePosition().getRow(); // piece's current row
         int curCol = this.getPiecePosition().getCol(); // piece's current column
 
         int row = move.getNewPos().getRow(); // coordinates of desired move are the directions of the user
         int col = move.getNewPos().getCol();
 
-        System.out.println("Current position: " + curRow + "," + curCol);
-        System.out.println("New position: " + row + "," + col);
-
+        if (move.getAttack()) {
+            board.getField()[row][col].getChessPiece().setIsAlive(false);
+            board.getField()[row][col].removeChessPiece();
+        }
         board.getField()[curRow][curCol].removeChessPiece(); // remove piece from current position
         board.getField()[row][col].setChessPiece(this); // set it to the new field
-        
+
         this.PawnPromotion(row, board);
     }
-    
-    
 
 }
