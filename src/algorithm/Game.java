@@ -230,9 +230,23 @@ public class Game {
                         if (move.getP().isMovePossible(move, board)) {
 
                             move.getP().makeMove(move, board);
-                            //check is king is in check, notify the other user 
-                            //call method:  isKingInCheck(FieldCoordinates fieldcoordinates, boolean is_color_white, Board board, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList ) {
+                                                      //check is king is in check, notify the other user 
+/*                        blackPieceList = new LinkedList<>();
+                        whitePieceList = new LinkedList<>();
+                        m = new miniMax();
+                        if (board.isFieldOccupied(newRow, newCol) && board.getField()[newRow][newCol].getChessPiece().getName() == ChessPieceCharacteristics.Name.K  && board.getField()[newRow][newCol].getChessPiece().getColor() == ChessPieceCharacteristics.Color.w) {
+                                //color of king = white
+                                king = new King(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.K);
+                                if ( king.isKingInCheck(king.get_Kings_position(board,m).getPiecePosition() , true, m.copyBoard(board), blackPieceList, whitePieceList ))
+                                    System.out.println("White King is in check! King is under threat!");
 
+                        }else if (board.isFieldOccupied(newRow, newCol) && board.getField()[newRow][newCol].getChessPiece().getName() == ChessPieceCharacteristics.Name.K  && board.getField()[newRow][newCol].getChessPiece().getColor() == ChessPieceCharacteristics.Color.b) {
+                                //color of king = black
+                                king = new King(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.K);
+                                if ( king.isKingInCheck(king.get_Kings_position(board,m).getPiecePosition() , false, m.copyBoard(board), blackPieceList, whitePieceList ))
+                                   System.out.println("Black King is in check! King is under threat!");
+                        }
+*/
                         } else {
 
                             System.out.println("Move not possible.");
@@ -249,8 +263,23 @@ public class Game {
 
                             move.getP().makeMove(move, board);
                             board.printBoard();
-                            //check is king is in check, notify the other user 
-                            //call method:  isKingInCheck(FieldCoordinates fieldcoordinates, boolean is_color_white, Board board, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList ) {
+                                                      //check is king is in check, notify the other user 
+/*                        blackPieceList = new LinkedList<>();
+                        whitePieceList = new LinkedList<>();
+                        m = new miniMax();
+                        if (board.isFieldOccupied(newRow, newCol) && board.getField()[newRow][newCol].getChessPiece().getName() == ChessPieceCharacteristics.Name.K  && board.getField()[newRow][newCol].getChessPiece().getColor() == ChessPieceCharacteristics.Color.w) {
+                                //color of king = white
+                                king = new King(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.K);
+                                if ( king.isKingInCheck(king.get_Kings_position(board,m).getPiecePosition() , true, m.copyBoard(board), blackPieceList, whitePieceList ))
+                                    System.out.println("White King is in check! King is under threat!");
+
+                        }else if (board.isFieldOccupied(newRow, newCol) && board.getField()[newRow][newCol].getChessPiece().getName() == ChessPieceCharacteristics.Name.K  && board.getField()[newRow][newCol].getChessPiece().getColor() == ChessPieceCharacteristics.Color.b) {
+                                //color of king = black
+                                king = new King(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.K);
+                                if ( king.isKingInCheck(king.get_Kings_position(board,m).getPiecePosition() , false, m.copyBoard(board), blackPieceList, whitePieceList ))
+                                   System.out.println("Black King is in check! King is under threat!");
+                        }
+*/
                         } else {
 
                             System.out.println("Move not possible.");
