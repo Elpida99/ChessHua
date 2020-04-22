@@ -117,14 +117,13 @@ public class miniMax {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (board.isFieldOccupied(i, j)) { //currently finds only for pawns and knights
-                    if (board.getField()[i][j].getChessPiece().getName().equals(ChessPieceCharacteristics.Name.P) || board.getField()[i][j].getChessPiece().getName().equals(ChessPieceCharacteristics.Name.N)) {
                         possibleMoves = board.getField()[i][j].getChessPiece().allPossibleMoves(board, player);
                         for (Field Field : possibleMoves) {
                             allMoves.add(
                                     new ChessMove(Field.getFieldCoordintes(), board.getField()[i][j].getChessPiece()));
                         }
                     }
-                }
+                
             }
         }
 
