@@ -9,20 +9,27 @@ import model_board.Field;
 import model_board.FieldCoordinates;
 import model_chess_pieces.ChessPiece;
 import model_chess_pieces.ChessPieceCharacteristics;
+import model_chess_pieces.King;
+
+/**
+ *
+ * @author it21735 , it21754, it21762
+ */
 
 public class Game {
 
     private static Player whiteP = new Player(ChessPieceCharacteristics.Color.w, null);
     private static Player blackP = new Player(ChessPieceCharacteristics.Color.b, null);
 
-    private static Board board = new Board();
+    private Board board = new Board();
 
     boolean playerTurn = true;
     miniMax bot; // AI engine
     int depth;
     
-    public List<ChessMove> blackPieceList; //Hold a list of black pieces. Could be handy.
-    public List<ChessMove> whitePieceList; //Hold a list of white pieces. Could be handy again.
+    King king;
+    private List<ChessMove> blackPieceList; //Hold a list of black pieces. Could be handy.
+    private List<ChessMove> whitePieceList; //Hold a list of white pieces. Could be handy again.
 
     public List<ChessMove> getBlackPieceList() {
         return blackPieceList;
@@ -117,67 +124,7 @@ public class Game {
         }
         return nrow;
     }
-    
-    
-    //See if a certain position is attackable by enemy piece. Used to find if a king's position of potential move is in check
-    public boolean isCheck(FieldCoordinates fieldcoordinates, boolean is_color_white, Board b) {
-        //column and row : the location of the king 
-        int row= 0;
-        int column = 0;
-        
-        row = fieldcoordinates.getRow();
-        column = fieldcoordinates.getCol();
-        
-        miniMax minimax = new miniMax();
-
-        blackPieceList  = new LinkedList<>();
-        whitePieceList =  new LinkedList<>();
-        
-        blackPieceList = miniMax.getAllMoves(board,ChessPieceCharacteristics.Color.b ); //Hold a list of black pieces. Could be handy.
-        whitePieceList = minimax.getAllMoves(board, ChessPieceCharacteristics.Color.w); //Hold a list of white pieces. Could be handy again.
-        
-        boolean isCheck;
-        
-        if(is_color_white) {   //if king has white color 
-            for(ChessMove chessmove:blackPieceList){
-                if(chessmove.getNewPos().getRow() == row && chessmove.getCurrent().getCol() == column ){
-                    //if a chesspiece can attack and "eat" the king, then is checkmate
-                        isCheck = true;
-                         return isCheck;
-                }
-            }
-            isCheck = false;
-             return isCheck;
-        }else{       //if king has black color 
-            for(ChessMove chessmove:whitePieceList){
-                if(chessmove.getNewPos().getRow() == row && chessmove.getCurrent().getCol() == column ){
-                    //if a chesspiece can attack and "eat" the king, then is checkmate
-                        isCheck = true;
-                         return isCheck;
-                }
-            }
-            isCheck = false;
-            return isCheck;
-        }
-    }
-
-    //Method to find checkmate condition
-    public boolean isCheckmate(ChessPiece king, boolean isWhite, Board board, Player player) {
-
-        if (!isCheck(king.getPiecePosition(), isWhite, board)) {  
-        // isCheck(FieldCoordinates fieldcoordinates, boolean is_color_white, Board b) {
-            return false;
-        }
-
-        for (Field f: king.allPossibleMoves(board, player)) {
-            if (!this.isCheck(f.getFieldCoordintes(), isWhite, board)) {
-                return false;
-            }
-        }
-        return true;
-
-    }
-
+   
     public ChessMove readFromUser(Player player) {
         ChessMove userMove = new ChessMove();
         Scanner input = new Scanner(System.in);
@@ -273,6 +220,9 @@ public class Game {
                     if (move.getP().isMovePossible(move, board)) {
 
                         move.getP().makeMove(move, board);
+                        //check is king is in check, notify the other user 
+                        //call method:  isKingInCheck(FieldCoordinates fieldcoordinates, boolean is_color_white, Board board, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList ) {
+
 
                     } else {
 
@@ -289,6 +239,9 @@ public class Game {
                     if (move.getP().isMovePossible(move, board)) {
 
                         move.getP().makeMove(move, board);
+                        
+                        //check is king is in check, notify the other user 
+                        //call method:  isKingInCheck(FieldCoordinates fieldcoordinates, boolean is_color_white, Board board, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList ) {
 
                     } else {
 
@@ -306,7 +259,7 @@ public class Game {
 
     }
 
-    public void ChessGame() {
+    public MoveResult ChessGame() {
 
         setBoard();
         whiteP.setTurn(true);
@@ -319,6 +272,13 @@ public class Game {
             List<ChessMove> reccomendedMoves = new LinkedList();
 
             if (whiteP.isTurn()) {
+                //check for check-mate, if yes game is over 
+                king = new King(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.K);
+
+//                if( king.isCheckmate(ChessPiece king, boolean isWhite, Board board, Player player, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList) ){
+//                    System.out.println("White LOST, Black WON");
+//                    return MoveResult.CHECK_MATE;
+//                }
 
                 System.out.println("White's turn, please enter move: ");
                 // = reccomendMove(ChessPieceCharacteristics.Color.w);
@@ -329,11 +289,17 @@ public class Game {
                 wMove.getP().makeMove(wMove, board);
                 blackP.setTurn(true);
                 whiteP.setTurn(false);
-
+                //check for check 
                 board.printBoard(); //reprints chess board
 
             } else {
+                //check for check-mate, if yes game is over  
+                king = new King(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.K);
 
+//                if( king.isCheckmate(ChessPiece king, boolean isWhite, Board board, Player player, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList) ){
+//                    System.out.println("Black LOST, White WON");
+//                    return MoveResult.CHECK_MATE;
+//                }
                 System.out.println("Black's turn, AI makes a move: ");
                 ChessMove move = bot.getNextMove(board);
                 processMove(move);
