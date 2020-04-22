@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import model_board.Board;
-import model_board.Field;
-import model_board.FieldCoordinates;
 import model_chess_pieces.ChessPiece;
 import model_chess_pieces.ChessPieceCharacteristics;
 import model_chess_pieces.King;
@@ -15,7 +13,6 @@ import model_chess_pieces.King;
  *
  * @author it21735 , it21754, it21762
  */
-
 public class Game {
 
     private static Player whiteP = new Player(ChessPieceCharacteristics.Color.w, null);
@@ -24,10 +21,9 @@ public class Game {
     private Board board = new Board();
 
     boolean playerTurn = true;
-    miniMax bot; // AI engine
     int depth;
-    
-   
+    miniMax bot; // AI engine
+
     King king;
     miniMax m;
     private List<ChessMove> blackPieceList; //Hold a list of black pieces. Could be handy.
@@ -36,9 +32,11 @@ public class Game {
     public List<ChessMove> getBlackPieceList() {
         return blackPieceList;
     }
+
     public List<ChessMove> getWhitePieceList() {
         return whitePieceList;
     }
+
     public void setBoard() {
         board.createBoard();
         board.printBoard();
@@ -50,7 +48,7 @@ public class Game {
     }
 
     public int returnColFromUser(String letter) { //returns the actual column that is assigned by the letters
-        int column = 0;
+        int column;
         if (letter.equalsIgnoreCase("a")) {
             column = 0;
         } else if (letter.equalsIgnoreCase("b")) {
@@ -74,7 +72,7 @@ public class Game {
     }
 
     public int returnRowFromUser(int inputRow) { //returns the actual row on the board
-        int row = 0;
+        int row;
         if (inputRow >= 0 && inputRow <= 8) {
             row = inputRow - 1;
         } else {
@@ -117,8 +115,8 @@ public class Game {
         return col;
     }
 
-    public int userRow(int row) {
-        int nrow = 0;
+    public int userRow(int row) { //returns row as the user sees it
+        int nrow;
         if (row >= 0 || row <= 7) {
             nrow = row + 1;
         } else {
@@ -126,7 +124,7 @@ public class Game {
         }
         return nrow;
     }
-   
+
     public ChessMove readFromUser(Player player) {
         ChessMove userMove = new ChessMove();
         Scanner input = new Scanner(System.in);
@@ -136,45 +134,54 @@ public class Game {
         userInput = userInput + " ";
         String[] inputTokens = userInput.split(" ");
 
-        if (inputTokens.length == 1) {
-            if (inputTokens[0].equals("h")) {
-                recommendMove(player.getPlayerColour());
-            }
-        } else if (inputTokens.length == 2) {
-            // inputTokens[0] is the position of the piece, eg--> a7
-            // inputTokens[1] is the new position, eg-->a6
+        switch (inputTokens.length) {
+            case 1:
+                if (inputTokens[0].equals("h")) {
+                    recommendMove(player.getPlayerColour());
+                    userMove = null;
+                    break;
+                } else {
+                    System.out.println("Not valid input");
+                    userMove = null;
+                    break;
+                }
+            case 2:
+                // inputTokens[0] is the position of the piece, eg--> a7
+                // inputTokens[1] is the new position, eg-->a6
 
-            String curPos = inputTokens[0];
-            curPos = curPos.trim();
+                String curPos = inputTokens[0];
+                curPos = curPos.trim();
+                String newPos = inputTokens[1];
+                newPos = newPos.trim();
+                String[] curTokens = curPos.split("");
+                String[] newTokens = newPos.split("");
 
-            String newPos = inputTokens[1];
-            newPos = newPos.trim();
+                if (curTokens.length == 2 && newTokens.length == 2) {
 
-            String[] curTokens = curPos.split("");
-            String[] newTokens = newPos.split("");
+                    int curRow = returnRowFromUser(Integer.parseInt(curTokens[1]));
+                    int curCol = returnColFromUser(curTokens[0]);
+                    userMove.setCurCoor(curRow, curCol);
 
-            if (curTokens.length == 2 && newTokens.length == 2) {
+                    userMove.setP(board.getField()[curRow][curCol].getChessPiece());
 
-                int curRow = returnRowFromUser(Integer.parseInt(curTokens[1]));
-                int curCol = returnColFromUser(curTokens[0]);
-                userMove.setCurCoor(curRow, curCol);
+                    System.out.println(
+                            "currow is: (" + curTokens[1] + ")" + curRow + " curcol is: (" + curTokens[0] + ")" + curCol);
 
-                userMove.setP(board.getField()[curRow][curCol].getChessPiece());
+                    int newRow = returnRowFromUser(Integer.parseInt(newTokens[1]));
+                    int newCol = returnColFromUser(newTokens[0]);
+                    userMove.setNewCoor(newRow, newCol);
+                    System.out.println(
+                            "newrow is: (" + newTokens[1] + ")" + newRow + " newcol is: (" + newTokens[0] + ")" + newCol);
 
-                System.out.println(
-                        "currow is: (" + curTokens[1] + ")" + curRow + " curcol is: (" + curTokens[0] + ")" + curCol);
-
-                int newRow = returnRowFromUser(Integer.parseInt(newTokens[1]));
-                int newCol = returnColFromUser(newTokens[0]);
-                userMove.setNewCoor(newRow, newCol);
-                System.out.println(
-                        "newrow is: (" + newTokens[1] + ")" + newRow + " newcol is: (" + newTokens[0] + ")" + newCol);
-
-            } else {
+                } else {
+                    System.out.println("Not valid input");
+                    userMove = null;
+                }
+                break;
+            default:
                 System.out.println("Not valid input");
-            }
-        } else {
-            System.out.println("Not valid input");
+                userMove = null;
+                break;
         }
         return userMove;
     }
@@ -198,7 +205,8 @@ public class Game {
             //at the moment it returns all possible moves
         }
     }
- public void processMove(ChessMove move) { //to douleuw twra auto -> This could be a solution (?)
+
+    public void processMove(ChessMove move) { //to douleuw twra auto -> This could be a solution (?)
 
         int curRow = move.getCurrent().getRow();
         int curCol = move.getCurrent().getCol();
@@ -206,88 +214,63 @@ public class Game {
         int newRow = move.getNewPos().getRow();
         int newCol = move.getNewPos().getCol();
 
-        ChessPieceCharacteristics.Color color = move.getP().getColor();
+        if (move.getP() != null) {
+            ChessPieceCharacteristics.Color color = move.getP().getColor();
 
-        if (ChessMove.isValid(curRow, curCol)) { //row and col number is valid
+            if (ChessMove.isValid(curRow, curCol)) { //row and col number is valid
 
-            //if current field is actually occupied and by the correct color
-            if (board.isFieldOccupied(curRow, curCol) && (board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(color))) {
+                //if current field is actually occupied and by the correct color
+                if (board.isFieldOccupied(curRow, curCol) && (board.getField()[curRow][curCol].getChessPiece().getColor().equals(color))) {
 
-                //if target field is occupied by an enemy piece, remove it and take its place
-                if (board.isFieldOccupied(newRow, newCol) && !(board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(color))) {
+                    //if target field is occupied by an enemy piece, remove it and take its place
+                    if (board.isFieldOccupied(newRow, newCol) && !(board.getField()[newRow][newCol].getChessPiece().getColor().equals(color))) {
 
-                    board.getField()[newRow][newCol].getChessPiece().setIsAlive(false);
-                    board.removePiece(move.getNewPos());
-                    if (move.getP().isMovePossible(move, board)) {
+                        board.getField()[newRow][newCol].getChessPiece().setIsAlive(false);
+                        board.removePiece(move.getNewPos());
+                        if (move.getP().isMovePossible(move, board)) {
 
-                        move.getP().makeMove(move, board);
-                        //check is king is in check, notify the other user 
-/*                        blackPieceList = new LinkedList<>();
-                        whitePieceList = new LinkedList<>();
-                        m = new miniMax();
-                        if (board.isFieldOccupied(newRow, newCol) && board.getField()[newRow][newCol].getChessPiece().getName() == ChessPieceCharacteristics.Name.K  && board.getField()[newRow][newCol].getChessPiece().getColor() == ChessPieceCharacteristics.Color.w) {
-                                //color of king = white
-                                king = new King(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.K);
-                                if ( king.isKingInCheck(king.get_Kings_position(board,m).getPiecePosition() , true, m.copyBoard(board), blackPieceList, whitePieceList ))
-                                    System.out.println("White King is in check! King is under threat!");
+                            move.getP().makeMove(move, board);
+                            //check is king is in check, notify the other user 
+                            //call method:  isKingInCheck(FieldCoordinates fieldcoordinates, boolean is_color_white, Board board, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList ) {
 
-                        }else if (board.isFieldOccupied(newRow, newCol) && board.getField()[newRow][newCol].getChessPiece().getName() == ChessPieceCharacteristics.Name.K  && board.getField()[newRow][newCol].getChessPiece().getColor() == ChessPieceCharacteristics.Color.b) {
-                                //color of king = black
-                                king = new King(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.K);
-                                if ( king.isKingInCheck(king.get_Kings_position(board,m).getPiecePosition() , false, m.copyBoard(board), blackPieceList, whitePieceList ))
-                                   System.out.println("Black King is in check! King is under threat!");
+                        } else {
+
+                            System.out.println("Move not possible.");
                         }
-*/
-                    } else {
 
-                        System.out.println("Move not possible.");
-                    }
+                        //if target field is occupied by a same-color piece, move is not possible
+                    } else if (board.isFieldOccupied(newRow, newCol) && (board.getField()[newRow][newCol].getChessPiece().getColor().equals(color))) {
 
-                    //if target field is occupied by a same-color piece, move is not possible
-                } else if (board.isFieldOccupied(curRow, curCol) && (board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(color))) {
+                        System.out.println("Sorry, field is occupied by the same color piece. ");
 
-                    System.out.println("Sorry, field is occupied by the same color piece. ");
+                    } else { //target field is not occupied
 
-                } else { //target field is not occupied
+                        if (move.getP().isMovePossible(move, board)) {
 
-                    if (move.getP().isMovePossible(move, board)) {
+                            move.getP().makeMove(move, board);
+                            board.printBoard();
+                            //check is king is in check, notify the other user 
+                            //call method:  isKingInCheck(FieldCoordinates fieldcoordinates, boolean is_color_white, Board board, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList ) {
+                        } else {
 
-                        move.getP().makeMove(move, board);
-                        
-                           //check is king is in check, notify the other user 
-/*                        blackPieceList = new LinkedList<>();
-                        whitePieceList = new LinkedList<>();
-                        m = new miniMax();
-                        if (board.isFieldOccupied(newRow, newCol) && board.getField()[newRow][newCol].getChessPiece().getName() == ChessPieceCharacteristics.Name.K  && board.getField()[newRow][newCol].getChessPiece().getColor() == ChessPieceCharacteristics.Color.w) {
-                                //color of king = white
-                                king = new King(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.K);
-                                if ( king.isKingInCheck(king.get_Kings_position(board,m).getPiecePosition() , true, m.copyBoard(board), blackPieceList, whitePieceList ))
-                                    System.out.println("White King is in check! King is under threat!");
-
-                        }else if (board.isFieldOccupied(newRow, newCol) && board.getField()[newRow][newCol].getChessPiece().getName() == ChessPieceCharacteristics.Name.K  && board.getField()[newRow][newCol].getChessPiece().getColor() == ChessPieceCharacteristics.Color.b) {
-                                //color of king = black
-                                king = new King(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.K);
-                                if ( king.isKingInCheck(king.get_Kings_position(board,m).getPiecePosition() , false, m.copyBoard(board), blackPieceList, whitePieceList ))
-                                   System.out.println("Black King is in check! King is under threat!");
+                            System.out.println("Move not possible.");
                         }
-*/
-                        
-                    } else {
 
-                        System.out.println("Move not possible.");
                     }
 
                 }
+            } else {
+
+                System.out.println("Coordinates do not exist.");
 
             }
         } else {
-
-            System.out.println("Coordinates do not exist.");
-
+            System.out.println("Sorry, this field is not occupied by a piece");
         }
 
     }
-  public MoveResult ChessGame() {
+
+    public MoveResult ChessGame() {
 
         setBoard();
         whiteP.setTurn(true);
@@ -305,27 +288,29 @@ public class Game {
                 blackPieceList = new LinkedList<>();
                 whitePieceList = new LinkedList<>();
 
-                m = new miniMax();
+                miniMax m = new miniMax();
 
-                if (king.isCheckmate(king.get_Kings_position(board,m), true, m.copyBoard(board), whiteP, blackPieceList, whitePieceList)) {
-                    //if( king.isCheckmate(ChessPiece king, boolean isWhite, Board board, Player player, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList) ){
-                    System.out.println(MoveResult.CHECK_MATE+ " : White LOST, Black WON");
-                    return MoveResult.CHECK_MATE;
-                }else{
-                   System.out.println("NOT A:  "+MoveResult.CHECK_MATE);
-                }
-
+//                if (king.isCheckmate(king.get_Kings_position(board, m), true, m.copyBoard(board), whiteP, blackPieceList, whitePieceList)) {
+//                    //if( king.isCheckmate(ChessPiece king, boolean isWhite, Board board, Player player, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList) ){
+//                    System.out.println(MoveResult.CHECK_MATE + " : White LOST, Black WON");
+//                    return MoveResult.CHECK_MATE;
+//                } else {
+//                    System.out.println("NOT A:  " + MoveResult.CHECK_MATE);
+//                }
                 System.out.println("White's turn, please enter move: ");
                 // = reccomendMove(ChessPieceCharacteristics.Color.w);
                 //show List
                 ChessMove wMove = new ChessMove();
                 wMove = readFromUser(whiteP);
 
-                wMove.getP().makeMove(wMove, board);
-                blackP.setTurn(true);
-                whiteP.setTurn(false);
-                //check for check 
-                board.printBoard(); //reprints chess board
+                // wMove.getP().makeMove(wMove, board);
+                if (wMove != null) {
+                    processMove(wMove);
+                    blackP.setTurn(true);
+                    whiteP.setTurn(false);
+                }
+
+               
 
             } else {
                 //check for check-mate, if yes game is over  
@@ -333,19 +318,21 @@ public class Game {
                 blackPieceList = new LinkedList<>();
                 whitePieceList = new LinkedList<>();
 
-                
-                miniMax m = new miniMax();
+                //  board = new Board();
+                m = new miniMax();
 
-                if (king.isCheckmate(king.get_Kings_position(board,m), false, m.copyBoard(board), blackP,blackPieceList, whitePieceList ) ){
-                    System.out.println(MoveResult.CHECK_MATE+ " : Black LOST, White WON");
+                if (king.isCheckmate(king.get_Kings_position(board, m), false, m.copyBoard(board), blackP, blackPieceList, whitePieceList)) {
+                    System.out.println(MoveResult.CHECK_MATE + " : Black LOST, White WON");
                     return MoveResult.CHECK_MATE;
-                }else{
-                    System.out.println("NOT A:  "+MoveResult.CHECK_MATE);
+                } else {
+                    System.out.println("NOT A:  " + MoveResult.CHECK_MATE);
                 }
 
                 System.out.println("Black's turn, AI makes a move: ");
                 ChessMove move = bot.getNextMove(board);
-                processMove(move);
+                if (move != null) {
+                    processMove(move);
+                }
                 blackP.setTurn(false);
                 whiteP.setTurn(true);
 
