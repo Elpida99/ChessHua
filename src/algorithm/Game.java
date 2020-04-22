@@ -27,7 +27,9 @@ public class Game {
     miniMax bot; // AI engine
     int depth;
     
+   
     King king;
+    miniMax m;
     private List<ChessMove> blackPieceList; //Hold a list of black pieces. Could be handy.
     private List<ChessMove> whitePieceList; //Hold a list of white pieces. Could be handy again.
 
