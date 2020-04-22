@@ -19,7 +19,16 @@ public class Game {
     boolean playerTurn = true;
     miniMax bot; // AI engine
     int depth;
+    
+    public List<ChessMove> blackPieceList; //Hold a list of black pieces. Could be handy.
+    public List<ChessMove> whitePieceList; //Hold a list of white pieces. Could be handy again.
 
+    public List<ChessMove> getBlackPieceList() {
+        return blackPieceList;
+    }
+    public List<ChessMove> getWhitePieceList() {
+        return whitePieceList;
+    }
     public void setBoard() {
         board.createBoard();
         board.printBoard();
@@ -106,6 +115,66 @@ public class Game {
             nrow = -1; //in case of error
         }
         return nrow;
+    }
+    
+    
+    //See if a certain position is attackable by enemy piece. Used to find if a king's position of potential move is in check
+    public boolean isCheck(FieldCoordinates fieldcoordinates, boolean is_color_white, Board b) {
+        //column and row : the location of the king 
+        int row= 0;
+        int column = 0;
+        
+        row = fieldcoordinates.getRow();
+        column = fieldcoordinates.getCol();
+        
+        miniMax minimax = new miniMax();
+
+        blackPieceList  = new LinkedList<>();
+        whitePieceList =  new LinkedList<>();
+        
+        blackPieceList = miniMax.getAllMoves(board,ChessPieceCharacteristics.Color.b ); //Hold a list of black pieces. Could be handy.
+        whitePieceList = minimax.getAllMoves(board, ChessPieceCharacteristics.Color.w); //Hold a list of white pieces. Could be handy again.
+        
+        boolean isCheck;
+        
+        if(is_color_white) {   //if king has white color 
+            for(ChessMove chessmove:blackPieceList){
+                if(chessmove.getNewPos().getRow() == row && chessmove.getCurrent().getCol() == column ){
+                    //if a chesspiece can attack and "eat" the king, then is checkmate
+                        isCheck = true;
+                         return isCheck;
+                }
+            }
+            isCheck = false;
+             return isCheck;
+        }else{       //if king has black color 
+            for(ChessMove chessmove:whitePieceList){
+                if(chessmove.getNewPos().getRow() == row && chessmove.getCurrent().getCol() == column ){
+                    //if a chesspiece can attack and "eat" the king, then is checkmate
+                        isCheck = true;
+                         return isCheck;
+                }
+            }
+            isCheck = false;
+            return isCheck;
+        }
+    }
+
+    //Method to find checkmate condition
+    public boolean isCheckmate(ChessPiece king, boolean isWhite, Board board, Player player) {
+
+        if (!isCheck(king.getPiecePosition(), isWhite, board)) {  
+        // isCheck(FieldCoordinates fieldcoordinates, boolean is_color_white, Board b) {
+            return false;
+        }
+
+        for (Field f: king.allPossibleMoves(board, player)) {
+            if (!this.isCheck(f.getFieldCoordintes(), isWhite, board)) {
+                return false;
+            }
+        }
+        return true;
+
     }
 
     public ChessMove readFromUser(Player player) {
