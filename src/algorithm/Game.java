@@ -222,6 +222,7 @@ public class Game {
                         validMove = true;
                         move.getP().makeMove(move, board);
                         player.setLastMove(move);
+                        board.setLastMove(move);
                         board.printBoard();
                     }
                 }
