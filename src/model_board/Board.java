@@ -189,7 +189,7 @@ public class Board {
     public ChessPieceCharacteristics.Name getPieceType(FieldCoordinates fieldcoordinates ){ //FieldCoordinates fieldcoordinates == Position position
 
         if(containsPiece(fieldcoordinates)){
-            return field[fieldcoordinates.getCol()][fieldcoordinates.getRow()].getChessPiece().getName();  //returns the type of the piece 
+            return field[fieldcoordinates.getRow()][fieldcoordinates.getCol()].getChessPiece().getName();  //returns the type of the piece 
         }
         return null;
     }
