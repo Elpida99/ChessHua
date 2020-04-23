@@ -221,6 +221,7 @@ public class Game {
                     if (move.getP().isMovePossible(move, board)) {
                         validMove = true;
                         move.getP().makeMove(move, board);
+                        player.setLastMove(move);
                         board.printBoard();
                     }
                 }
