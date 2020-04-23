@@ -80,23 +80,22 @@ public class King extends ChessPiece {
 
     @Override
     public boolean isMovePossible(ChessMove move, Board board ){
-        int curRow = 0;
-        int curCol = 0;
-        int row = 0;
-        int col = 0;
+        
+        if (move == null || move.getNewPos() == null || move.getCurrent()==null) {
+            return  answer = false;
+        }
         String color = null;
 
-        answer = false; //answer: is the move possiple or not
         color = this.getColor().toString(); // colour of pawn
         //System.out.println("colour=" + color);
         move.setCurrent(this.getPiecePosition()); // piece's current position-->set it to class ChessMove
 
-        curRow = this.getPiecePosition().getRow(); // piece's current row , x !!
-        curCol = this.getPiecePosition().getCol(); // piece's current column, y !!
+        int curRow = this.getPiecePosition().getRow(); // piece's current row , x !!
+        int curCol = this.getPiecePosition().getCol(); // piece's current column, y !!
         //System.out.println("old coordinates: " + move.getCurrent().getRow() + "," + move.getCurrent().getCol());
 
-        row = move.getNewPos().getRow(); // coordinates of desired move are the directions of the user
-        col = move.getNewPos().getCol();
+        int row = move.getNewPos().getRow(); // coordinates of desired move are the directions of the user
+        int col = move.getNewPos().getCol();
         //System.out.println("new position: " + row + "," + col); // check that they are right
         
         if (board.isFieldOccupied(curRow, curCol)) { //if piece exists on the field
