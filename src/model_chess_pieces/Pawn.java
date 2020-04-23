@@ -101,7 +101,6 @@ public class Pawn extends ChessPiece {
         if (!this.isBlocked(board)) {
             if (ChessMove.isValid(row, col)) { // if the new position is valid (row&col <8)
                 if (col == curCol) {
-                    move.setAttack(false);
                     // forward
                     if (this.isFirstMove()) { // the pawn can move 2 fields forward if it is its first move
                         if ((row - curRow) == forward * 1 || (row - curRow) == forward * 2) {
@@ -115,23 +114,21 @@ public class Pawn extends ChessPiece {
                 } else {
                     // diagonal
                     if (Math.abs((col - curCol)) == 1 && (row - curRow) == forward * 1) {
-                        if (board.isFieldOccupied(row, col)
-                                && (board.getField()[row][col].getChessPiece().getColor() != color)) {
-                            move.setAttack(true);
-                            answer = true;
+                        if (board.isFieldOccupied(row, col)) {
+                            if ((board.getField()[row][col].getChessPiece().getColor() != color)) {
+                                move.setAttack(true);
+                                answer = true;
+                            }
                         } else { // check enpassant
                             if (board.getLastMove() != null) {
                                 Player player = new Player();
                                 player.setPlayerColour(this.getColor());
 
                                 ChessMove enpassant = this.CheckEnPassant(board, player);
-                                if (enpassant != null) {
+                                if (enpassant.getNewPos() != null) {
                                     move.setAttack(true);
                                     answer = true;
-                                } else {
-                                    answer = false;
-                                    move.setAttack(false);
-                                }
+                                } 
                             }
                         }
                     }
@@ -184,7 +181,6 @@ public class Pawn extends ChessPiece {
 
                     if (field.isOccupied() && field.getChessPiece().getName().equals(ChessPieceCharacteristics.Name.P)
                             && field.getChessPiece().getColor().equals(enemycolour)) {
-                        System.out.println("piece found at " + row + "," + col);
                         FieldCoordinates currenttmp = board.getField()[row][col].getFieldCoordintes();
                         FieldCoordinates previoustmp = board.getField()[row + back][col].getFieldCoordintes();
                         if (currenttmp.equals(curEnemy) && previoustmp.equals(oldEnemy)) {
@@ -288,11 +284,9 @@ public class Pawn extends ChessPiece {
 
         if (move.getAttack()) {
             if (board.isFieldOccupied(row, col)) {
-                System.out.println("in if");
                 board.getField()[row][col].getChessPiece().setIsAlive(false);
                 board.getField()[row][col].removeChessPiece();
             } else {
-                System.out.println("in else");
                 int enpRow = board.getLastMove().getNewPos().getRow();
                 int enpCol = board.getLastMove().getNewPos().getCol();
                 board.getField()[enpRow][enpCol].getChessPiece().setIsAlive(false);
