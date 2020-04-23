@@ -88,7 +88,7 @@ public class Rook extends ChessPiece {
         int row = move.getNewPos().getRow(); // coordinates of desired move are the directions of the user
         int col = move.getNewPos().getCol();
 
-        //System.out.println("new position: " + row + "," + col); // check that they are right
+        //System.out.println("ROOK new position: " + row + "," + col); // check that they are right
         if (board.isFieldOccupied(curRow, curCol) && ChessMove.isValid(row, col)) { //if piece exists on the field and the new position is valid (row&col <8)
             //System.out.println("piece exists on this field and it can be moved and New position is valid, coordinates exist on board (row&col <8) \n");
 
@@ -109,8 +109,8 @@ public class Rook extends ChessPiece {
                     //return answer;
                 }
         } else {
-            System.out.println("ROOK'S piece DOES NOT exists on this field -- move not possible");
-            System.out.println("ROOK'S This field " + curRow + " " + curCol + " does not contain a piece");
+            //System.out.println("ROOK'S piece DOES NOT exists on this field -- move not possible");
+            //System.out.println("ROOK'S This field " + curRow + " " + curCol + " does not contain a piece");
             answer = false;
             return answer;
         }
@@ -122,9 +122,9 @@ public class Rook extends ChessPiece {
         //curRow = old x, curCol = old y
         if //VERTICAL 
         (col == curCol) { //if column(Yposition) is the same-->the move is forward/ backword : newX - oldX
-            System.out.println("ROOK'S VERTICAL move is possible  old col: " +curCol + "new col:(must be the same ) " +col +"and new row is : "+ row );
             for(int i=curRow; i<row; i++){
                 if ( ! ( board.isFieldOccupied(i, col)) ){
+                    System.out.println("ROOK'S VERTICAL move  old col: " +curCol + " new col:(must be the same ) " +col +" and old row is: "+curCol+" new row is : "+ row );
                     answer = true;
                     return answer;
                 }else{
@@ -134,9 +134,9 @@ public class Rook extends ChessPiece {
             }
         }//HORIZONTAL 
         else if (row == curRow) {   //if row(Xposition)is the same and newY - oldY 
-            System.out.println("ROOK'S HORIZONTAL move is possible new row : "+ row +"old row(must be same)" +curRow+"and new col: "+ (col- curCol));
             for(int i=curCol; i<col; i++){
                 if ( ! ( board.isFieldOccupied(row, i)) ){
+                    System.out.println("ROOK'S HORIZONTAL move is possible new row : "+ row +"old row(must be same)" +curRow+"and new col: "+ (col- curCol));
                     answer = true;
                     return answer;
                 }else{
