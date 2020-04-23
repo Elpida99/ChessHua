@@ -69,7 +69,7 @@ public class King extends ChessPiece {
 			int[] direction = directions[i];
 			int col = curcol + direction[0];
 			int row = currow + direction[1];
-			move.setNewCoor(row, col);
+			//move.setNewCoor(row, col);
 			if (this.isMovePossible(move,  board)) {
 				moves.add(new Field(row, col));
 			}
