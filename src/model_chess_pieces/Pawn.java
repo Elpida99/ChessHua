@@ -101,6 +101,7 @@ public class Pawn extends ChessPiece {
         if (!this.isBlocked(board)) {
             if (ChessMove.isValid(row, col)) { // if the new position is valid (row&col <8)
                 if (col == curCol) {
+                    move.setAttack(false);
                     // forward
                     if (this.isFirstMove()) { // the pawn can move 2 fields forward if it is its first move
                         if ((row - curRow) == forward * 1 || (row - curRow) == forward * 2) {
@@ -120,10 +121,8 @@ public class Pawn extends ChessPiece {
                             answer = true;
                         } else { // check enpassant
                             if (board.getLastMove() != null) {
-                                ChessMove temp = board.getLastMove();
                                 Player player = new Player();
-                                player.setPlayerColour(temp.getP().getColor());
-                                player.setLastMove(temp);
+                                player.setPlayerColour(this.getColor());
 
                                 ChessMove enpassant = this.CheckEnPassant(board, player);
                                 if (enpassant != null) {
@@ -131,16 +130,14 @@ public class Pawn extends ChessPiece {
                                     answer = true;
                                 } else {
                                     answer = false;
+                                    move.setAttack(false);
                                 }
-                            } else {
-                                answer = false;
                             }
-
                         }
                     }
                 }
             } else {
-
+                move.setAttack(false);
             }
         }
         return answer;
@@ -291,14 +288,16 @@ public class Pawn extends ChessPiece {
 
         if (move.getAttack()) {
             if (board.isFieldOccupied(row, col)) {
+                System.out.println("in if");
                 board.getField()[row][col].getChessPiece().setIsAlive(false);
                 board.getField()[row][col].removeChessPiece();
             } else {
+                System.out.println("in else");
                 int enpRow = board.getLastMove().getNewPos().getRow();
                 int enpCol = board.getLastMove().getNewPos().getCol();
                 board.getField()[enpRow][enpCol].getChessPiece().setIsAlive(false);
                 board.getField()[enpRow][enpCol].removeChessPiece();
-                
+
             }
         }
         board.getField()[curRow][curCol].removeChessPiece(); // remove piece from current position
