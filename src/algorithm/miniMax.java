@@ -44,7 +44,7 @@ public class miniMax {
         return nextMove;
     }
 
-    public Board copyBoard(Board board) {
+   public Board copyBoard(Board board) {
         Board copy = new Board();
         copy.createEmptyBoard();
         ChessPiece piece = null;
@@ -54,23 +54,27 @@ public class miniMax {
             for (int j = 0; j < 8; j++) {
                 if (board.isFieldOccupied(i, j)) {
                     ChessPiece tempPiece = board.getField()[i][j].getChessPiece();
-                    if (tempPiece.getName().equals(ChessPieceCharacteristics.Name.P)) {
-                        piece = new Pawn(tempPiece.getColor(), ChessPieceCharacteristics.Name.P);
-                    } else if (tempPiece.getName().equals(ChessPieceCharacteristics.Name.B)) {
-                        piece = new Bishop(tempPiece.getColor(), ChessPieceCharacteristics.Name.B);
-
-                    } else if (tempPiece.getName().equals(ChessPieceCharacteristics.Name.K)) {
-                        piece = new King(tempPiece.getColor(), ChessPieceCharacteristics.Name.K);
-
-                    } else if (tempPiece.getName().equals(ChessPieceCharacteristics.Name.N)) {
-                        piece = new Knight(tempPiece.getColor(), ChessPieceCharacteristics.Name.N);
-
-                    } else if (tempPiece.getName().equals(ChessPieceCharacteristics.Name.Q)) {
-                        piece = new Queen(tempPiece.getColor(), ChessPieceCharacteristics.Name.Q);
-
-                    } else if (tempPiece.getName().equals(ChessPieceCharacteristics.Name.R)) {
-                        piece = new Rook(tempPiece.getColor(), ChessPieceCharacteristics.Name.R);
-
+                    switch (tempPiece.getName()) {
+                        case P:
+                            piece = new Pawn(tempPiece.getColor(), ChessPieceCharacteristics.Name.P);
+                            break;
+                        case B:
+                            piece = new Bishop(tempPiece.getColor(), ChessPieceCharacteristics.Name.B);
+                            break;
+                        case K:
+                            piece = new King(tempPiece.getColor(), ChessPieceCharacteristics.Name.K);
+                            break;
+                        case N:
+                            piece = new Knight(tempPiece.getColor(), ChessPieceCharacteristics.Name.N);
+                            break;
+                        case Q:
+                            piece = new Queen(tempPiece.getColor(), ChessPieceCharacteristics.Name.Q);
+                            break;
+                        case R:
+                            piece = new Rook(tempPiece.getColor(), ChessPieceCharacteristics.Name.R);
+                            break;
+                        default:
+                            break;
                     }
 
                     copy.getField()[i][j].setChessPiece(piece);
@@ -122,7 +126,7 @@ public class miniMax {
 			for (Field Field : possibleMoves) {
 				allMoves.add(new ChessMove(Field.getFieldCoordintes(), board.getField()[row][col].getChessPiece()));
 			}
-		} catch (Exception e) {
+		} catch (NullPointerException exception) {
 
 		}
 		return allMoves;
@@ -144,7 +148,7 @@ public class miniMax {
                                     new ChessMove(field.getFieldCoordintes(), board.getField()[i][j].getChessPiece()));
                         }
 
-                    } catch (Exception e) {
+                    } catch (NullPointerException exception) {
 
                     }
                 }
