@@ -57,6 +57,7 @@ public class Bishop extends ChessPiece {
         }
     }
 
+    @Override
     public boolean isMovePossible(ChessMove move, Board board) {
 
         String color = this.getColor().toString(); // colour of pawn
@@ -137,7 +138,7 @@ public class Bishop extends ChessPiece {
                 int col = curCol + direction[0] * j;
                 int row = curRow + direction[1] * j;
 
-                move.setNewCoor(row, col);
+                //move.setNewCoor(row, col);
                 //if the possible position is valid check the next positions
                 if (this.isMovePossible(move, board)) {
 
