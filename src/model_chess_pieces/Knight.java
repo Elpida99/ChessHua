@@ -28,6 +28,7 @@ public class Knight extends ChessPiece {
         return value;
     }
 
+    @Override
     public List<Field> allPossibleMoves(Board board, Player player) {
         List<Field> moves = new LinkedList<>();
         int currow = this.getPiecePosition().getRow();
@@ -39,7 +40,7 @@ public class Knight extends ChessPiece {
             int[] direction = directions[i];
             int col = curcol + direction[0];
             int row = currow + direction[1];
-           // move.setNewCoor(row, col);
+
             if (this.isMovePossible(move, board)) {
                 moves.add(new Field(row, col));
             }
@@ -49,7 +50,11 @@ public class Knight extends ChessPiece {
 
     }
 
+    @Override
     public boolean isMovePossible(ChessMove move, Board board) {
+         if (move == null || move.getNewPos() == null || move.getCurrent()==null) {
+            return  false;
+        }
         boolean answer = false; // final answer--is the requested move possible?
         boolean validPosition = false; // temp boolean to check if the move is valid without checking if field is
         // occupied
