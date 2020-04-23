@@ -120,12 +120,12 @@ public class King extends ChessPiece {
                 }
             } else {
                 // not valid, out of bounds
-                System.out.println("KING: new field must exist on board!");
+                //System.out.println("KING: new field must exist on board!");
                 answer = false;
             }
         } else {
-           System.out.println("KING'S piece DOES NOT exists on this field -- move not possible");
-            System.out.println("KING: This field " + curRow + " " + curCol + " does not contain a piece");
+          // System.out.println("KING'S piece DOES NOT exists on this field -- move not possible");
+          //  System.out.println("KING: This field " + curRow + " " + curCol + " does not contain a piece");
             answer = false;
         }
         return answer;
@@ -136,15 +136,15 @@ public class King extends ChessPiece {
         //curRow = old x, curCol = old y
         if //VERTICAL 
                 (col == curCol && ((row - curRow) == 1 || (row - curRow == -1))) { //if column(Yposition) is the same-->the move is forward/ backword : newX - oldX = 1 or -1
-            System.out.println("KING'S VERTICAL move is possible: "+ Math.abs(row - curRow) +"\n");
+            System.out.println("KING'S VERTICAL move is possible: row - curRow: "+ Math.abs(row - curRow) +" col == curCol: "+col+"\n");
             answer = true;
         }//HORIZONTAL 
         else if (row == curRow && ((col - curCol) == 1 || (col - curCol) == -1)) {   //if row(Xposition)is the same and newY - oldY = 1 or -1
-            System.out.println("KING'S HORIZONTAL move is possible: "+ (row - curRow) + "\n");
+            System.out.println("KING'S HORIZONTAL move is possible: row == curRow: "+ row + "col - curCol: "+ (col - curCol)+"col == curCol : "+col + "\n");
             answer = true;
         }//DIAGONAL 
         else if ((((row - curRow) == 1 || (row - curRow) == -1) && ((col - curCol) == 1 || (col - curCol) == -1))) {    //newX - oldX = 1 or -1 AND newY - oldY = 1 or -1
-            System.out.println("KING'S DIAGONAL  move is possible: "+ (row - curRow));
+            System.out.println("KING'S DIAGONAL  move is possible: row - curRow: "+ (row - curRow)+"col - curCol: "+ ( col - curCol) +"\n");
             answer = true;
         } else {
             System.out.println("KING'S piece exists on this field -- move not possible");
@@ -249,11 +249,12 @@ public class King extends ChessPiece {
     //See if a certain position is attackable by enemy piece. Used to find if a king's position of potential move is in check
     public boolean isKingInCheck(FieldCoordinates fieldcoordinates, boolean is_color_white, Board board, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList ) {
         //column and row : the location of the king 
-        int row= 0;
-        int column = 0;
-        
-        row = fieldcoordinates.getRow();
-        column = fieldcoordinates.getCol();
+    
+        if(fieldcoordinates == null){
+            return false;
+        }
+        int row = fieldcoordinates.getRow();
+        int column = fieldcoordinates.getCol();
         
         miniMax minimax = new miniMax();
 
@@ -263,7 +264,7 @@ public class King extends ChessPiece {
         blackPieceList = miniMax.getAllMoves(board,ChessPieceCharacteristics.Color.b ); //Hold a list of black pieces. Could be handy.
         whitePieceList = miniMax.getAllMoves(board, ChessPieceCharacteristics.Color.w); //Hold a list of white pieces. Could be handy again.
         
-        boolean isCheck;
+        boolean isCheck = false;
         
         if(is_color_white) {   //if king has white color 
             for(ChessMove chessmove:blackPieceList){
