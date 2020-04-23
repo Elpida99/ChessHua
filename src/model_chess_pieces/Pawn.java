@@ -119,9 +119,23 @@ public class Pawn extends ChessPiece {
                             move.setAttack(true);
                             answer = true;
                         } else { // check enpassant
+                            if (board.getLastMove() != null) {
+                                ChessMove temp = board.getLastMove();
+                                Player player = new Player();
+                                player.setPlayerColour(temp.getP().getColor());
+                                player.setLastMove(temp);
 
-                            answer = false;
-                            // }
+                                ChessMove enpassant = this.CheckEnPassant(board, player);
+                                if (enpassant != null) {
+                                    move.setAttack(true);
+                                    answer = true;
+                                } else {
+                                    answer = false;
+                                }
+                            } else {
+                                answer = false;
+                            }
+
                         }
                     }
                 }
@@ -276,8 +290,16 @@ public class Pawn extends ChessPiece {
         int col = move.getNewPos().getCol();
 
         if (move.getAttack()) {
-            board.getField()[row][col].getChessPiece().setIsAlive(false);
-            board.getField()[row][col].removeChessPiece();
+            if (board.isFieldOccupied(row, col)) {
+                board.getField()[row][col].getChessPiece().setIsAlive(false);
+                board.getField()[row][col].removeChessPiece();
+            } else {
+                int enpRow = board.getLastMove().getNewPos().getRow();
+                int enpCol = board.getLastMove().getNewPos().getCol();
+                board.getField()[enpRow][enpCol].getChessPiece().setIsAlive(false);
+                board.getField()[enpRow][enpCol].removeChessPiece();
+                
+            }
         }
         board.getField()[curRow][curCol].removeChessPiece(); // remove piece from current position
         board.getField()[row][col].setChessPiece(this); // set it to the new field
