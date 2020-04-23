@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model_chess_pieces;
 
 import algorithm.ChessMove;
@@ -59,7 +54,9 @@ public class Bishop extends ChessPiece {
 
     @Override
     public boolean isMovePossible(ChessMove move, Board board) {
-
+        if (move == null || move.getNewPos() == null || move.getCurrent()==null) {
+            return  false;
+        }
         String color = this.getColor().toString(); // colour of pawn
         System.out.println("colour=" + color);
         move.setCurrent(this.getPiecePosition()); // piece's current position-->set it to class ChessMove
