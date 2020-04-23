@@ -126,7 +126,7 @@ public class miniMax {
 			for (Field Field : possibleMoves) {
 				allMoves.add(new ChessMove(Field.getFieldCoordintes(), board.getField()[row][col].getChessPiece()));
 			}
-		} catch (NullPointerException exception) {
+		} catch (Exception exception) {
 
 		}
 		return allMoves;
@@ -148,7 +148,7 @@ public class miniMax {
                                     new ChessMove(field.getFieldCoordintes(), board.getField()[i][j].getChessPiece()));
                         }
 
-                    } catch (NullPointerException exception) {
+                    } catch (Exception exception) {
 
                     }
                 }
