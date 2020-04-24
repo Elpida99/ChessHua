@@ -44,11 +44,6 @@ public class Field {
                 this.setOccupied(false);
 	}
         
-        public void removeChessPiece(ChessPiece chessPiece) {
-		this.chessPiece = null;
-                this.setOccupied(false);
-	}
-        
 	public FieldCoordinates getFieldCoordintes() {
 		return this.fieldCoordinates;
 	}
@@ -73,14 +68,8 @@ public class Field {
         public ChessPiece takeChessPiece(){    //makes the current piece null and returns the tiles piece  //????????
             if(isOccupied()){
                 ChessPiece holder = chessPiece;
-                //chessPiece = null;
-                //this.setOccupied(false);
-
-                removeChessPiece(chessPiece);
-                //setIsAlive(false);
-                //this.Field[chessPiece.getPiecePosition().getRow()][ chessPiece.getPiecePosition().getCol())].setOccupied(false);
-                //System.out.println("chessPiece = "+chessPiece );
-                //System.out.println("holder= "+holder.getPiecePosition() );
+                chessPiece = null;
+                    this.setOccupied(false);
                 return holder;
             }
             return null;
