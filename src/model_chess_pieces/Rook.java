@@ -23,7 +23,7 @@ public class Rook extends ChessPiece {
         {0, -1},
         {0, 1}
     };
-    
+
     //logic used for castling
     @Override
     public boolean firstMove() {
@@ -39,7 +39,7 @@ public class Rook extends ChessPiece {
     public void setFirstMove(boolean move) {
         firstMove = move;
     }
-    
+
     @Override
     public int getValue() {
         return value;
@@ -62,7 +62,7 @@ public class Rook extends ChessPiece {
             int[] direction = directions[i];
             int col = curcol + direction[0];
             int row = currow + direction[1];
-            //move.setNewCoor(row, col);
+
             if (this.isMovePossible(move, board)) {
                 moves.add(new Field(row, col));
             }
@@ -93,13 +93,13 @@ public class Rook extends ChessPiece {
             //System.out.println("piece exists on this field and it can be moved and New position is valid, coordinates exist on board (row&col <8) \n");
 
                 if (board.isFieldOccupied(row, col) && !(board.getField()[row][col].getChessPiece().getColor().toString().equals(color))) {
-                    //if NEW POSITION IS OCCUPIED/ NOT EMPTY , we need to check the colour of the pioni + and the colour is DIFFERENT from the one that the king has 
+                    //if NEW POSITION IS OCCUPIED/ NOT EMPTY , we need to check the colour of the pioni + and the colour is DIFFERENT from the one that the king has
                     //System.out.println("field occupied-the colour of the pawn (pioni) needs to be checked ");
 
                     return check_col_row(col, curCol, row, curRow, board);
                     //return answer;
                 } else if (board.isFieldOccupied(row, col) && (board.getField()[row][col].getChessPiece().getColor().toString().equals(color))) {
-                    //if NEW POSITION IS OCCUPIED/ NOT EMPTY , we need to check the colour of the pioni + and the colour is the SAME from the one that the king has 
+                    //if NEW POSITION IS OCCUPIED/ NOT EMPTY , we need to check the colour of the pioni + and the colour is the SAME from the one that the king has
                     //System.out.println("field occupied-the colour of the pawn (pioni) is the SAME with the colour of the king ");
                     answer = false;
                     return answer;
@@ -118,29 +118,31 @@ public class Rook extends ChessPiece {
     }
 
     private boolean check_col_row(int col, int curCol, int row, int curRow, Board board) {
-        //row = new x, col = new y 
+        //row = new x, col = new y
         //curRow = old x, curCol = old y
-        if //VERTICAL 
-        (col == curCol) { //if column(Yposition) is the same-->the move is forward/ backword : newX - oldX
-            for(int i=curRow; i<row; i++){
-                if ( ! ( board.isFieldOccupied(i, col)) ){
-                    System.out.println("ROOK'S VERTICAL move  old col: " +curCol + " new col:(must be the same ) " +col +" and old row is: "+curCol+" new row is : "+ row );
+        if //VERTICAL
+                (col == curCol) { //if column(Yposition) is the same-->the move is forward/ backword : newX - oldX
+            for (int i = curRow; i < row; i++) {
+                if (!(board.isFieldOccupied(i, col))) {
+                    System.out.println("ROOK'S VERTICAL move  old col: " + curCol + " new col:(must be the same ) " + col + " and old row is: " + curCol + " new row is : " + row);
+                    setFirstMove(true);
                     answer = true;
                     return answer;
-                }else{
-                    answer = false; 
+                } else {
+                    answer = false;
                     return answer;
                 }
             }
-        }//HORIZONTAL 
-        else if (row == curRow) {   //if row(Xposition)is the same and newY - oldY 
-            for(int i=curCol; i<col; i++){
-                if ( ! ( board.isFieldOccupied(row, i)) ){
-                    System.out.println("ROOK'S HORIZONTAL move is possible new row : "+ row +"old row(must be same)" +curRow+"and new col: "+ (col- curCol));
+        }//HORIZONTAL
+        else if (row == curRow) {   //if row(Xposition)is the same and newY - oldY
+            for (int i = curCol; i < col; i++) {
+                if (!(board.isFieldOccupied(row, i))) {
+                    System.out.println("ROOK'S HORIZONTAL move is possible new row : " + row + "old row(must be same)" + curRow + "and new col: " + (col - curCol));
+                    setFirstMove(true);
                     answer = true;
                     return answer;
-                }else{
-                    answer = false; 
+                } else {
+                    answer = false;
                     return answer;
                 }
             }
@@ -151,6 +153,5 @@ public class Rook extends ChessPiece {
         }
         return answer;
     }
-
 
 }
