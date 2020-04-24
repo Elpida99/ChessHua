@@ -16,7 +16,7 @@ import model_board.FieldCoordinates;
 public class King extends ChessPiece {
 
     private boolean firstMove;
-    private final int value = 10;
+    private final int value = 900;
     private boolean answer = false; //answer: is the move possiple or not
 
     
@@ -69,7 +69,7 @@ public class King extends ChessPiece {
 			int[] direction = directions[i];
 			int col = curcol + direction[0];
 			int row = currow + direction[1];
-			//move.setNewCoor(row, col);
+		
 			if (this.isMovePossible(move,  board)) {
 				moves.add(new Field(row, col));
 			}
@@ -98,11 +98,8 @@ public class King extends ChessPiece {
         int col = move.getNewPos().getCol();
         //System.out.println("new position: " + row + "," + col); // check that they are right
         
-        if (board.isFieldOccupied(curRow, curCol)) { //if piece exists on the field
-            //System.out.println("piece exists on this field and it can be moved\n");
-
-            if (ChessMove.isValid(row, col)) { //if the new position is valid (row&col <8)
-                //System.out.print("New position is valid, coordinates exist on board, (row&col <8) ");
+        if (board.isFieldOccupied(curRow, curCol)&& ChessMove.isValid(row, col)) { //if piece exists on the field and the new position is valid (row&col <8)
+            //System.out.println("piece exists on this field and it can be moved AND New position is valid, coordinates exist on board, (row&col <8)\n");
 
                 if (board.isFieldOccupied(row, col) && !(board.getField()[row][col].getChessPiece().getColor().toString().equals(color))) {
                     //if NEW POSITION IS OCCUPIED/ NOT EMPTY , we need to check the colour of the pioni + and the colour is DIFFERENT from the one that the king has 
@@ -115,14 +112,8 @@ public class King extends ChessPiece {
                     answer = false;
                 } else if (!(board.isFieldOccupied(row, col))) { //FIELD EMPTY
                    // System.out.println("position available-FIELD NOT OCCUPIED/EMPTY  --- Let's check if the new move meets the \"criteria\"");
-
                     check_col_row(col, curCol, row, curRow);
-                }
-            } else {
-                // not valid, out of bounds
-                //System.out.println("KING: new field must exist on board!");
-                answer = false;
-            }
+                }   
         } else {
           // System.out.println("KING'S piece DOES NOT exists on this field -- move not possible");
           //  System.out.println("KING: This field " + curRow + " " + curCol + " does not contain a piece");
@@ -136,31 +127,34 @@ public class King extends ChessPiece {
         //curRow = old x, curCol = old y
         if //VERTICAL 
                 (col == curCol && ((row - curRow) == 1 || (row - curRow == -1))) { //if column(Yposition) is the same-->the move is forward/ backword : newX - oldX = 1 or -1
-            System.out.println("KING'S VERTICAL move is possible: row - curRow: "+ Math.abs(row - curRow) +" col == curCol: "+col+"\n");
+            System.out.println("KING'S VERTICAL move is possible: row - curRow: " + Math.abs(row - curRow) + " col == curCol: " + col + "\n");
+            setFirstMove(true);
             answer = true;
         }//HORIZONTAL 
         else if (row == curRow && ((col - curCol) == 1 || (col - curCol) == -1)) {   //if row(Xposition)is the same and newY - oldY = 1 or -1
-            System.out.println("KING'S HORIZONTAL move is possible: row == curRow: "+ row + "col - curCol: "+ (col - curCol)+"col == curCol : "+col + "\n");
+            System.out.println("KING'S HORIZONTAL move is possible: row == curRow: " + row + "col - curCol: " + (col - curCol) + "col == curCol : " + col + "\n");
+            setFirstMove(true);
             answer = true;
         }//DIAGONAL 
         else if ((((row - curRow) == 1 || (row - curRow) == -1) && ((col - curCol) == 1 || (col - curCol) == -1))) {    //newX - oldX = 1 or -1 AND newY - oldY = 1 or -1
-            System.out.println("KING'S DIAGONAL  move is possible: row - curRow: "+ (row - curRow)+"col - curCol: "+ ( col - curCol) +"\n");
+            System.out.println("KING'S DIAGONAL  move is possible: row - curRow: " + (row - curRow) + "col - curCol: " + (col - curCol) + "\n");
+            setFirstMove(true);
+
             answer = true;
         } else {
             System.out.println("KING'S piece exists on this field -- move not possible");
+            setFirstMove(false);
             answer = false;
         }
     }
     
-    public void doCastling(Board board){
+    public void doCastling(Board board, Field startTile, Field endTile){
         //castling, change positions between rook and king !
-        int king_curRow = 0;
-        int king_curCol = 0;
-        String king_color = null;
-           
-        int rook_curRow = 0;
-        int rook_curCol = 0;
-        String rook_color = null;
+        int king_curRow = startTile.getFieldCoordintes().getRow();
+        int king_curCol = startTile.getFieldCoordintes().getCol();
+                
+        int rook_curRow = endTile.getFieldCoordintes().getRow();
+        int rook_curCol =  endTile.getFieldCoordintes().getCol();
         
         int new_king_Row = 0;
         int new_king_Col = 0;           
@@ -173,11 +167,13 @@ public class King extends ChessPiece {
             new_king_Col = 6;           
             new_rook_Row = 0;
             new_rook_Col = 5;
+            board.movePiecesForCastling(new FieldCoordinates(king_curRow,king_curCol), new FieldCoordinates(new_king_Row, new_king_Col), new FieldCoordinates(rook_curRow, rook_curCol), new FieldCoordinates( new_rook_Row,new_rook_Col) );      
         } else if (king_curRow == 0 && king_curCol == 4 && (rook_curRow == 0 && rook_curCol == 0) && (!board.isFieldOccupied(0, 1)) && (!board.isFieldOccupied(0, 2)) && (!board.isFieldOccupied(0, 3))) {
             new_king_Row = 0;
             new_king_Col = 3;           
             new_rook_Row = 0;
             new_rook_Col = 2;
+            board.movePiecesForCastling(new FieldCoordinates(king_curRow,king_curCol), new FieldCoordinates(new_king_Row, new_king_Col), new FieldCoordinates(rook_curRow, rook_curCol), new FieldCoordinates( new_rook_Row,new_rook_Col) );      
         }  
         //WHITE colour
         else if (king_curRow == 7 && king_curCol == 4 && rook_curRow == 7 && rook_curCol == 7 && (!board.isFieldOccupied(7, 5)) && (!board.isFieldOccupied(7, 6))) {
@@ -185,35 +181,39 @@ public class King extends ChessPiece {
             new_king_Col = 6;           
             new_rook_Row = 7;
             new_rook_Col = 5;
+            board.movePiecesForCastling(new FieldCoordinates(king_curRow,king_curCol), new FieldCoordinates(new_king_Row, new_king_Col), new FieldCoordinates(rook_curRow, rook_curCol), new FieldCoordinates( new_rook_Row,new_rook_Col) );      
         } else if (king_curRow == 7 && king_curCol == 4 && rook_curRow == 7 && rook_curCol == 0 && (!board.isFieldOccupied(7, 1)) && (!board.isFieldOccupied(7, 2)) && (!board.isFieldOccupied(7, 3))) {
             new_king_Row = 7;
             new_king_Col = 3;           
             new_rook_Row = 7;
             new_rook_Col = 2;
+            board.movePiecesForCastling(new FieldCoordinates(king_curRow,king_curCol), new FieldCoordinates(new_king_Row, new_king_Col), new FieldCoordinates(rook_curRow, rook_curCol), new FieldCoordinates( new_rook_Row,new_rook_Col) );      
         } else {
-            System.out.println("ERROR!!");
+            System.out.println("CASTLING ERROR!!");
         }
-
     }
-
-    //lists must be in the class where the method will be called 
-    List<Field> king_moves = new LinkedList<>();
-    List<Field> rook_moves = new LinkedList<>();
     
-    public boolean isCastlingPossible(Board board, int king_curRow, int king_curCol, String king_color, int rook_curRow, int rook_curCol, String rook_color){
+    public boolean isCastlingPossible(Board board,Field startTile, Field endTile ){
+
+        int king_curRow = startTile.getFieldCoordintes().getRow();
+        int king_curCol = startTile.getFieldCoordintes().getCol();
+        String king_color = startTile.getChessPiece().getColor().toString();
+                
+        int rook_curRow = endTile.getFieldCoordintes().getRow();
+        int rook_curCol =  endTile.getFieldCoordintes().getCol();
+        String rook_color = endTile.getChessPiece().getColor().toString();
         boolean possible = false;
         
-        //*both lists empty=>rook, queen have not been moved once   
+        //*both rook, king must have not been moved once, this must be their first move   
         //*the in-between fields empty  
         //*in their initial position based on their colour  
-        if( king_moves.isEmpty() && rook_moves.isEmpty() ){ 
+        if( startTile.getChessPiece().firstMove() && endTile.getChessPiece().firstMove()){  
             if ("b".equals(rook_color) && "b".equals(king_color)) { //black  colour
                 //*if they are in their initial position ++ the in-between fields empty
                 if (king_curRow == 0 && king_curCol == 4 && rook_curRow == 0 && rook_curCol == 7 && (!board.isFieldOccupied(0, 5)) && (!board.isFieldOccupied(0, 6))) {                    //*if they are in their initial position  ++ the in-between fields empty : [0][5]  [0][6]
                     System.out.println("same color=b, king_curRow == 0 && king_curCol == 4 && rook_curRow == 0 && rook_curCol == 7 ");
                     possible = true;
-                } else if (king_curRow == 0 && king_curCol == 4 && (rook_curRow == 0 && rook_curCol == 0) && (!board.isFieldOccupied(0, 1)) && (!board.isFieldOccupied(0, 2)) && (!board.isFieldOccupied(0, 3))) {
-                    //empty:  [0][1] [0][2]    [0][3]
+                } else if (king_curRow == 0 && king_curCol == 4 && (rook_curRow == 0 && rook_curCol == 0) && (!board.isFieldOccupied(0, 1)) && (!board.isFieldOccupied(0, 2)) && (!board.isFieldOccupied(0, 3))) { // [0][1] [0][2]  [0][3]: must be empty 
                     System.out.println("same color=b, king( Row == 0 , Col == 4 ) && rook ( Row == 0 && Col == 0)");
                     possible = true;
                 } else {
@@ -222,12 +222,10 @@ public class King extends ChessPiece {
                 }
             } else if ("w".equals(rook_color) && "w".equals(king_color)) { //white colour
                 //*if they are in their initial position ++ the in-between fields empty
-                if(king_curRow == 7 && king_curCol == 4 &&  rook_curRow == 7 && rook_curCol == 7 && ( !board.isFieldOccupied(7,5) ) &&  ( !board.isFieldOccupied(7,6) ) ){  
-                    //empty: [7][5]  [7][6]
+                if(king_curRow == 7 && king_curCol == 4 &&  rook_curRow == 7 && rook_curCol == 7 && ( !board.isFieldOccupied(7,5) ) &&  ( !board.isFieldOccupied(7,6) ) ){   //[7][5]  [7][6]: must be empty 
                     System.out.println("same color=w, king_curRow == 7 && king_curCol == 4 &&  rook_curRow == 7 && rook_curCol == 7 && empty: [7][5]  [7][6]");
                     possible = true;
-                }else if (king_curRow == 7 && king_curCol == 4 && rook_curRow == 7 && rook_curCol == 0 && ( !board.isFieldOccupied(7,1) ) && (! board.isFieldOccupied(7,2) ) && ( !board.isFieldOccupied(7,3) ) ){
-                    //empty: [7][1],  [7][2], [7][3]
+                }else if (king_curRow == 7 && king_curCol == 4 && rook_curRow == 7 && rook_curCol == 0 && ( !board.isFieldOccupied(7,1) ) && (! board.isFieldOccupied(7,2) ) && ( !board.isFieldOccupied(7,3) ) ){  //[7][1],  [7][2], [7][3]: must be empty 
                     System.out.println("same color=w, king_curRow == 7 && king_curCol == 4 && rook_curRow == 7 && rook_curCol == 0 + empty: [7][1],  [7][2], [7][3]");
                     possible = true;
                 }else{
@@ -239,7 +237,7 @@ public class King extends ChessPiece {
                 possible = false;
             }
         }else{
-            System.out.println("lists not empty, one or both of the pawns have been moved before");
+            System.out.println("one or both of the pawns have been moved before");
             possible = false;
         } 
         return possible;
