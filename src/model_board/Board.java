@@ -174,7 +174,7 @@ public class Board {
     }
 
     public boolean checkFirstMove(FieldCoordinates fieldcoordinates){    ///??????
-        if(containsPiece(fieldcoordinates)){
+        if(containsPiece(fieldcoordinates) && field[fieldcoordinates.getRow()][fieldcoordinates.getCol()].getChessPiece() != null  && ChessMove.isValid(fieldcoordinates.getRow(), fieldcoordinates.getCol())){
             return field[fieldcoordinates.getRow()][fieldcoordinates.getCol()].getChessPiece().firstMove();   // method firstMove() :   returns false
         }
         return false;
@@ -188,20 +188,24 @@ public class Board {
      //gets the type of piece at the given FieldCoordinates = (row, col)
     public ChessPieceCharacteristics.Name getPieceType(FieldCoordinates fieldcoordinates ){ //FieldCoordinates fieldcoordinates == Position position
 
-        if(containsPiece(fieldcoordinates)){
-            return field[fieldcoordinates.getRow()][fieldcoordinates.getCol()].getChessPiece().getName();  //returns the type of the piece 
+        if(containsPiece(fieldcoordinates) && ChessMove.isValid(fieldcoordinates.getRow(), fieldcoordinates.getCol())){
+            if ( field[fieldcoordinates.getRow()][fieldcoordinates.getCol()].getChessPiece() != null) 
+                return field[fieldcoordinates.getRow()][fieldcoordinates.getCol()].getChessPiece().getName();  //returns the type of the piece 
         }
         return null;
     }
     
-     //move a piece from the start to the end, it takes the piece at the start position and moves it to ene end position
-    public void movePiece(FieldCoordinates start, FieldCoordinates end){
-      //  field[end.getRow()][end.getCol()].setChessPiece(field[start.getCol()][start.getRow()].takeChessPiece());  
-        
-        // setPiecePosition(FieldCoordinates piecePosition)
-        Field myfield = field[end.getRow()][end.getCol()];
-        myfield.setFieldCoordinates(myfield.getFieldCoordintes().getRow(), myfield.getFieldCoordintes().getCol());
+    //move a piece from the start to the end, it takes the piece at the start position and moves it to the end position
+    //for castling
+    public void movePiecesForCastling(FieldCoordinates king_start,FieldCoordinates king_end, FieldCoordinates rook_start,FieldCoordinates rook_end ){       
+        field[king_end.getRow()][king_end.getCol()].setChessPiece(field[king_start.getCol()][king_start.getRow()].takeChessPiece());  
+        field[rook_end.getRow()][rook_end.getCol()].setChessPiece(field[rook_start.getCol()][rook_start.getRow()].takeChessPiece());  
     }   
+    
+    //move a piece from the start to the end, it takes the piece at the start position and moves it to the end position
+    public void movePiece(FieldCoordinates start,FieldCoordinates end ){       
+        field[end.getRow()][end.getCol()].setChessPiece(field[start.getCol()][start.getRow()].takeChessPiece());  
+    }  
     
     //if the tile is not occupied it can place down the piece, if it's occupied it doesn't place down the piece
     boolean setPiece(FieldCoordinates position, ChessPiece piece){
@@ -226,14 +230,16 @@ public class Board {
     
     //this handles castling and pawn moving for the first time
     public ChessPiece moveSpecialPiece (ChessMove move) {
-
+         Field startTile = null;
         //position variables to make it a bit easier when looking up moves
         FieldCoordinates moveStart = move.getCurrent();   //start
         FieldCoordinates moveEnd = move.getNewPos();      //end
 
         //tiles from the start to the end
-        Field startTile = field[moveStart.getRow()][moveStart.getCol()];
+        startTile = field[moveStart.getRow()][moveStart.getCol()];
         Field endTile = field[moveEnd.getRow()][moveEnd.getCol()];
+        System.out.println("moveStart: row: " + moveStart.getRow() +" col: " + moveStart.getCol()+
+                           "moveEnd: row: " + moveEnd.getRow()+" col: "+moveEnd.getCol()+ " chess piece "+startTile.getChessPiece());
 
         //pieces from the start to the end
         ChessPiece startPiece = startTile.getChessPiece();
@@ -241,42 +247,52 @@ public class Board {
 
         //if the start piece is null, there's no way for a move to be made
         if (startPiece == null) {
+            System.out.print("startPiece == null\n");
             return null;
         }
 
         //if the pawn is moving for the first time and its moving twice set the first move to true so it can't move twice again
         if (startPiece.getName() == ChessPieceCharacteristics.Name.P) {  //method getName returns the type of the piece
-            startPiece.setFirstMove(false);
+                        System.out.print("startPiece is pawn\n");
+
+                        startPiece.setFirstMove(false);
             //if the rook or king is moving for the first time set that piece to already moved, so it can't be used for castling
         } else if (startPiece.getName() == ChessPieceCharacteristics.Name.R || startPiece.getName() == ChessPieceCharacteristics.Name.K) { // rook || king 
-            if (startPiece.firstMove()) 
-                startPiece.setFirstMove(false);
+                System.out.print("startPiece is rook or king \n");
+                if (startPiece.firstMove()) 
+                    startPiece.setFirstMove(false);
         }
 
         //if the end piece is occupied get the piece
         if (endTile.isOccupied()) {
+            System.out.print("endTile.isOccupied()\n");
+
             endPiece = endTile.takeChessPiece();
         }
 
-        endTile.setChessPiece(startTile.takeChessPiece());
-       
-        //castle the pieces if if's a castling move
+        endTile.setChessPiece(startTile.takeChessPiece());  
+        System.out.print("startTile"+ startTile.getFieldCoordintes()+"\n");
+
+        System.out.print("moveSpecialPiece  endTile"+ endTile.getFieldCoordintes().toString());
+        King king = null;
+        
+        //castle the pieces if it's a castling move
         if (getPieceType(move.getCurrent()) == ChessPieceCharacteristics.Name.K && getPieceType(move.getNewPos()) == ChessPieceCharacteristics.Name.R) {
+            king = new King(startPiece.getColor(), ChessPieceCharacteristics.Name.K);
+            if( king.isCastlingPossible(this, startTile , endTile)){  //board, king, rook 
+    
+                System.out.println("Castling");
+                king.doCastling(this, startTile, endTile);
+            }
+        }else if (getPieceType(move.getCurrent()) == ChessPieceCharacteristics.Name.R && getPieceType(move.getNewPos()) == ChessPieceCharacteristics.Name.K) {
+            king = new King(endTile.getChessPiece().getColor(), ChessPieceCharacteristics.Name.K);
+            if( king.isCastlingPossible(this,endTile, startTile)){  //board, king ,  rook 
+            
+                System.out.println("Castling");
+                king.doCastling(this,endTile, startTile);
+            }         
+        }      
 
-            System.out.println("Castling");
-
-//            if (move.getEnd().getCol() == 6) movePiece(new Position(7, move.getEnd().getRow()),
-
-//                    new Position(5, move.getEnd().getRow()));
-
-//            else if (move.getEnd().getCol() == 2) {
-
-//                movePiece(new Position(0, move.getEnd().getRow()),
-
-//                        new Position(3, move.getEnd().getRow()));
-
-//            }
-        }
         return endPiece;
     }
         
