@@ -65,7 +65,7 @@ public class Field {
 		this.isOccupied = isOccupied;
 	}
 
-        public ChessPiece takeChessPiece(){    //makes the current piece null and returns the tiles piece  //????????
+        public ChessPiece takeChessPiece(){    //makes the current piece null and returns the tiles piece  
             if(isOccupied()){
                 ChessPiece holder = chessPiece;
                 chessPiece = null;
