@@ -204,7 +204,15 @@ public class Board {
     
     //move a piece from the start to the end, it takes the piece at the start position and moves it to the end position
     public void movePiece(FieldCoordinates start,FieldCoordinates end ){       
-        field[end.getRow()][end.getCol()].setChessPiece(field[start.getCol()][start.getRow()].takeChessPiece());  
+        //field[end.getRow()][end.getCol()].setChessPiece(field[start.getCol()][start.getRow()].takeChessPiece());  
+        
+        // setPiecePosition(FieldCoordinates piecePosition)
+        Field endfield = field[end.getRow()][end.getCol()];
+        Field startfield = field[start.getRow()][start.getCol()];
+        //myfield.setFieldCoordinates(myfield.getFieldCoordintes().getRow(), myfield.getFieldCoordintes().getCol());
+        //endfield.setFieldCoordinates(start.getRow(), start.getCol());
+        endfield.setChessPiece(startfield.takeChessPiece());  
+
     }  
     
     //if the tile is not occupied it can place down the piece, if it's occupied it doesn't place down the piece
@@ -300,7 +308,7 @@ public class Board {
     public void undoSpecialMove (ChessMove move, ChessPiece piece, boolean firstMove) {
 
         //reverse the move
-        movePiece(move.getNewPos(), move.getCurrent()); //end, start 
+        movePiece( move.getNewPos(), move.getCurrent()); //end, start 
 
         //if there is a piece place the piece down at the destination of the move
         if (piece != null) 
