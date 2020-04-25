@@ -147,6 +147,81 @@ public class King extends ChessPiece {
             answer = false;
         }
     }
+    public void undoCastling(Board board, Field startTile, Field endTile){
+        //undo castling, change positions between rook and king !
+
+        //position before the castling 
+        int king_curRow = 0;
+        int king_curCol = 0; 
+        int rook_curRow = 0;
+        int rook_curCol = 0;
+        
+        //positions after the castling has happened 
+        int new_king_Row = startTile.getFieldCoordintes().getRow();
+        int new_king_Col = startTile.getFieldCoordintes().getCol();           
+        int new_rook_Row =  endTile.getFieldCoordintes().getRow();
+        int new_rook_Col = endTile.getFieldCoordintes().getCol();
+
+        //BLACK  colour
+        if( new_king_Row == 0 && new_king_Col == 6 && new_rook_Row == 0 && new_rook_Col == 5 ) {
+            king_curRow = 0;
+            king_curCol = 4; 
+            rook_curRow = 0; 
+            rook_curCol = 7;
+            //undo castling moves, move king, rook back to their initial positions
+            board.movePiecesForCastling(new FieldCoordinates(new_king_Row, new_king_Col), new FieldCoordinates(king_curRow,king_curCol), new FieldCoordinates( new_rook_Row,new_rook_Col), new FieldCoordinates(rook_curRow, rook_curCol) );      
+        } else if (new_king_Row == 0 && new_king_Col == 3 && new_rook_Row == 0 && new_rook_Col == 2 ) {
+            king_curRow = 0;
+            king_curCol = 4;
+            rook_curRow = 0; 
+            rook_curCol = 0;
+            //undo castling moves, move king, rook back to their initial positions
+            board.movePiecesForCastling(new FieldCoordinates(new_king_Row, new_king_Col), new FieldCoordinates(king_curRow,king_curCol), new FieldCoordinates( new_rook_Row,new_rook_Col), new FieldCoordinates(rook_curRow, rook_curCol) );      
+        }  
+        //WHITE colour
+        else if (new_king_Row == 7 && new_king_Col == 6 && new_rook_Row == 7 && new_rook_Col == 5 ){
+            king_curRow = 7;
+            king_curCol = 4; 
+            rook_curRow = 7; 
+            rook_curCol = 7;
+            //undo castling moves, move king, rook back to their initial positions
+            board.movePiecesForCastling(new FieldCoordinates(new_king_Row, new_king_Col), new FieldCoordinates(king_curRow,king_curCol), new FieldCoordinates( new_rook_Row,new_rook_Col), new FieldCoordinates(rook_curRow, rook_curCol) );      
+        } else if (new_king_Row == 7 && new_king_Col == 3 && new_rook_Row == 7 && new_rook_Col == 2 ) {  
+            king_curRow = 7;
+            king_curCol = 4; 
+            rook_curRow = 7; 
+            rook_curCol = 0;
+            //undo castling moves, move king, rook back to their initial positions
+            board.movePiecesForCastling(new FieldCoordinates(new_king_Row, new_king_Col), new FieldCoordinates(king_curRow,king_curCol), new FieldCoordinates( new_rook_Row,new_rook_Col), new FieldCoordinates(rook_curRow, rook_curCol) );      
+        } 
+    }
+    
+    public boolean hasCastlingHappened(Board board, Field startTile, Field endTile){
+        //check if castling has happened 
+        boolean castlingHappened = false;
+        
+        int new_king_Row = startTile.getFieldCoordintes().getRow();
+        int new_king_Col = startTile.getFieldCoordintes().getCol();           
+        int new_rook_Row =  endTile.getFieldCoordintes().getRow();
+        int new_rook_Col = endTile.getFieldCoordintes().getCol();
+
+        if( startTile.getChessPiece().firstMove() == false  && endTile.getChessPiece().firstMove() == false ){  
+
+            //BLACK  colour
+            if(new_king_Row == 0 && new_king_Col == 6 && new_rook_Row == 0 && new_rook_Col == 5  && (!board.isFieldOccupied(0, 4)) && (!board.isFieldOccupied(0, 7))) {
+                castlingHappened = true; 
+            } else if (new_king_Row == 0 && new_king_Col == 3 && new_rook_Row == 0 && new_rook_Col == 2 && (!board.isFieldOccupied(0, 4)) && (!board.isFieldOccupied(0, 0))) {
+                castlingHappened = true; 
+            }  
+            //WHITE colour
+            else if (new_king_Row == 7 && new_king_Col == 6 && new_rook_Row == 7 && new_rook_Col == 5 && (!board.isFieldOccupied(7, 4)) && (!board.isFieldOccupied(7, 7))) {  
+                castlingHappened = true; 
+            } else if (new_king_Row == 7 && new_king_Col == 3 && new_rook_Row == 7 && new_rook_Col == 2 && (!board.isFieldOccupied(7, 4)) && (!board.isFieldOccupied(7, 0))) {  
+                castlingHappened = true; 
+            }
+        }
+        return castlingHappened;
+    }
     
     public void doCastling(Board board, Field startTile, Field endTile){
         //castling, change positions between rook and king !
