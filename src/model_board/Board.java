@@ -140,7 +140,7 @@ public class Board {
                             + this.field[i][j].getChessPiece().getName() + " ");
                     if (j == 7) {
                         int k = i + 1;
-                        System.out.print(" | " + k + "(" + (k - 1) + ")\n");
+                         System.out.print(" | " + k +  "\n");                 
                     }
                     continue;
                 } else {
@@ -148,14 +148,14 @@ public class Board {
                         System.out.print("## ");
                         if (j == 7) {
                             int k = i + 1;
-                            System.out.print(" | " + k + "(" + (k - 1) + ")\n");
+                             System.out.print(" | " + k +  "\n");
                         }
                         continue;
                     } else {
                         System.out.print("   ");
                         if (j == 7) {
                             int k = i + 1;
-                            System.out.print(" | " + k + "(" + (k - 1) + ")\n");
+                             System.out.print(" | " + k +  "\n");
                         }
                         continue;
                     }
@@ -164,8 +164,8 @@ public class Board {
 
         }
         System.out.println("------------------------");
-        System.out.println(" a  b  c  d  e  f  g  h ");
-        System.out.println("(0  1  2  3  4  5  6  7) \n");
+        System.out.println(" a  b  c  d  e  f  g  h \n");
+        //System.out.println("(0  1  2  3  4  5  6  7) \n");
     }
     
     
