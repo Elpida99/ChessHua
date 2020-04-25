@@ -43,7 +43,8 @@ public class Game {
         System.out.println("Players: w=white and b=black");
         System.out.println("Pieces: K=king, Q=queen, N=knight, B=bishop, R=rook, P=pawn");
         System.out.println("Choose which piece you want to move like this: g7 h5 to move from g7 to h5");
-        System.out.println("Or write -h for help with a recommended move");
+        System.out.println("You can write -h for help with a recommended move");
+        System.out.println("Or -q if you wish to quit playing.");
 
     }
 
@@ -136,10 +137,12 @@ public class Game {
 
         switch (inputTokens.length) {
             case 1:
-                if (inputTokens[0].equals("h")) {
+                if (inputTokens[0].equals("-h")) {
                     recommendMove(player.getPlayerColour());
                     userMove = null;
                     break;
+                } else if(inputTokens[0].equals("-q")){
+                    System.exit(0);
                 } else {
                     System.out.println("Not valid input");
                     userMove = null;
@@ -177,6 +180,7 @@ public class Game {
                     userMove = null;
                 }
                 break;
+
             default:
                 System.out.println("Not valid input");
                 userMove = null;
@@ -263,9 +267,9 @@ public class Game {
                     if (processMove(wMove, whiteP)) {
                         blackP.setTurn(true);
                         whiteP.setTurn(false);
-                     }else 
+                    } else {
                         System.out.println("Move not valid ");
-                     }
+                    }
                 }
 
             } else {
@@ -280,11 +284,11 @@ public class Game {
                 if (king.isCheckmate(king.get_Kings_position(board, m, false), false, m.copyBoard(board), blackP, blackPieceList, whitePieceList)) {
                     System.out.println(MoveResult.CHECK_MATE + " : Black LOST, White WON");
                     return MoveResult.CHECK_MATE;
-                } 
+                }
                 System.out.println("Black's turn, AI makes a move: ");
                 ChessMove move = bot.getNextMove(board);
 
-                System.out.println(move);
+                System.out.println(move.getNewPos().getRow() + "," + move.getNewPos().getCol());
 //                ChessMove wMove = readFromUser(blackP);
 //
 //                if (wMove != null) {
