@@ -170,13 +170,18 @@ public class King extends ChessPiece {
             rook_curCol = 7;
             //undo castling moves, move king, rook back to their initial positions
             board.movePiecesForCastling(new FieldCoordinates(new_king_Row, new_king_Col), new FieldCoordinates(king_curRow,king_curCol), new FieldCoordinates( new_rook_Row,new_rook_Col), new FieldCoordinates(rook_curRow, rook_curCol) );      
-        } else if (new_king_Row == 0 && new_king_Col == 3 && new_rook_Row == 0 && new_rook_Col == 2 ) {
+            startTile.getChessPiece().setFirstMove(false);
+            endTile.getChessPiece().setFirstMove(false);
+            
+         } else if (new_king_Row == 0 && new_king_Col == 3 && new_rook_Row == 0 && new_rook_Col == 2 ) {
             king_curRow = 0;
             king_curCol = 4;
             rook_curRow = 0; 
             rook_curCol = 0;
             //undo castling moves, move king, rook back to their initial positions
             board.movePiecesForCastling(new FieldCoordinates(new_king_Row, new_king_Col), new FieldCoordinates(king_curRow,king_curCol), new FieldCoordinates( new_rook_Row,new_rook_Col), new FieldCoordinates(rook_curRow, rook_curCol) );      
+            startTile.getChessPiece().setFirstMove(false);
+            endTile.getChessPiece().setFirstMove(false);
         }  
         //WHITE colour
         else if (new_king_Row == 7 && new_king_Col == 6 && new_rook_Row == 7 && new_rook_Col == 5 ){
@@ -186,6 +191,8 @@ public class King extends ChessPiece {
             rook_curCol = 7;
             //undo castling moves, move king, rook back to their initial positions
             board.movePiecesForCastling(new FieldCoordinates(new_king_Row, new_king_Col), new FieldCoordinates(king_curRow,king_curCol), new FieldCoordinates( new_rook_Row,new_rook_Col), new FieldCoordinates(rook_curRow, rook_curCol) );      
+            startTile.getChessPiece().setFirstMove(false);
+            endTile.getChessPiece().setFirstMove(false);
         } else if (new_king_Row == 7 && new_king_Col == 3 && new_rook_Row == 7 && new_rook_Col == 2 ) {  
             king_curRow = 7;
             king_curCol = 4; 
@@ -193,6 +200,8 @@ public class King extends ChessPiece {
             rook_curCol = 0;
             //undo castling moves, move king, rook back to their initial positions
             board.movePiecesForCastling(new FieldCoordinates(new_king_Row, new_king_Col), new FieldCoordinates(king_curRow,king_curCol), new FieldCoordinates( new_rook_Row,new_rook_Col), new FieldCoordinates(rook_curRow, rook_curCol) );      
+            startTile.getChessPiece().setFirstMove(false);
+            endTile.getChessPiece().setFirstMove(false);
         } 
     }
     
