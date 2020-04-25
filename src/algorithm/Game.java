@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import model_board.Board;
-import model_chess_pieces.ChessPiece;
 import model_chess_pieces.ChessPieceCharacteristics;
 import model_chess_pieces.King;
 
@@ -15,10 +14,10 @@ import model_chess_pieces.King;
  */
 public class Game {
 
-    private static Player whiteP = new Player(ChessPieceCharacteristics.Color.w, null);
-    private static Player blackP = new Player(ChessPieceCharacteristics.Color.b, null);
+    private static final Player whiteP = new Player(ChessPieceCharacteristics.Color.w, null);
+    private static final Player blackP = new Player(ChessPieceCharacteristics.Color.b, null);
 
-    private Board board = new Board();
+    private final Board board = new Board();
 
     boolean playerTurn = true;
     int depth = 1;
@@ -126,6 +125,20 @@ public class Game {
         return nrow;
     }
 
+    public final boolean containsDigit(String s) {
+        boolean containsDigit = false;
+
+        if (s != null && !s.isEmpty()) {
+            for (char c : s.toCharArray()) {
+                if (containsDigit = Character.isDigit(c)) {
+                    break;
+                }
+            }
+        }
+
+        return containsDigit;
+    }
+
     public ChessMove readFromUser(Player player) {
         ChessMove userMove = new ChessMove();
         Scanner input = new Scanner(System.in);
@@ -135,18 +148,20 @@ public class Game {
         userInput = userInput + " ";
         String[] inputTokens = userInput.split(" ");
 
+        OUTER:
         switch (inputTokens.length) {
             case 1:
-                if (inputTokens[0].equals("-h")) {
-                    recommendMove(player.getPlayerColour());
-                    userMove = null;
-                    break;
-                } else if(inputTokens[0].equals("-q")){
-                    System.exit(0);
-                } else {
-                    System.out.println("Not valid input");
-                    userMove = null;
-                    break;
+                switch (inputTokens[0]) {
+                    case "-h":
+                        recommendMove(player.getPlayerColour());
+                        userMove = null;
+                        break OUTER;
+                    case "-q":
+                        System.exit(0);
+                    default:
+                        System.out.println("Not valid input");
+                        userMove = null;
+                        break OUTER;
                 }
             case 2:
                 // inputTokens[0] is the position of the piece, eg--> a7
@@ -160,27 +175,25 @@ public class Game {
                 String[] newTokens = newPos.split("");
 
                 if (curTokens.length == 2 && newTokens.length == 2) {
+                    if (containsDigit(curTokens[1]) && containsDigit(newTokens[1])) {
+                        int curRow = returnRowFromUser(Integer.parseInt(curTokens[1]));
+                        int curCol = returnColFromUser(curTokens[0]);
+                        userMove.setCurCoor(curRow, curCol);
 
-                    int curRow = returnRowFromUser(Integer.parseInt(curTokens[1]));
-                    int curCol = returnColFromUser(curTokens[0]);
-                    userMove.setCurCoor(curRow, curCol);
+                        userMove.setP(board.getField()[curRow][curCol].getChessPiece());
 
-                    userMove.setP(board.getField()[curRow][curCol].getChessPiece());
-
-//                    System.out.println(
-//                            "currow is: (" + curTokens[1] + ")" + curRow + " curcol is: (" + curTokens[0] + ")" + curCol);
-                    int newRow = returnRowFromUser(Integer.parseInt(newTokens[1]));
-                    int newCol = returnColFromUser(newTokens[0]);
-                    userMove.setNewCoor(newRow, newCol);
-//                    System.out.println(
-//                            "newrow is: (" + newTokens[1] + ")" + newRow + " newcol is: (" + newTokens[0] + ")" + newCol);
-
+                        int newRow = returnRowFromUser(Integer.parseInt(newTokens[1]));
+                        int newCol = returnColFromUser(newTokens[0]);
+                        userMove.setNewCoor(newRow, newCol);
+                    } else {
+                        System.out.println("Not valid input");
+                        userMove = null;
+                    }
                 } else {
                     System.out.println("Not valid input");
                     userMove = null;
                 }
                 break;
-
             default:
                 System.out.println("Not valid input");
                 userMove = null;
@@ -200,13 +213,19 @@ public class Game {
                     + userRow(move.getCurrent().getRow());
             String newPos = userCol(move.getNewPos().getCol())
                     + "" + userRow(move.getNewPos().getRow());
+            if (curPos.equals(newPos)) {
+                counter--;
+                continue;
+            }
             System.out.print(" >>" + curPos + "-->" + newPos + " ");
+
             if (counter % 2 == 0) {
                 System.out.print("\n");
             }
 
             //at the moment it returns all possible moves
         }
+        System.out.print("\n");
     }
 
     public boolean processMove(ChessMove move, Player player) { //to douleuw twra auto -> This could be a solution (?)
@@ -288,16 +307,8 @@ public class Game {
                 System.out.println("Black's turn, AI makes a move: ");
                 ChessMove move = bot.getNextMove(board);
 
-                System.out.println(move.getNewPos().getRow() + "," + move.getNewPos().getCol());
-//                ChessMove wMove = readFromUser(blackP);
-//
-//                if (wMove != null) {
-//                    if (processMove(wMove, blackP)) {
-//                        blackP.setTurn(false);
-//                        whiteP.setTurn(true);
-//                    }
-//                }
                 if (move != null) {
+                    //   System.out.println(move.getNewPos().getRow() + "," + move.getNewPos().getCol());
                     processMove(move, blackP);
                 }
                 blackP.setTurn(false);
@@ -307,6 +318,5 @@ public class Game {
 
         }
 
-        //readFromUser();
     }
 }
