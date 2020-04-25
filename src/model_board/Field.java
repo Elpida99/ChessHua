@@ -9,7 +9,7 @@ public class Field {
 
 	private boolean isOccupied;
 	private ChessPiece chessPiece;
-	private FieldCoordinates fieldCoordinates = new FieldCoordinates();;
+	private FieldCoordinates fieldCoordinates;
 	private final FieldCoordinates permanentCoordinates;
 
    
