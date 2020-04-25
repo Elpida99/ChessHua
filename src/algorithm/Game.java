@@ -139,7 +139,7 @@ public class Game {
         return containsDigit;
     }
 
-    public ChessMove readFromUser(Player player) {
+     public ChessMove readFromUser(Player player) {
         ChessMove userMove = new ChessMove();
         Scanner input = new Scanner(System.in);
 
@@ -175,7 +175,7 @@ public class Game {
                 String[] newTokens = newPos.split("");
 
                 if (curTokens.length == 2 && newTokens.length == 2) {
-                    if (containsDigit(curTokens[1]) && containsDigit(newTokens[1])) {
+                    if ((containsDigit(curTokens[1]) && containsDigit(newTokens[1])) && !(containsDigit(curTokens[0]) && containsDigit(newTokens[0]))) {
                         int curRow = returnRowFromUser(Integer.parseInt(curTokens[1]));
                         int curCol = returnColFromUser(curTokens[0]);
                         userMove.setCurCoor(curRow, curCol);
