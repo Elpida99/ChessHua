@@ -58,6 +58,8 @@ public class Queen extends ChessPiece {
 
         int deltaX = newRow - curRow;
         int deltaY = newCol - curCol;
+        
+        String colour = this.getColor().toString(); // colour of piece
 
         int dx = deltaX / Math.abs(deltaX);
         int dy = deltaY / Math.abs(deltaY);
@@ -65,7 +67,14 @@ public class Queen extends ChessPiece {
         //check that field is actually occupied
         if (board.isFieldOccupied(move.getCurrent().getRow(), move.getCurrent().getCol())) {
 
-            if (board.isFieldOccupied(newRow, newCol)) {
+            if ((board.isFieldOccupied(newRow, newCol))
+                    && !(board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(colour))) {
+
+                // System.out.println("New move is not possible - Field occupied.");
+                move.setAttack(true);
+                return true;
+            } else if ((board.isFieldOccupied(newRow, newCol))
+                    && (board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(colour))) {
 
                 return false;
 
@@ -110,6 +119,8 @@ public class Queen extends ChessPiece {
 
         int deltaX = newRow - curRow;
         int deltaY = newCol - curCol;
+        
+        String colour = this.getColor().toString(); // colour of piece
 
         /*IF EXPLANATION: deltaX !=0 && deltaY !=0 is true IF the move is not horizontal OR vertical
                           newRow == curRow && newCol==curRow is true IF the queen stays on the same position*/
@@ -125,9 +136,15 @@ public class Queen extends ChessPiece {
 
         //check that field is actually occupied
         if (board.isFieldOccupied(move.getCurrent().getRow(), move.getCurrent().getCol())) {
-            ;
+            
+            if ((board.isFieldOccupied(newRow, newCol))
+                    && !(board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(colour))) {
 
-            if (board.isFieldOccupied(newRow, newCol)) {
+                // System.out.println("New move is not possible - Field occupied.");
+                move.setAttack(true);
+                return true;
+            } else if ((board.isFieldOccupied(newRow, newCol))
+                    && (board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(colour))) {
 
                 return false;
 
@@ -175,7 +192,10 @@ public class Queen extends ChessPiece {
         int deltaX = newRow - curRow;
         int deltaY = newCol - curCol;
 
+        String colour = this.getColor().toString();
+
         if (ChessMove.isValid(newRow, newCol)) {
+            
             if ((deltaX == 0 && deltaY != 0) || (deltaX != 0 && deltaY == 0)) {
                 return isMoveLikeRook(move, board);
             }
@@ -201,7 +221,7 @@ public class Queen extends ChessPiece {
                 int col = curCol + direction[0] * j;
                 int row = curRow + direction[1] * j;
 
-               // move.setNewCoor(row, col);
+                // move.setNewCoor(row, col);
                 //if the possible position is valid check the next positions
                 if (this.isMovePossible(move, board)) {
 
@@ -212,6 +232,25 @@ public class Queen extends ChessPiece {
         }
 
         return moves;
+
+    }
+
+    @Override
+    public void makeMove(ChessMove move, Board board) {
+
+        int curRow = this.getPiecePosition().getRow(); // piece's current row
+        int curCol = this.getPiecePosition().getCol(); // piece's current column
+
+        int row = move.getNewPos().getRow(); // coordinates of desired move are the directions of the user
+        int col = move.getNewPos().getCol();
+
+        if (move.getAttack()) {
+            board.getField()[row][col].getChessPiece().setIsAlive(false);
+            board.getField()[row][col].removeChessPiece();
+            // board.getField()[row][col].getChessPiece().setPiecePosition(null);
+        }
+        board.getField()[curRow][curCol].removeChessPiece(); // remove piece from current position
+        board.getField()[row][col].setChessPiece(this); // set it to the new field
 
     }
 

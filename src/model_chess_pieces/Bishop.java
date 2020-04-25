@@ -66,6 +66,8 @@ public class Bishop extends ChessPiece {
 
         int newRow = move.getNewPos().getRow(); //get bishop's new coordinates 
         int newCol = move.getNewPos().getCol();
+        
+        String colour = this.getColor().toString(); // colour of piece
 
         if (move.getCurrent() == null || move.getNewPos() == null) { //check
             System.out.println("One of the piece's positions is null");
@@ -84,23 +86,29 @@ public class Bishop extends ChessPiece {
         if (ChessMove.isValid(newRow, newCol)) {
             if (board.isFieldOccupied(move.getCurrent().getRow(), move.getCurrent().getCol())) {
 
-                System.out.println("bishop exists on the field and can be moved");
+                //System.out.println("bishop exists on the field and can be moved");
 
-                if (board.isFieldOccupied(newRow, newCol)) {
+                if ((board.isFieldOccupied(newRow, newCol))
+                        && !(board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(colour))) {
 
-                    System.out.println("New move is not possible - Field occupied.");
+                   // System.out.println("New move is not possible - Field occupied.");
+                    move.setAttack(true);
+                    return true;
+                } else if((board.isFieldOccupied(newRow, newCol))
+                        && (board.getField()[newRow][newCol].getChessPiece().getColor().toString().equals(colour))) {
+                    
                     return false;
 
                 } else {
 
-                    System.out.println("Position available");
+                    //System.out.println("Position available");
                     Field nextField;
 
                     for (int i = 1; i <= Math.abs(deltaX); i++) {
 
                         nextField = board.getField(curRow + i * dx, curCol + i * dy);
                         if (nextField == null) {
-                            System.out.println("null");
+                            //System.out.println("null");
                         }
                         if (nextField.getChessPiece() != null && (i != Math.abs(deltaX) || nextField.getChessPiece().getColor() == this.getColor())) {
                             return false;
@@ -113,7 +121,7 @@ public class Bishop extends ChessPiece {
             }
 
         } else {
-            System.out.println("Out of bounds");
+            //System.out.println("Out of bounds");
             return false;
         }
         return true;
@@ -146,6 +154,25 @@ public class Bishop extends ChessPiece {
         }
 
         return moves;
+
+    }
+    
+    @Override
+    public void makeMove(ChessMove move, Board board) {
+
+        int curRow = this.getPiecePosition().getRow(); // piece's current row
+        int curCol = this.getPiecePosition().getCol(); // piece's current column
+
+        int row = move.getNewPos().getRow(); // coordinates of desired move are the directions of the user
+        int col = move.getNewPos().getCol();
+
+        if (move.getAttack()) {
+            board.getField()[row][col].getChessPiece().setIsAlive(false);
+            board.getField()[row][col].removeChessPiece();
+            // board.getField()[row][col].getChessPiece().setPiecePosition(null);
+        }
+        board.getField()[curRow][curCol].removeChessPiece(); // remove piece from current position
+        board.getField()[row][col].setChessPiece(this); // set it to the new field
 
     }
 }
