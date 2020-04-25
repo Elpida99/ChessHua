@@ -252,11 +252,8 @@ public class Game {
                 miniMax m = new miniMax();
 
                 if (king.isCheckmate(king.get_Kings_position(board, m, true), true, m.copyBoard(board), whiteP, blackPieceList, whitePieceList)) {
-                    //if( king.isCheckmate(ChessPiece king, boolean isWhite, Board board, Player player, List<ChessMove> blackPieceList,List <ChessMove> whitePieceList) ){
                     System.out.println(MoveResult.CHECK_MATE + " : White LOST, Black WON");
                     return MoveResult.CHECK_MATE;
-                } else {
-                    System.out.println("NOT A:  " + MoveResult.CHECK_MATE);
                 }
                 System.out.println("White's turn, please enter move: ");
 
@@ -266,7 +263,9 @@ public class Game {
                     if (processMove(wMove, whiteP)) {
                         blackP.setTurn(true);
                         whiteP.setTurn(false);
-                    }
+                     }else 
+                        System.out.println("Move not valid ");
+                     }
                 }
 
             } else {
@@ -281,10 +280,7 @@ public class Game {
                 if (king.isCheckmate(king.get_Kings_position(board, m, false), false, m.copyBoard(board), blackP, blackPieceList, whitePieceList)) {
                     System.out.println(MoveResult.CHECK_MATE + " : Black LOST, White WON");
                     return MoveResult.CHECK_MATE;
-                } else {
-                    System.out.println("NOT A:  " + MoveResult.CHECK_MATE);
-                }
-
+                } 
                 System.out.println("Black's turn, AI makes a move: ");
                 ChessMove move = bot.getNextMove(board);
 
