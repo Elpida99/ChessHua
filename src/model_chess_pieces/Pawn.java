@@ -84,6 +84,9 @@ public class Pawn extends ChessPiece {
 
     @Override
     public boolean isMovePossible(ChessMove move, Board board) {
+        if (move.getNewPos() == null) {
+            return false;
+        }
         boolean answer = false; // answer: is the move possible or not
         ChessPieceCharacteristics.Color color = this.getColor(); // colour of pawn
         int forward;
@@ -98,9 +101,9 @@ public class Pawn extends ChessPiece {
         int row = move.getNewPos().getRow(); // coordinates of desired move are the directions of the user
         int col = move.getNewPos().getCol();
 
-        if (!this.isBlocked(board)) {
-            if (ChessMove.isValid(row, col)) { // if the new position is valid (row&col <8)
-                if (col == curCol) {
+        if (ChessMove.isValid(row, col)) { // if the new position is valid (row&col <8)
+            if (col == curCol) {
+                if (!this.isBlocked(board)) {
                     // forward
                     if (this.isFirstMove()) { // the pawn can move 2 fields forward if it is its first move
                         if ((row - curRow) == forward * 1 || (row - curRow) == forward * 2) {
@@ -109,34 +112,39 @@ public class Pawn extends ChessPiece {
                             }
                         }
                     } else { // not its first move-only one field forward is valid
-                        answer = (row - curRow) == forward * 1;
-                    }
-                } else {
-                    // diagonal
-                    if (Math.abs((col - curCol)) == 1 && (row - curRow) == forward * 1) {
-                        if (board.isFieldOccupied(row, col)) {
-                            if ((board.getField()[row][col].getChessPiece().getColor() != color)) {
-                                move.setAttack(true);
+                        if ((row - curRow) == forward * 1) {
+                            if (!board.isFieldOccupied(row, col)) {
                                 answer = true;
-                            }
-                        } else { // check enpassant
-                            if (board.getLastMove() != null) {
-                                Player player = new Player();
-                                player.setPlayerColour(this.getColor());
-
-                                ChessMove enpassant = this.CheckEnPassant(board, player);
-                                if (enpassant.getNewPos() != null) {
-                                    move.setAttack(true);
-                                    answer = true;
-                                } 
                             }
                         }
                     }
                 }
             } else {
-                move.setAttack(false);
+                // diagonal
+                if (Math.abs((col - curCol)) == 1 && (row - curRow) == forward * 1) {
+                    if (board.isFieldOccupied(row, col)) {
+                        if ((board.getField()[row][col].getChessPiece().getColor() != color)) {
+                            move.setAttack(true);
+                            answer = true;
+                        }
+                    } else { // check enpassant
+                        if (board.getLastMove() != null) {
+                            Player player = new Player();
+                            player.setPlayerColour(this.getColor());
+
+                            ChessMove enpassant = this.CheckEnPassant(board, player);
+                            if (enpassant.getNewPos() != null) {
+                                move.setAttack(true);
+                                answer = true;
+                            }
+                        }
+                    }
+                }
             }
+        } else {
+            move.setAttack(false);
         }
+
         return answer;
     }
 
@@ -281,7 +289,6 @@ public class Pawn extends ChessPiece {
 
         int row = move.getNewPos().getRow(); // coordinates of desired move are the directions of the user
         int col = move.getNewPos().getCol();
-
         if (move.getAttack()) {
             if (board.isFieldOccupied(row, col)) {
                 board.getField()[row][col].getChessPiece().setIsAlive(false);
