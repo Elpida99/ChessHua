@@ -69,9 +69,6 @@ public abstract class ChessPiece {
         int row = move.getNewPos().getRow(); // coordinates of desired move are the directions of the user
         int col = move.getNewPos().getCol();
 
-        System.out.println("Current position: " + curRow + "," + curCol);
-        System.out.println("New position: " + row + "," + col);
-
         board.getField()[curRow][curCol].removeChessPiece(); // remove piece from current position
         board.getField()[row][col].setChessPiece(this); // set it to the new field
 
