@@ -241,8 +241,6 @@ public class Board {
         //tiles from the start to the end
         startTile = field[moveStart.getRow()][moveStart.getCol()];
         Field endTile = field[moveEnd.getRow()][moveEnd.getCol()];
-        System.out.println("moveStart: row: " + moveStart.getRow() +" col: " + moveStart.getCol()+
-                           "moveEnd: row: " + moveEnd.getRow()+" col: "+moveEnd.getCol()+ " chess piece "+startTile.getChessPiece());
 
         //pieces from the start to the end
         ChessPiece startPiece = startTile.getChessPiece();
