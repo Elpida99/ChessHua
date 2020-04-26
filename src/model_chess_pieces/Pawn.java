@@ -91,9 +91,9 @@ public class Pawn extends ChessPiece {
         ChessPieceCharacteristics.Color color = this.getColor(); // colour of pawn
         int forward;
         if (color.equals(ChessPieceCharacteristics.Color.w)) {
-            forward = -1;
+            forward = -1; //white pieces start at row 6 
         } else {
-            forward = 1;
+            forward = 1; //black pieces start at row 1
         }
         int curRow = this.getPiecePosition().getRow(); // piece's current row
         int curCol = this.getPiecePosition().getCol(); // piece's current column
@@ -111,7 +111,7 @@ public class Pawn extends ChessPiece {
                                 answer = true;
                             }
                         }
-                    } else { // not its first move-only one field forward is valid
+                    } else { // not its first move -- > only one field forward is valid
                         if ((row - curRow) == forward * 1) {
                             if (!board.isFieldOccupied(row, col)) {
                                 answer = true;
@@ -122,13 +122,13 @@ public class Pawn extends ChessPiece {
             } else {
                 // diagonal
                 if (Math.abs((col - curCol)) == 1 && (row - curRow) == forward * 1) {
-                    if (board.isFieldOccupied(row, col)) {
-                        if ((board.getField()[row][col].getChessPiece().getColor() != color)) {
-                            move.setAttack(true);
+                    if (board.isFieldOccupied(row, col)) { //is the new field occupied?
+                        if ((board.getField()[row][col].getChessPiece().getColor() != color)) { //is it occupied by an enemy piece?
+                            move.setAttack(true); //is yes, the other piece gets eaten
                             answer = true;
                         }
-                    } else { // check enpassant
-                        if (board.getLastMove() != null) {
+                    } else { //check if enpassant is happening
+                        if (board.getLastMove() != null) { //if the other player has played yet
                             Player player = new Player();
                             player.setPlayerColour(this.getColor());
 
@@ -148,51 +148,53 @@ public class Pawn extends ChessPiece {
         return answer;
     }
 
-    public ChessMove CheckEnPassant(Board board, Player curplayer) {
+    public ChessMove CheckEnPassant(Board board, Player curplayer) { //check enpassant and catch it
 
-        ChessMove move = new ChessMove(null, this);
+        ChessMove move = new ChessMove(null, this); //ChessMove by this pawn
 
-        FieldCoordinates oldEnemy = board.getLastMove().getCurrent();
-        FieldCoordinates curEnemy = board.getLastMove().getNewPos();
+        FieldCoordinates oldEnemy = board.getLastMove().getCurrent(); //old position of enemy pawn
+        FieldCoordinates curEnemy = board.getLastMove().getNewPos(); //new position of enemy pawn
 
         int currow = this.getPiecePosition().getRow();
         int curcol = this.getPiecePosition().getCol();
-        int Pawnrank;
-        int back;
-        int forward;
+        int Pawnrank; //row of current player's pawn
+        int back; //for enemy pawn
+        int forward; //for current pawn
         ChessPieceCharacteristics.Color enemycolour;
         Player enemy = new Player();
 
         if (curplayer.getPlayerColour().equals(ChessPieceCharacteristics.Color.w)) {// white player's turn
-            Pawnrank = 3; // white pawn must be at field 3 to catch en passant
+            Pawnrank = 3; // white pawn must be at row 3 to catch en passant
             back = -2; // black pawn must have moved 2 fields forward (it was 2 fields back)
-            forward = -1; // white pawn moves 1 field forward horizontally
+            forward = -1; // white pawn moves 1(-1) field forward vertically (eg 3 --> 2)
             enemycolour = ChessPieceCharacteristics.Color.b; // enemyColour
             enemy.setPlayerColour(enemycolour);
 
         } else {
-            Pawnrank = 4;
-            back = 2;
-            forward = 1;
+            Pawnrank = 4; //black pawn must be at row 4 to catch en passant
+            back = 2; //white piece must have moved -2 fields forward (it was 2 fields back)
+            forward = 1; //black pawn moves 1 field forward vertically (eg 4 --> 5)
             enemycolour = ChessPieceCharacteristics.Color.w; // enemyColour
             enemy.setPlayerColour(enemycolour);
 
         }
-        if (currow == Pawnrank) { // this defines if it is white's or black's turn
-            for (int i = -1; i <= 1; i += 2) { // we need to check left of the pawn(-1) and right(+1), 0 is not needed
+        if (currow == Pawnrank) { // if it's 3, current pawn is white, is it's 4, current pawn is black
+            for (int i = -1; i <= 1; i += 2) { // we need to check left of the pawn(-1) and right(+1), 0 is the pawn's position
                 // hence the i+=2
                 int row = currow;
-                int col = curcol + i;
+                int col = curcol + i; //first time --> curcol-1(left), second time --> curcol+1(right)
 
                 if (ChessMove.isValid(row, col)) {
                     Field field = board.getField()[row][col];
-
                     if (field.isOccupied() && field.getChessPiece().getName().equals(ChessPieceCharacteristics.Name.P)
                             && field.getChessPiece().getColor().equals(enemycolour)) {
+                        //if current pawn has next to it an enemy pawn then 
                         FieldCoordinates currenttmp = board.getField()[row][col].getFieldCoordintes();
                         FieldCoordinates previoustmp = board.getField()[row + back][col].getFieldCoordintes();
+                        //we check if the enemy player's last move was to move this enemy pawn 2 fields forward
                         if (currenttmp.equals(curEnemy) && previoustmp.equals(oldEnemy)) {
                             move.setNewCoor(currow + forward, curcol + i);
+                            //if yes then current pawn can move diagonally and catch en passant(eat the other pawn)
                         }
                     }
                 }
@@ -203,7 +205,7 @@ public class Pawn extends ChessPiece {
 
     }
 
-    public boolean CheckPawnPromotion(int row) {
+    public boolean CheckPawnPromotion(int row) { //check if a pawn can be promoted
         boolean promotion = false;
         if (this.getColor().equals(ChessPieceCharacteristics.Color.w)) {
             if (row == 0) {
@@ -289,11 +291,11 @@ public class Pawn extends ChessPiece {
 
         int row = move.getNewPos().getRow(); // coordinates of desired move are the directions of the user
         int col = move.getNewPos().getCol();
-        if (move.getAttack()) {
-            if (board.isFieldOccupied(row, col)) {
+         if (move.getAttack()) { //if it eats another piece
+            if (board.isFieldOccupied(row, col)) { //simple diagonal attack
                 board.getField()[row][col].getChessPiece().setIsAlive(false);
                 board.getField()[row][col].removeChessPiece();
-            } else {
+            } else { //en passant
                 int enpRow = board.getLastMove().getNewPos().getRow();
                 int enpCol = board.getLastMove().getNewPos().getCol();
                 board.getField()[enpRow][enpCol].getChessPiece().setIsAlive(false);
