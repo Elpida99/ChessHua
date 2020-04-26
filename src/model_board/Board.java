@@ -28,7 +28,7 @@ public class Board {
         this.field = field;
     }
 
-    public Field getField(int x, int y) //NEW METHOD
+    public Field getField(int x, int y) 
     {
         if (x < 0 || x > 7 || y < 0 || y > 7) {
             return null;
