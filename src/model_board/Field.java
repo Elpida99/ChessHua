@@ -9,7 +9,7 @@ public class Field {
 
 	private boolean isOccupied;
 	private ChessPiece chessPiece;
-	private FieldCoordinates fieldCoordinates;
+	private FieldCoordinates fieldCoordinates ;
 	private final FieldCoordinates permanentCoordinates;
 
    
@@ -69,7 +69,7 @@ public class Field {
             if(isOccupied()){
                 ChessPiece holder = chessPiece;
                 chessPiece = null;
-                    this.setOccupied(false);
+                this.setOccupied(false);
                 return holder;
             }
             return null;
