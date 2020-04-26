@@ -123,7 +123,7 @@ public class Rook extends ChessPiece {
             }
             if( !field_empty_or_not.contains("false") ){  //if all intermediate fields are empty, then the rook can be moved 
                 setFirstMove(true);
-                System.out.println("ROOK'S VERTICAL move  old col: " + curCol + " new col:(must be the same ) " + col + " and old row is: " + curCol + " new row is : " + row);
+                System.out.println("ROOK'S VERTICAL move  OLD coordinates : (" + curRow + " , " + curCol + " )   NEW coordinates : ( " + row + " , " + col + " ) \n");
                 answer = true;
                 return answer;
             }else {           //if there is a field that is not empty, then the rook can not be moved 
@@ -142,7 +142,7 @@ public class Rook extends ChessPiece {
             }
             if( !field_empty_or_not.contains("false") ){   //if all intermediate fields are empty, then the rook can be moved 
                 setFirstMove(true);
-                System.out.println("ROOK'S HORIZONTAL move is possible new row : " + row + "old row(must be same)" + curRow + "and new col: " + (col - curCol));
+                System.out.println("ROOK'S HORIZONTAL move is possible:  OLD coordinates : (" + curRow + " , " + curCol + " )   NEW coordinates : ( " + row + " , " + col + " ) \n");
                 answer = true;
                 return answer;
             }else {                                //if there is a field that is not empty, then the rook can not be moved 
