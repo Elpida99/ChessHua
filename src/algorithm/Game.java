@@ -15,12 +15,12 @@ import model_chess_pieces.King;
  * @author it21735 , it21754, it21762
  */
 public class Game {
-
+    
     private static final Player whiteP = new Player(ChessPieceCharacteristics.Color.w, null);
     private static final Player blackP = new Player(ChessPieceCharacteristics.Color.b, null);
-
+    
     private final Board board = new Board();
-
+    
     boolean playerTurn = true;
     int depth = 1;
     miniMax bot; // AI engine
@@ -33,11 +33,11 @@ public class Game {
     public List<ChessMove> getBlackPieceList() {
         return blackPieceList;
     }
-
+    
     public List<ChessMove> getWhitePieceList() {
         return whitePieceList;
     }
-
+    
     public void setBoard() {
         board.createBoard();
         board.printBoard();
@@ -46,9 +46,9 @@ public class Game {
         System.out.println("Choose which piece you want to move like this: g7 h5 to move from g7 to h5");
         System.out.println("You can write -h for help with a recommended move");
         System.out.println("Or -q if you wish to quit playing.");
-
+        
     }
-
+    
     public int returnColFromUser(String letter) { //returns the actual column that is assigned by the letters
         int column;
         if (letter.equalsIgnoreCase("a")) {
@@ -72,7 +72,7 @@ public class Game {
         }
         return column;
     }
-
+    
     public int returnRowFromUser(int inputRow) { //returns the actual row on the board
         int row;
         if (inputRow >= 0 && inputRow <= 8) {
@@ -80,10 +80,10 @@ public class Game {
         } else {
             row = -1; // in case the user inputs a row that does not exist
         }
-
+        
         return row;
     }
-
+    
     public char userCol(int column) { //returns column as letter
         char col;
         switch (column) {
@@ -116,7 +116,7 @@ public class Game {
         }
         return col;
     }
-
+    
     public int userRow(int row) { //returns row as the user sees it
         int nrow;
         if (row >= 0 || row <= 7) {
@@ -126,10 +126,10 @@ public class Game {
         }
         return nrow;
     }
-
+    
     public final boolean containsDigit(String s) {
         boolean containsDigit = false;
-
+        
         if (s != null && !s.isEmpty()) {
             for (char c : s.toCharArray()) {
                 if (containsDigit = Character.isDigit(c)) {
@@ -137,19 +137,19 @@ public class Game {
                 }
             }
         }
-
+        
         return containsDigit;
     }
-
+    
     public ChessMove readFromUser(Player player) {
         ChessMove userMove = new ChessMove();
         Scanner input = new Scanner(System.in);
-
+        
         String userInput = input.nextLine();
         userInput = userInput.trim();
         userInput = userInput + " ";
         String[] inputTokens = userInput.split(" ");
-
+        
         OUTER:
         switch (inputTokens.length) {
             case 1:
@@ -175,18 +175,22 @@ public class Game {
                 newPos = newPos.trim();
                 String[] curTokens = curPos.split("");
                 String[] newTokens = newPos.split("");
-
+                
                 if (curTokens.length == 2 && newTokens.length == 2) {
                     if ((containsDigit(curTokens[1]) && containsDigit(newTokens[1])) && !(containsDigit(curTokens[0]) && containsDigit(newTokens[0]))) {
                         int curRow = returnRowFromUser(Integer.parseInt(curTokens[1]));
                         int curCol = returnColFromUser(curTokens[0]);
                         userMove.setCurCoor(curRow, curCol);
-
-                        userMove.setP(board.getField()[curRow][curCol].getChessPiece());
-
+                        
+                        if (ChessMove.isValid(curRow, curCol)) {
+                            userMove.setP(board.getField()[curRow][curCol].getChessPiece());
+                        }
+                        
                         int newRow = returnRowFromUser(Integer.parseInt(newTokens[1]));
                         int newCol = returnColFromUser(newTokens[0]);
+                        
                         userMove.setNewCoor(newRow, newCol);
+                        
                     } else {
                         System.out.println("Not valid input");
                         userMove = null;
@@ -203,9 +207,9 @@ public class Game {
         }
         return userMove;
     }
-
+    
     public void recommendMove(ChessPieceCharacteristics.Color colour) {
-
+        
         List<ChessMove> recommendedMoves = miniMax.getAllMoves(board, colour);
         System.out.println(" \nRecommended moves for white player:");
         int counter = 0;
@@ -220,7 +224,7 @@ public class Game {
                 continue;
             }
             System.out.print(" >>" + curPos + "-->" + newPos + " ");
-
+            
             if (counter % 2 == 0) {
                 System.out.print("\n");
             }
@@ -229,7 +233,7 @@ public class Game {
         }
         System.out.print("\n");
     }
-
+    
     public boolean isKingAlive(King king, Board result_board, boolean is_color_white) { //returns true if the king is alive, else false
         ChessPiece piece = null;
         m = new miniMax();
@@ -250,18 +254,18 @@ public class Game {
         }
         return false;
     }
-
+    
     private void check_if_KingIsInCheck(int newRow, int newCol) {
         blackPieceList = new LinkedList<>();
         whitePieceList = new LinkedList<>();
         m = new miniMax();
-
+        
         if ((board.isFieldOccupied(newRow, newCol) && board.getField()[newRow][newCol].getChessPiece().getColor() == ChessPieceCharacteristics.Color.b)
                 || (board.isFieldOccupied(newRow, newCol) && board.getField()[newRow][newCol].getChessPiece().getName() == ChessPieceCharacteristics.Name.K && board.getField()[newRow][newCol].getChessPiece().getColor() == ChessPieceCharacteristics.Color.w)) {
             //the chesspiece that was just moved is of black color, color of king = white
             //OR the chesspiece that was just moved is the king and has white color
             king = new King(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.K);
-
+            
             if (isKingAlive(king, board, true)) {
                 if (king.isKingInCheck(king.get_Kings_position(board, m, true).getPiecePosition(), true, m.copyBoard(board), blackPieceList, whitePieceList)) {
                     System.out.println("White King is in check! King is under threat!");
@@ -279,30 +283,30 @@ public class Game {
             }
         }
     }
-
+    
     public boolean processMove(ChessMove move, Player player) {
-
+        
         boolean validMove = false;
         int curRow = move.getCurrent().getRow();
         int curCol = move.getCurrent().getCol();
-
+        
         Field startField = board.getField(curRow, curCol);
-
+        
         int newRow = move.getNewPos().getRow();
         int newCol = move.getNewPos().getCol();
         Field endField = board.getField(newRow, newCol);
-
+        
         if (move.getP() != null) {
             ChessPieceCharacteristics.Color color = move.getP().getColor();
             if (color == player.getPlayerColour()) {
-                if (ChessMove.isValid(curRow, curCol)) { //row and col number is valid
+                if (ChessMove.isValid(curRow, curCol) && ChessMove.isValid(newRow, newCol)) { //row and col number is valid
 
                     //castle the pieces if it's a castling move
                     if (board.getPieceType(move.getCurrent()) == ChessPieceCharacteristics.Name.K && board.getPieceType(move.getNewPos()) == ChessPieceCharacteristics.Name.R) { //chesspieces that are about to move are: king, rook
                         if (isKingAlive(king, board, true)) {
                             king = new King(startField.getChessPiece().getColor(), ChessPieceCharacteristics.Name.K);
                             if (king.isCastlingPossible(board, startField, endField)) {
-
+                                
                                 System.out.println("Player: Castling");
                                 king.doCastling(board, startField, endField);
                             }
@@ -311,7 +315,7 @@ public class Game {
                         king = new King(endField.getChessPiece().getColor(), ChessPieceCharacteristics.Name.K);
                         if (isKingAlive(king, board, true)) {
                             if (king.isCastlingPossible(board, endField, startField)) {
-
+                                
                                 System.out.println("Player: Castling");
                                 king.doCastling(board, endField, startField);
                             }
@@ -329,35 +333,36 @@ public class Game {
         }
         return validMove;
     }
-
+    
     public MoveResult ChessGame() {
-
+        
         setBoard();
         whiteP.setTurn(true);
         blackP.setTurn(false);
         miniMax.setPlayer(blackP);
         bot = new miniMax(ChessPieceCharacteristics.Color.b, depth);
-
+        
         while (true) {
-
+            
             List<ChessMove> reccomendedMoves = new LinkedList();
-
+            
             if (whiteP.isTurn()) {
                 //check for check-mate, if yes game is over 
                 king = new King(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.K);
                 blackPieceList = new LinkedList<>();
                 whitePieceList = new LinkedList<>();
-
+                
                 miniMax m = new miniMax();
-
+                
                 if (king.isCheckmate(king.get_Kings_position(board, m, true), true, board, whiteP, blackPieceList, whitePieceList)) {
                     System.out.println(MoveResult.CHECK_MATE + " : White LOST, Black WON");
                     return MoveResult.CHECK_MATE;
                 }
+                
                 System.out.println("White's turn, please enter move: ");
-
+                
                 ChessMove wMove = readFromUser(whiteP);
-
+                
                 if (wMove != null) {
                     if (processMove(wMove, whiteP)) {
                         blackP.setTurn(true);
@@ -366,15 +371,15 @@ public class Game {
                         System.out.println("Move not valid ");
                     }
                 }
-
+                
             } else {
                 //check for check-mate, if yes game is over  
                 king = new King(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.K);
                 blackPieceList = new LinkedList<>();
                 whitePieceList = new LinkedList<>();
-
+                
                 m = new miniMax();
-
+                
                 if (king.isCheckmate(king.get_Kings_position(board, m, false), false, board, blackP, blackPieceList, whitePieceList)) {
                     System.out.println(MoveResult.CHECK_MATE + " : Black LOST, White WON");
                     return MoveResult.CHECK_MATE;
@@ -382,7 +387,7 @@ public class Game {
                 //ai move 
                 System.out.println("Black's turn, AI makes a move: ");
                 ChessMove move = bot.getNextMove(board);
-
+                
                 if (move != null) {
                     processMove(move, blackP);
                 }
