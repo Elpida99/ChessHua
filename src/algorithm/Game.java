@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import model_board.Board;
+import model_board.Field;
+import model_chess_pieces.ChessPiece;
 import model_chess_pieces.ChessPieceCharacteristics;
 import model_chess_pieces.King;
 
@@ -139,7 +141,7 @@ public class Game {
         return containsDigit;
     }
 
-     public ChessMove readFromUser(Player player) {
+    public ChessMove readFromUser(Player player) {
         ChessMove userMove = new ChessMove();
         Scanner input = new Scanner(System.in);
 
@@ -228,24 +230,98 @@ public class Game {
         System.out.print("\n");
     }
 
-    public boolean processMove(ChessMove move, Player player) { //to douleuw twra auto -> This could be a solution (?)
+    public boolean isKingAlive(King king, Board result_board, boolean is_color_white) { //returns true if the king is alive, else false
+        ChessPiece piece = null;
+        m = new miniMax();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (result_board.isFieldOccupied(i, j) && result_board.getField()[i][j].getChessPiece().getName() == ChessPieceCharacteristics.Name.K && is_color_white == true && result_board.getField()[i][j].getChessPiece().getColor() == ChessPieceCharacteristics.Color.w) {
+                    piece = result_board.getField()[i][j].getChessPiece();
+                    if (piece != null) {
+                        return true;
+                    }
+                } else if (result_board.isFieldOccupied(i, j) && result_board.getField()[i][j].getChessPiece().getName() == ChessPieceCharacteristics.Name.K && is_color_white == false && result_board.getField()[i][j].getChessPiece().getColor() == ChessPieceCharacteristics.Color.b) {
+                    piece = result_board.getField()[i][j].getChessPiece();
+                    if (piece != null) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private void check_if_KingIsInCheck(int newRow, int newCol) {
+        blackPieceList = new LinkedList<>();
+        whitePieceList = new LinkedList<>();
+        m = new miniMax();
+
+        if ((board.isFieldOccupied(newRow, newCol) && board.getField()[newRow][newCol].getChessPiece().getColor() == ChessPieceCharacteristics.Color.b)
+                || (board.isFieldOccupied(newRow, newCol) && board.getField()[newRow][newCol].getChessPiece().getName() == ChessPieceCharacteristics.Name.K && board.getField()[newRow][newCol].getChessPiece().getColor() == ChessPieceCharacteristics.Color.w)) {
+            //the chesspiece that was just moved is of black color, color of king = white
+            //OR the chesspiece that was just moved is the king and has white color
+            king = new King(ChessPieceCharacteristics.Color.w, ChessPieceCharacteristics.Name.K);
+
+            if (isKingAlive(king, board, true)) {
+                if (king.isKingInCheck(king.get_Kings_position(board, m, true).getPiecePosition(), true, m.copyBoard(board), blackPieceList, whitePieceList)) {
+                    System.out.println("White King is in check! King is under threat!");
+                }
+            }
+        } else if ((board.isFieldOccupied(newRow, newCol) && board.getField()[newRow][newCol].getChessPiece().getColor() == ChessPieceCharacteristics.Color.w)
+                || (board.isFieldOccupied(newRow, newCol) && board.getField()[newRow][newCol].getChessPiece().getName() == ChessPieceCharacteristics.Name.K && board.getField()[newRow][newCol].getChessPiece().getColor() == ChessPieceCharacteristics.Color.b)) {
+            //the chesspiece that was just moved is of white color,color of king = black 
+            //OR the chesspiece that was just moved is the king and has black color
+            king = new King(ChessPieceCharacteristics.Color.b, ChessPieceCharacteristics.Name.K);
+            if (isKingAlive(king, board, false)) {
+                if (king.isKingInCheck(king.get_Kings_position(board, m, false).getPiecePosition(), false, m.copyBoard(board), blackPieceList, whitePieceList)) {
+                    System.out.println("Black King is in check! King is under threat!");
+                }
+            }
+        }
+    }
+
+    public boolean processMove(ChessMove move, Player player) {
 
         boolean validMove = false;
         int curRow = move.getCurrent().getRow();
         int curCol = move.getCurrent().getCol();
 
+        Field startField = board.getField(curRow, curCol);
+
         int newRow = move.getNewPos().getRow();
         int newCol = move.getNewPos().getCol();
+        Field endField = board.getField(newRow, newCol);
 
         if (move.getP() != null) {
             ChessPieceCharacteristics.Color color = move.getP().getColor();
             if (color == player.getPlayerColour()) {
                 if (ChessMove.isValid(curRow, curCol)) { //row and col number is valid
-                    if (move.getP().isMovePossible(move, board)) {
+
+                    //castle the pieces if it's a castling move
+                    if (board.getPieceType(move.getCurrent()) == ChessPieceCharacteristics.Name.K && board.getPieceType(move.getNewPos()) == ChessPieceCharacteristics.Name.R) { //chesspieces that are about to move are: king, rook
+                        if (isKingAlive(king, board, true)) {
+                            king = new King(startField.getChessPiece().getColor(), ChessPieceCharacteristics.Name.K);
+                            if (king.isCastlingPossible(board, startField, endField)) {
+
+                                System.out.println("Player: Castling");
+                                king.doCastling(board, startField, endField);
+                            }
+                        }
+                    } else if (board.getPieceType(move.getCurrent()) == ChessPieceCharacteristics.Name.R && board.getPieceType(move.getNewPos()) == ChessPieceCharacteristics.Name.K) {  //chesspieces that are about to move are: king, rook
+                        king = new King(endField.getChessPiece().getColor(), ChessPieceCharacteristics.Name.K);
+                        if (isKingAlive(king, board, true)) {
+                            if (king.isCastlingPossible(board, endField, startField)) {
+
+                                System.out.println("Player: Castling");
+                                king.doCastling(board, endField, startField);
+                            }
+                        }
+                    } else if (move.getP().isMovePossible(move, board)) {
                         validMove = true;
                         move.getP().makeMove(move, board);
                         player.setLastMove(move);
                         board.setLastMove(move);
+                        check_if_KingIsInCheck(newRow, newCol);                            //check is king is in check, notify the other user 
                         board.printBoard();
                     }
                 }
@@ -274,7 +350,7 @@ public class Game {
 
                 miniMax m = new miniMax();
 
-                if (king.isCheckmate(king.get_Kings_position(board, m, true), true, m.copyBoard(board), whiteP, blackPieceList, whitePieceList)) {
+                if (king.isCheckmate(king.get_Kings_position(board, m, true), true, board, whiteP, blackPieceList, whitePieceList)) {
                     System.out.println(MoveResult.CHECK_MATE + " : White LOST, Black WON");
                     return MoveResult.CHECK_MATE;
                 }
@@ -297,26 +373,22 @@ public class Game {
                 blackPieceList = new LinkedList<>();
                 whitePieceList = new LinkedList<>();
 
-                //  board = new Board();
                 m = new miniMax();
 
-                if (king.isCheckmate(king.get_Kings_position(board, m, false), false, m.copyBoard(board), blackP, blackPieceList, whitePieceList)) {
+                if (king.isCheckmate(king.get_Kings_position(board, m, false), false, board, blackP, blackPieceList, whitePieceList)) {
                     System.out.println(MoveResult.CHECK_MATE + " : Black LOST, White WON");
                     return MoveResult.CHECK_MATE;
                 }
+                //ai move 
                 System.out.println("Black's turn, AI makes a move: ");
                 ChessMove move = bot.getNextMove(board);
 
                 if (move != null) {
-                    //   System.out.println(move.getNewPos().getRow() + "," + move.getNewPos().getCol());
                     processMove(move, blackP);
                 }
                 blackP.setTurn(false);
                 whiteP.setTurn(true);
-
             }
-
         }
-
     }
 }
