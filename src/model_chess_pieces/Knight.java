@@ -7,7 +7,6 @@ import algorithm.ChessMove;
 import algorithm.Player;
 import model_board.Board;
 import model_board.Field;
-import model_board.FieldCoordinates;
 
 /**
  * it21735 , it21754, it21762
@@ -16,7 +15,7 @@ public class Knight extends ChessPiece {
 
     private final int value = 3;
 
-    private int[][] directions = {{1, 2}, {-1, 2}, {2, -1}, {-2, -1}, {-1, -2}, {1, -2}, {-2, 1},
+    private final int[][] directions = {{1, 2}, {-1, 2}, {2, -1}, {-2, -1}, {-1, -2}, {1, -2}, {-2, 1},
     {2, 1}}; // {vertical,horizontal}
 
     public Knight(ChessPieceCharacteristics.Color color, ChessPieceCharacteristics.Name name) {
@@ -35,16 +34,14 @@ public class Knight extends ChessPiece {
         int curcol = this.getPiecePosition().getCol();
         ChessMove move = new ChessMove(null, this);
 
-        //	moves.add(board.getField()[currow][curcol]);
-        for (int i = 0; i < this.directions.length; i++) {
-            int[] direction = directions[i];
+        moves.add(board.getField()[currow][curcol]);
+        for (int[] direction : this.directions) {
             int col = curcol + direction[0];
             int row = currow + direction[1];
-
+            move.setNewCoor(row, col);
             if (this.isMovePossible(move, board)) {
                 moves.add(new Field(row, col));
             }
-
         }
         return moves;
 
@@ -52,14 +49,14 @@ public class Knight extends ChessPiece {
 
     @Override
     public boolean isMovePossible(ChessMove move, Board board) {
-         if (move == null || move.getNewPos() == null || move.getCurrent()==null) {
-            return  false;
+        if (move == null || move.getNewPos() == null || move.getCurrent() == null) {
+            return false;
         }
         boolean answer = false; // final answer--is the requested move possible?
         boolean validPosition = false; // temp boolean to check if the move is valid without checking if field is
         // occupied
 
-        String colour = this.getColor().toString(); // colour of piece
+        ChessPieceCharacteristics.Color colour = this.getColor(); // colour of piece
 
         int currow = this.getPiecePosition().getRow(); // current row
         int curcol = this.getPiecePosition().getCol(); // current column
@@ -84,7 +81,7 @@ public class Knight extends ChessPiece {
             if (validPosition) { // if valid position is true, we must check if the field is occupied or not and
                 // by what colour
                 if ((board.isFieldOccupied(row, col))
-                        && !(board.getField()[row][col].getChessPiece().getColor().toString().equals(colour))) {
+                        && !(board.getField()[row][col].getChessPiece().getColor().equals(colour))) {
                     // if occupied by different colour-it gets eaten
                     move.setAttack(true);
                     answer = true;
@@ -110,7 +107,6 @@ public class Knight extends ChessPiece {
         if (move.getAttack()) {
             board.getField()[row][col].getChessPiece().setIsAlive(false);
             board.getField()[row][col].removeChessPiece();
-            // board.getField()[row][col].getChessPiece().setPiecePosition(null);
         }
         board.getField()[curRow][curCol].removeChessPiece(); // remove piece from current position
         board.getField()[row][col].setChessPiece(this); // set it to the new field
