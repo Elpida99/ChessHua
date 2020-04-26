@@ -1,12 +1,14 @@
 package algorithm;
 
-import exceptions.InvalidMoveException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
 import model_board.*;
 import model_chess_pieces.*;
+
+/**
+ * it21735 , it21754, it21762
+ */
+
 
 public class miniMax {
 
