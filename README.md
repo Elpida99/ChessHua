@@ -1,8 +1,11 @@
 # ChessHua
 
-Project regarding AI course written in Java\
-Authors: https://github.com/Eleftheria-99 Eleftheria Papageorgiou \
-https://github.com/Elpida99 Elpida Makri \
-https://github.com/nicolepits Nikoleta Pitsidianaki
+**Description**
 
-Chess played against the computer using the algorithm miniMax
+A simple command-line chess AI implemented using the Min-Max algorithm created for AI course.
+
+>Authors:
+>- Eleftheria Papageorgiou - it21754 ([git](https://github.com/Eleftheria-99))
+>- Elpida Makri - it21735 ([git](https://github.com/Elpida99)
+>- Nikoleta Pitsidianaki - it2176 ([git](https://github.com/nicolepits)
+
