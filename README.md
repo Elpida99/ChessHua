@@ -6,6 +6,6 @@ A simple command-line chess AI implemented using the Min-Max algorithm created f
 
 >Authors:
 >- Eleftheria Papageorgiou - it21754 ([git](https://github.com/Eleftheria-99))
->- Elpida Makri - it21735 ([git](https://github.com/Elpida99)
->- Nikoleta Pitsidianaki - it2176 ([git](https://github.com/nicolepits)
+>- Elpida Makri - it21735 ([git](https://github.com/Elpida99))
+>- Nikoleta Pitsidianaki - it21762 ([git](https://github.com/nicolepits))
 
